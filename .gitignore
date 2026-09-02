@@ -1,0 +1,30 @@
+# Byte-compiled / optimized files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Test / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environments
+.env
+.env.*
+*.env
+.venv
+venv/
+env/
+
+# Type checkers / linters
+.mypy_cache/
+.ruff_cache/
+
+# OS
+.DS_Store

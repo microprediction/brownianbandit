@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+        include:
+          - os: macos-latest
+            python-version: "3.12"
+          - os: windows-latest
+            python-version: "3.12"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install
+        run: pip install -e ".[test]"
+      - name: Test
+        run: python -m pytest -q
+
+  package:
+    # Build the wheel and exercise the installed copy from outside the repo.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build
+        run: |
+          pip install build twine
+          python -m build
+          twine check dist/*
+      - name: Smoke the installed wheel
+        run: |
+          python -m venv /tmp/wheelenv
+          /tmp/wheelenv/bin/pip install --upgrade pip
+          /tmp/wheelenv/bin/pip install dist/*.whl
+          cd /tmp
+          /tmp/wheelenv/bin/python -c "
+          from brownianbandit import BrownianGrid, point_mass_initial_intensity, solve_for_budget
+          grid = BrownianGrid.build(x_min=-6.0, x_max=6.0, n_space=201, dt=0.05, sigma=1.0)
+          initial = point_mass_initial_intensity(grid, total_intensity=50.0, x0=0.0)
+          s = solve_for_budget(target_path_time=5.0, grid=grid, initial_mass=initial, n_steps=20)
+          assert s.objective > 0
+          print('objective', s.objective)
+          "

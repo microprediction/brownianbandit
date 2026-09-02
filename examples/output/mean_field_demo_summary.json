@@ -1,0 +1,35 @@
+{
+  "model": "Poissonized IID Brownian cloud with deterministic fallback",
+  "horizon": 1.0,
+  "initial_optional_intensity": 100.0,
+  "optional_path_time_budget": 10.0,
+  "fallback": 0.0,
+  "n_time_steps": 100,
+  "n_space_points": 601,
+  "optimal_expected_maximum": 1.96009700157425,
+  "optimal_expected_path_time": 10.000927072934454,
+  "shadow_price_lambda": 0.058837890625,
+  "frank_wolfe_dual_gap": 4.125032929775882e-08,
+  "expected_terminal_survivor_intensity": 4.12549827995838,
+  "static_thinning_expected_maximum": 1.508638023683822,
+  "one_shot_expected_maximum": 1.6428702029650792,
+  "one_shot_screening_time": 0.02,
+  "one_shot_retained_intensity": 8.16326530612245,
+  "gain_over_static_fraction": 0.29924936983097283,
+  "gain_over_one_shot_fraction": 0.19309303804806643,
+  "monte_carlo_expected_maximum": 1.9609210000000004,
+  "monte_carlo_standard_error": 0.0020686672113779717,
+  "budget_solution_uses_bracket_mixture": false,
+  "active_policy_atoms": [
+    {
+      "weight": 0.5545792680078002,
+      "path_time": 10.07084218515712,
+      "terminal_survivor_intensity": 4.15574663099522
+    },
+    {
+      "weight": 0.4454207319916992,
+      "path_time": 9.913877977608788,
+      "terminal_survivor_intensity": 4.087837014616103
+    }
+  ]
+}

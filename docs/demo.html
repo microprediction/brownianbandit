@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Live wavefront pruning &mdash; Budgeted Brownian Races</title>
+  <link rel="stylesheet" href="./style.css" />
+  <link rel="stylesheet" href="./demos.css" />
+</head>
+<body>
+<header class="site-header">
+  <div class="nav-inner">
+    <a class="brand" href="./index.html">brownianbandit</a>
+    <nav>
+      <a href="./index.html">Home</a>
+      <a href="./demo.html">Demo</a>
+      <a href="./papers.html">Papers</a>
+      <a href="./bibliography.html">Bibliography</a>
+      <a href="https://github.com/microprediction/brownianbandit">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <h1>Live wavefront pruning</h1>
+  <p class="subtitle">The budget solve of the <a href="./index.html">mean-field race</a>, running in your browser.</p>
+
+  <p>
+    A Poisson cloud of Brownian paths starts at zero with the intensity you
+    choose. The solver prices path-time by dual bisection, generates
+    wavefront policies from the obstacle problem, and mixes them by
+    Frank&ndash;Wolfe until the dual gap closes. Move a slider and the whole
+    solve reruns; nothing is pre-baked. The port is parity-locked against
+    the Python package by
+    <a href="https://github.com/microprediction/brownianbandit/blob/main/tests/test_js_parity.py">tests/test_js_parity.py</a>.
+  </p>
+
+  <div class="widget">
+    <div class="controls">
+      <label for="budget">path-time budget</label>
+      <input type="range" id="budget" min="1" max="40" step="0.5" value="10" />
+      <span class="val" id="budgetVal">10.0</span>
+      <label for="intensity">initial intensity</label>
+      <input type="range" id="intensity" min="25" max="300" step="5" value="100" />
+      <span class="val" id="intensityVal">100</span>
+    </div>
+    <canvas id="survivors" width="820" height="240"></canvas>
+    <canvas id="cutoffs" width="820" height="240"></canvas>
+    <canvas id="terminal" width="820" height="240"></canvas>
+    <div class="readout" id="readout">computing&hellip;</div>
+  </div>
+
+  <div class="lookfor">What to look for: the adaptive objective must beat the
+  one-shot screening baseline, which must beat static thinning, at every
+  setting of the sliders; an inversion anywhere would falsify the solver. The
+  cull is immediate and the survivor curve then thins slowly; the kill-below
+  cutoff rises over most of the horizon and collapses near maturity, where a
+  final step of carry is cheap next to the terminal option value. The dual
+  gap in the readout is the certificate that the mixture is near-optimal.
+  </div>
+
+  <p class="muted">
+    Discretization: 50 time steps on a 301-point state grid, coarser than the
+    committed Python example (100 &times; 601), so headline numbers here sit
+    a few hundredths below the committed ones. The solver is
+    <a href="https://github.com/microprediction/brownianbandit/blob/main/docs/bb_core.js">bb_core.js</a>,
+    a direct port of <code>brownianbandit/mean_field.py</code>.
+  </p>
+</main>
+
+<script src="./bb_core.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  const N_STEPS = 50;
+  const N_SPACE = 301;
+  const grid = BB.buildGrid(-6, 6, N_SPACE, 1 / N_STEPS, 1.0);
+
+  const budgetEl = document.getElementById('budget');
+  const intensityEl = document.getElementById('intensity');
+  const budgetVal = document.getElementById('budgetVal');
+  const intensityVal = document.getElementById('intensityVal');
+  const readout = document.getElementById('readout');
+
+  function setup(id, h) {
+    const c = document.getElementById(id);
+    const cx = c.getContext('2d');
+    return { cx, W: c.width, H: h };
+  }
+
+  function axes(cx, W, H, padL, padB, title) {
+    cx.strokeStyle = '#e2e2e2';
+    cx.lineWidth = 1;
+    cx.beginPath();
+    cx.moveTo(padL, 12); cx.lineTo(padL, H - padB);
+    cx.lineTo(W - 12, H - padB);
+    cx.stroke();
+    cx.fillStyle = '#5a5a5a';
+    cx.font = '12px sans-serif';
+    cx.textAlign = 'left';
+    cx.fillText(title, padL, 12);
+  }
+
+  function drawLine(cx, xs, ys, X, Y, color) {
+    cx.strokeStyle = color;
+    cx.lineWidth = 2;
+    cx.beginPath();
+    let started = false;
+    for (let i = 0; i < xs.length; i++) {
+      if (!isFinite(ys[i])) { started = false; continue; }
+      if (started) cx.lineTo(X(xs[i]), Y(ys[i]));
+      else { cx.moveTo(X(xs[i]), Y(ys[i])); started = true; }
+    }
+    cx.stroke();
+  }
+
+  function xTicks(cx, W, H, padL, padB, X, values, fmt) {
+    cx.fillStyle = '#9a9a9a';
+    cx.font = '10px sans-serif';
+    cx.textAlign = 'center';
+    for (const v of values) cx.fillText(fmt(v), X(v), H - padB + 14);
+  }
+
+  function yTicks(cx, padL, Y, values, fmt) {
+    cx.fillStyle = '#9a9a9a';
+    cx.font = '10px sans-serif';
+    cx.textAlign = 'right';
+    for (const v of values) cx.fillText(fmt(v), padL - 6, Y(v) + 3);
+  }
+
+  function niceTicks(lo, hi, count) {
+    const span = hi - lo || 1;
+    const step = Math.pow(10, Math.floor(Math.log10(span / count)));
+    const err = span / count / step;
+    const mult = err >= 7.5 ? 10 : err >= 3.5 ? 5 : err >= 1.5 ? 2 : 1;
+    const s = mult * step;
+    const ticks = [];
+    for (let v = Math.ceil(lo / s) * s; v <= hi + 1e-12; v += s) ticks.push(v);
+    return ticks;
+  }
+
+  function chart(id, xs, series, xLabelFmt, title) {
+    const { cx, W, H } = setup(id, 240);
+    cx.clearRect(0, 0, W, H + 40);
+    const padL = 52, padB = 26;
+    let ymin = Infinity, ymax = -Infinity;
+    for (const s of series) {
+      for (const v of s.ys) {
+        if (isFinite(v)) { ymin = Math.min(ymin, v); ymax = Math.max(ymax, v); }
+      }
+    }
+    if (!isFinite(ymin)) { ymin = 0; ymax = 1; }
+    const pad = (ymax - ymin) * 0.08 || 0.01;
+    ymin -= pad; ymax += pad;
+    const xmin = xs[0], xmax = xs[xs.length - 1];
+    const X = v => padL + (v - xmin) / (xmax - xmin) * (W - padL - 14);
+    const Y = v => H - padB - (v - ymin) / (ymax - ymin) * (H - padB - 24);
+    axes(cx, W, H, padL, padB, title);
+    xTicks(cx, W, H, padL, padB, X, niceTicks(xmin, xmax, 6), xLabelFmt);
+    yTicks(cx, padL, Y, niceTicks(ymin, ymax, 5), v => +v.toFixed(3));
+    for (const s of series) drawLine(cx, xs, s.ys, X, Y, s.color);
+    // series labels
+    cx.font = '11px sans-serif';
+    cx.textAlign = 'left';
+    let ly = 26;
+    for (const s of series) {
+      if (!s.label) continue;
+      cx.fillStyle = s.color;
+      cx.fillText(s.label, W - 190, ly);
+      ly += 14;
+    }
+  }
+
+  function recompute() {
+    const budget = +budgetEl.value;
+    const intensity = +intensityEl.value;
+    budgetVal.textContent = budget.toFixed(1);
+    intensityVal.textContent = intensity.toFixed(0);
+    readout.textContent = 'computing…';
+
+    setTimeout(function () {
+      const t0 = performance.now();
+      const initial = BB.pointMassInitial(grid, intensity, 0.0);
+      const sol = BB.solveForBudget(budget, grid, initial, N_STEPS, 0.0,
+        { tol: 1e-5, maxIter: 90, budgetTol: 2e-3, bisections: 20 });
+      const st = BB.staticThinningBaseline(budget, grid, initial, N_STEPS, 0.0);
+      const os = BB.oneShotScreeningBaseline(budget, grid, initial, N_STEPS, 0.0);
+      const ms = performance.now() - t0;
+
+      const times = Array.from({ length: N_STEPS }, (_, k) => k * grid.dt);
+      chart('survivors', times,
+        [{ ys: sol.aliveCurve, color: '#4a3aff', label: 'expected paths kept' }],
+        v => v.toFixed(1), 'Survivor schedule');
+      const finiteCutoffs = Array.from(sol.cutoffs, v => isFinite(v) ? v : NaN);
+      chart('cutoffs', times,
+        [{ ys: finiteCutoffs, color: '#4a3aff', label: 'kill below' }],
+        v => v.toFixed(1), 'Wavefront policy: kill-below cutoff');
+      const scaled = ys => {
+        let m = 0;
+        for (const v of ys) m = Math.max(m, v);
+        return Array.from(ys, v => m > 0 ? v / m : v);
+      };
+      chart('terminal', Array.from(grid.x),
+        [
+          { ys: scaled(sol.terminalMass), color: '#4a3aff', label: 'terminal intensity (scaled)' },
+          { ys: scaled(sol.stats.gradient), color: '#b0abec', label: 'pivotal value (scaled)' },
+        ],
+        v => v.toFixed(0), 'Terminal survivor cloud and pivotal value, each scaled to its maximum');
+
+      const ok = sol.objective > os.objective && os.objective > st.objective;
+      readout.innerHTML =
+        'Expected terminal maximum: adaptive <b>' + sol.objective.toFixed(4) + '</b>' +
+        ' vs one-shot <b>' + os.objective.toFixed(4) + '</b>' +
+        ' vs static <b>' + st.objective.toFixed(4) + '</b>.' +
+        ' Ordering adaptive &gt; one-shot &gt; static: <b>' + (ok ? 'true' : 'FALSE') + '</b>.' +
+        ' Shadow price &lambda; = <b>' + sol.lambda.toFixed(4) + '</b>,' +
+        ' spent path-time <b>' + sol.pathTime.toFixed(3) + '</b>,' +
+        ' dual gap <b>' + sol.dualGap.toExponential(1) + '</b>.' +
+        ' Solved in ' + ms.toFixed(0) + ' ms.';
+    }, 10);
+  }
+
+  budgetEl.addEventListener('change', recompute);
+  intensityEl.addEventListener('change', recompute);
+  budgetEl.addEventListener('input', function () { budgetVal.textContent = (+budgetEl.value).toFixed(1); });
+  intensityEl.addEventListener('input', function () { intensityVal.textContent = (+intensityEl.value).toFixed(0); });
+  recompute();
+})();
+</script>
+</body>
+</html>

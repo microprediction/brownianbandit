@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Papers &mdash; Budgeted Brownian Races</title>
+  <link rel="stylesheet" href="./style.css" />
+  <style>
+    .paper { background: var(--panel); border: 1px solid var(--border);
+      border-radius: 8px; padding: 16px 20px; margin: 18px 0; }
+    .paper .meta { color: var(--muted); font-size: 0.92rem; margin: 4px 0 10px; }
+    .paper p { margin: 6px 0; }
+  </style>
+</head>
+<body>
+<header class="site-header">
+  <div class="nav-inner">
+    <a class="brand" href="./index.html">brownianbandit</a>
+    <nav>
+      <a href="./index.html">Home</a>
+      <a href="./demo.html">Demo</a>
+      <a href="./papers.html">Papers</a>
+      <a href="./bibliography.html">Bibliography</a>
+      <a href="https://github.com/microprediction/brownianbandit">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <h1>Papers</h1>
+  <p class="subtitle">Manuscripts of the budgeted Brownian race program.</p>
+
+  <div class="paper">
+    <p><strong>Wavefront Pruning in Budgeted Brownian Races</strong></p>
+    <p class="meta">Peter Cotton &middot; in preparation &middot;
+      <a href="https://github.com/microprediction/brownianbandit">solver</a> &middot;
+      <a href="./demo.html">demo</a></p>
+    <p>
+      Defines the budgeted Brownian race: a controller observes a cloud of
+      Brownian paths, pays per unit time for each survivor, may irreversibly
+      prune, and allocates a finite path-time budget to maximize the expected
+      terminal maximum. The planned scope is the mean-field limit &mdash; the
+      coupled obstacle/Fokker&ndash;Planck system whose discrete counterpart
+      this repository already solves &mdash; the wavefront characterization of
+      the optimal policy, and the relation to the finite-<em>n</em>
+      pathwise-budget problem. The numerical certificates will be the committed scripts in
+      this repository.
+    </p>
+  </div>
+
+  <h2>Working notes</h2>
+  <div class="paper">
+    <p><strong>The mean-field solver</strong></p>
+    <p class="meta">
+      <a href="https://github.com/microprediction/brownianbandit/blob/main/brownianbandit/mean_field.py">code</a> &middot;
+      <a href="https://github.com/microprediction/brownianbandit/blob/main/tests/test_mean_field.py">tests</a> &middot;
+      <a href="./demo.html">live demo</a></p>
+    <p>
+      The Poissonized, expected-budget, discrete-time formulation: the exact
+      layer-cake value of the Poisson terminal maximum, its pivotal-value
+      gradient, the obstacle best response, and the fully-corrective
+      Frank&ndash;Wolfe outer loop with dual bisection. The module docstring
+      is the current write-up of record.
+    </p>
+  </div>
+</main>
+
+<footer>
+  <a href="https://github.com/microprediction/brownianbandit">Source</a> &middot;
+  Maintained by <a href="https://github.com/microprediction">Peter Cotton</a>.
+</footer>
+</body>
+</html>

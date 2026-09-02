@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Bibliography &mdash; Budgeted Brownian Races</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+<header class="site-header">
+  <div class="nav-inner">
+    <a class="brand" href="./index.html">brownianbandit</a>
+    <nav>
+      <a href="./index.html">Home</a>
+      <a href="./demo.html">Demo</a>
+      <a href="./papers.html">Papers</a>
+      <a href="./bibliography.html">Bibliography</a>
+      <a href="https://github.com/microprediction/brownianbandit">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <h1>Bibliography</h1>
+  <p class="subtitle">The literatures a budgeted Brownian race borrows from, and where it differs from each.</p>
+
+  <div class="bib">
+    <h3>Selection in branching systems</h3>
+    <p>The closest-looking relatives. In branching Brownian motion with
+    selection, particles branch and a rule retains the rightmost ones; the
+    population size is exogenous. In a budgeted Brownian race nothing
+    branches, the survivor count is endogenous, and the resource is
+    cumulative path-time, not a headcount.</p>
+    <ul>
+      <li>
+        Brunet, E., and Derrida, B. (1997). &ldquo;Shift in the velocity of a
+        front due to a cutoff.&rdquo;
+        <a href="https://doi.org/10.1103/PhysRevE.56.2597"><em>Physical Review E</em> 56(3), 2597&ndash;2604</a>.
+        <em>The cutoff moves the front; the first quantitative account of what
+        truncating a population does to its leading edge.</em>
+      </li>
+      <li>
+        Berestycki, J., Berestycki, N., and Schweinsberg, J. (2013).
+        &ldquo;The genealogy of branching Brownian motion with absorption.&rdquo;
+        <a href="https://doi.org/10.1214/11-AOP728"><em>Annals of Probability</em> 41(2), 527&ndash;618</a>.
+        <em>Absorption at a moving barrier as a selection mechanism, worked out
+        in full.</em>
+      </li>
+      <li>
+        Maillard, P. (2016). &ldquo;Speed and fluctuations of N-particle
+        branching Brownian motion with spatial selection.&rdquo;
+        <a href="https://doi.org/10.1007/s00440-015-0675-z"><em>Probability Theory and Related Fields</em> 166, 1061&ndash;1173</a>.
+        <em>The N-BBM benchmark: keep the N rightmost. The fixed-N constraint
+        is exactly what the path-time budget relaxes.</em>
+      </li>
+    </ul>
+
+    <h3>Budgets as fuel</h3>
+    <p>The classification home for the constraint. Finite-fuel control bounds
+    a cumulative control effort; here the fuel is aggregate survivor-time and
+    the control is irreversible killing.</p>
+    <ul>
+      <li>
+        Bene&scaron;, V. E., Shepp, L. A., and Witsenhausen, H. S. (1980).
+        &ldquo;Some solvable stochastic control problems.&rdquo;
+        <a href="https://doi.org/10.1080/17442508008833156"><em>Stochastics</em> 4(1), 39&ndash;83</a>.
+        <em>The original finite-fuel problems, solved in closed form. A useful
+        subtitle for the race, not its name.</em>
+      </li>
+    </ul>
+
+    <h3>Search, indices, and optionality</h3>
+    <p>The economics of paying to keep options alive. The race is a
+    continuous-time cousin: each surviving path is a box still open, and the
+    pivotal value prices the option of keeping it.</p>
+    <ul>
+      <li>
+        Weitzman, M. L. (1979). &ldquo;Optimal search for the best
+        alternative.&rdquo;
+        <a href="https://doi.org/10.2307/1910412"><em>Econometrica</em> 47(3), 641&ndash;654</a>.
+        <em>Pandora's rule: open boxes in reservation-value order. The
+        one-inspection-per-box version of the pruning decision.</em>
+      </li>
+      <li>
+        Gittins, J. C. (1979). &ldquo;Bandit processes and dynamic allocation
+        indices.&rdquo;
+        <a href="https://doi.org/10.1111/j.2517-6161.1979.tb01068.x"><em>Journal of the Royal Statistical Society, Series B</em> 41(2), 148&ndash;177</a>.
+        <em>The index that decides which arm deserves the next unit of
+        attention; the reason a race of continued-or-killed paths is a bandit
+        at heart, and the name on the repo.</em>
+      </li>
+      <li>
+        Audibert, J.-Y., Bubeck, S., and Munos, R. (2010). &ldquo;Best arm
+        identification in multi-armed bandits.&rdquo;
+        <a href="https://dl.acm.org/doi/10.5555/3023549.3023568">COLT 2010</a>.
+        <em>Pure exploration under a hard budget of pulls: the discrete,
+        statistical face of the same keep-or-kill question.</em>
+      </li>
+    </ul>
+
+    <h3>Mean-field control</h3>
+    <p>The machinery the solver discretizes: a value function coupled to a
+    density evolution through a shadow price.</p>
+    <ul>
+      <li>
+        Lasry, J.-M., and Lions, P.-L. (2007). &ldquo;Mean field games.&rdquo;
+        <a href="https://doi.org/10.1007/s11537-007-0657-8"><em>Japanese Journal of Mathematics</em> 2(1), 229&ndash;260</a>.
+        <em>The coupled HJB/Fokker&ndash;Planck template. The race's version
+        swaps the HJB for an obstacle problem, since the only control is
+        stopping.</em>
+      </li>
+      <li>
+        Carmona, R., and Delarue, F. (2018). <em>Probabilistic Theory of Mean
+        Field Games with Applications</em>, vols. I&ndash;II. Springer.
+        <em>The reference treatment, including control of McKean&ndash;Vlasov
+        dynamics, which is the honest label for the population problem here.</em>
+      </li>
+    </ul>
+
+    <h3>The algorithmic tools</h3>
+    <ul>
+      <li>
+        Frank, M., and Wolfe, P. (1956). &ldquo;An algorithm for quadratic
+        programming.&rdquo;
+        <a href="https://doi.org/10.1002/nav.3800030109"><em>Naval Research Logistics Quarterly</em> 3, 95&ndash;110</a>.
+        <em>The outer loop: linearize the concave objective, call the obstacle
+        problem as the linear-optimization oracle, mix.</em>
+      </li>
+      <li>
+        Jaggi, M. (2013). &ldquo;Revisiting Frank&ndash;Wolfe: projection-free
+        sparse convex optimization.&rdquo;
+        <a href="https://proceedings.mlr.press/v28/jaggi13.html">ICML 2013</a>.
+        <em>The modern convergence and duality-gap toolkit; the dual gap
+        reported by the solver and the demo is this one.</em>
+      </li>
+    </ul>
+
+    <h3>The rollout application</h3>
+    <p>Best-of-n sampling from language models is a budgeted race: partial
+    generations drift, compute is metered per token kept alive, and only the
+    best completion is paid. Standard beam search fixes the beam width;
+    wavefront pruning would let the width float under the budget.</p>
+    <ul>
+      <li>
+        Yao, S., Yu, D., Zhao, J., Shafran, I., Griffiths, T. L., Cao, Y.,
+        and Narasimhan, K. (2023). &ldquo;Tree of Thoughts: deliberate problem
+        solving with large language models.&rdquo;
+        <a href="https://arxiv.org/abs/2305.10601">NeurIPS 2023, arXiv:2305.10601</a>.
+        <em>Explicit keep-or-prune decisions over partial reasoning paths,
+        with a hand-set frontier size.</em>
+      </li>
+      <li>
+        Snell, C., Lee, J., Xu, K., and Kumar, A. (2024). &ldquo;Scaling LLM
+        test-time compute optimally can be more effective than scaling model
+        parameters.&rdquo;
+        <a href="https://arxiv.org/abs/2408.03314">arXiv:2408.03314</a>.
+        <em>Makes the budget explicit: fixed inference compute, allocated
+        across candidate solutions. The allocation rule is the open dial.</em>
+      </li>
+    </ul>
+
+    <p class="muted" style="font-size:0.9rem; margin-top:16px;">
+      Working on a related paper or implementation? Open an issue on
+      <a href="https://github.com/microprediction/brownianbandit">the repo</a>
+      and we&apos;ll add it.
+    </p>
+  </div>
+</main>
+
+<footer>
+  <a href="https://github.com/microprediction/brownianbandit">Source</a> &middot;
+  Maintained by <a href="https://github.com/microprediction">Peter Cotton</a>.
+</footer>
+</body>
+</html>

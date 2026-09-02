@@ -93,6 +93,11 @@ zero. A 100,000-trial Monte Carlo puts the adaptive policy's expected
 maximum at 1.9609 with standard error 0.0021, against the solver's
 1.9601. The Frank–Wolfe dual gap at termination is below 1e-7.
 
+A JavaScript port of the solver runs the same budget solve
+[live in the browser](https://brownianbandit.microprediction.org/demo.html)
+at any budget and intensity; `tests/test_js_parity.py` holds it to the
+Python at stated tolerances.
+
 ## Tests
 
 `pytest -q` runs checks that can fail for the right reason: the

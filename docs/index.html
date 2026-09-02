@@ -11,18 +11,18 @@
     onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
 </head>
 <body>
-  <header class="site-header">
-    <div class="nav-inner">
-      <a class="brand" href="./index.html">brownianbandit</a>
-      <nav>
-        <a href="#model">Model</a>
-        <a href="#method">Method</a>
-        <a href="#demo">Demo</a>
-        <a href="#install">Install</a>
-        <a href="https://github.com/microprediction/brownianbandit">GitHub</a>
-      </nav>
-    </div>
-  </header>
+<header class="site-header">
+  <div class="nav-inner">
+    <a class="brand" href="./index.html">brownianbandit</a>
+    <nav>
+      <a href="./index.html">Home</a>
+      <a href="./demo.html">Demo</a>
+      <a href="./papers.html">Papers</a>
+      <a href="./bibliography.html">Bibliography</a>
+      <a href="https://github.com/microprediction/brownianbandit">GitHub</a>
+    </nav>
+  </div>
+</header>
 
   <main>
     <h1>Budgeted Brownian Races</h1>
@@ -146,7 +146,9 @@
       policy at 1.9609 with standard error 0.0021; the discrepancy from the
       closed form is well inside two standard errors, and a larger one would
       falsify the layer-cake formula above. Regenerate everything with
-      <code>python examples/run_mean_field_demo.py</code>.
+      <code>python examples/run_mean_field_demo.py</code>, or run the solver
+      <a href="./demo.html">live in your browser</a> at any budget and
+      intensity.
     </p>
 
     <p>

@@ -48,6 +48,26 @@
     </p>
   </div>
 
+  <div class="paper">
+    <p><strong>Posterior-Predictive Pass-at-k</strong></p>
+    <p class="meta">Peter Cotton &middot; note, September 2026 &middot;
+      <a href="./passk_posterior.pdf">PDF</a> &middot;
+      <a href="https://github.com/microprediction/winning/tree/main/research/cavity_calculus/exp2_passk">experiment scripts</a></p>
+    <p>
+      The estimation side of the rollout race: pass@k is the expected-maximum
+      payoff of a best-of-k batch, and the standard extrapolation
+      1&nbsp;&minus;&nbsp;(1&nbsp;&minus;&nbsp;p&#770;)<sup>k</sup> evaluates
+      it at a noisy point estimate. Jensen's inequality makes that plug-in
+      biased downward for every difficulty, and a prompt with zero observed
+      successes is rated impossible at every k. Replacing the plug-in with
+      the posterior expectation under a two-parameter difficulty prior,
+      fitted once by marginal maximum likelihood, cuts held-out log loss
+      from 3.37 to 0.48 on nine thousand released rollout prompts and
+      brings extrapolated aggregate pass@8 within two points of truth;
+      beta-binomial and probit-normal priors tie to three decimals.
+    </p>
+  </div>
+
   <h2>Working notes</h2>
   <div class="paper">
     <p><strong>The mean-field solver</strong></p>

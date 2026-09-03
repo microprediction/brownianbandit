@@ -101,6 +101,18 @@ predicted value, and the full budget frontier against both baselines.
 `tests/test_js_parity.py` holds the port to the Python at stated
 tolerances.
 
+## Papers
+
+The manuscript in preparation is *Wavefront Pruning in Budgeted
+Brownian Races*; the [papers page](https://brownianbandit.microprediction.org/papers.html)
+tracks it. A companion note,
+[*Posterior-Predictive Pass-at-k*](docs/passk_posterior.pdf), covers
+the estimation side of the rollout application: pass@k is the
+expected-maximum payoff of a best-of-k batch, and the note replaces the
+biased plug-in extrapolation with a two-parameter posterior expectation
+(experiment scripts live in the
+[winning repo](https://github.com/microprediction/winning/tree/main/research/cavity_calculus/exp2_passk)).
+
 ## Tests
 
 `pytest -q` runs checks that can fail for the right reason: the

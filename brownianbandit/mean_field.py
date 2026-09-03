@@ -13,6 +13,16 @@ this problem. It is the natural finite-difference approximation to the
 continuous mean-field obstacle/Fokker--Planck system. It is not yet the
 finite-n, pathwise-hard-budget control problem.
 
+The optimization is over *per-path, population-blind* controls: each path's
+keep-or-kill decision depends on its own state and time, plus independent
+randomization, never on the realized population, so the surviving cloud
+stays Poisson by independent thinning. A population-aware controller can do
+better on the same expected budget. One step, Poisson(100) paths at zero,
+budget one, fallback zero: independent thinning to intensity one pays about
+0.3469, while keeping exactly one path whenever any exist pays
+1/sqrt(2*pi) ~ 0.3989. The values computed here are optimal within the
+population-blind class only.
+
 For terminal survivor intensity m on ordered grid points x, let
 
     R_j = sum_{k >= j} m_k.

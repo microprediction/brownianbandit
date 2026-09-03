@@ -53,15 +53,18 @@
     <div class="readout" id="readout">computing&hellip;</div>
   </div>
 
-  <div class="lookfor">What to look for: the adaptive objective must beat the
-  one-shot screening baseline at every setting of the sliders, and one-shot
-  must never fall below static thinning (the two coincide at tight budgets,
-  where the best screening date is time zero and paths have not yet
-  separated); an inversion anywhere would falsify the solver. The
-  cull is immediate and the survivor curve then thins slowly; the kill-below
-  cutoff rises over most of the horizon and collapses near maturity, where a
-  final step of carry is cheap next to the terminal option value. The dual
-  gap in the readout is the certificate that the mixture is near-optimal.
+  <div class="lookfor">What to look for: no baseline may beat the returned
+  policy by more than its certified suboptimality, and one-shot screening
+  must never fall below static thinning; a larger inversion anywhere would
+  falsify the solver. Ties are legitimate: the baselines coincide at tight
+  budgets (screening at time zero, before paths separate), and all three
+  policies coincide when the budget funds the whole cloud. The certificate
+  is the Frank&ndash;Wolfe gap plus the complementary-slackness term
+  &lambda;(B&minus;C) &mdash; the gap alone bounds nothing at the requested
+  budget when the returned policy underspends. The cull is immediate and
+  the survivor curve then thins slowly; the kill-below cutoff rises over
+  most of the horizon and collapses near maturity, where a final step of
+  carry is cheap next to the terminal option value.
   </div>
 
   <p class="muted">
@@ -218,16 +221,23 @@
         ],
         v => v.toFixed(0), 'Terminal survivor cloud and pivotal value, each scaled to its maximum');
 
-      const ok = sol.objective > os.objective && os.objective >= st.objective - 1e-12;
+      // A genuine violation is a baseline beating the returned policy by
+      // MORE than its certified suboptimality; ties are legitimate when
+      // the budget does not bind or screening happens at time zero.
+      const ok = sol.objective >= os.objective - sol.certificate - 1e-9 &&
+        os.objective >= st.objective - 1e-9;
       readout.innerHTML =
         'Expected terminal maximum: adaptive <b>' + sol.objective.toFixed(4) + '</b>' +
         ' vs one-shot <b>' + os.objective.toFixed(4) + '</b>' +
         ' vs static <b>' + st.objective.toFixed(4) + '</b>.' +
-        ' Ordering adaptive &gt; one-shot &ge; static: <b>' + (ok ? 'true' : 'FALSE') + '</b>.' +
+        ' Consistent with adaptive &ge; one-shot &ge; static: <b>' + (ok ? 'true' : 'FALSE') + '</b>.' +
         ' Shadow price &lambda; = <b>' + sol.lambda.toFixed(4) + '</b>,' +
-        ' spent path-time <b>' + sol.pathTime.toFixed(3) + '</b>,' +
-        ' dual gap <b>' + sol.dualGap.toExponential(1) + '</b>.' +
-        ' Solved in ' + ms.toFixed(0) + ' ms.';
+        ' spent path-time <b>' + sol.pathTime.toFixed(3) + '</b> (&le; budget by construction).' +
+        ' Certified within <b>' + sol.certificate.toExponential(1) + '</b> of the budget optimum' +
+        ' (Frank&ndash;Wolfe gap ' + sol.dualGap.toExponential(1) +
+        ' + budget slack &lambda;(B&minus;C) = ' + sol.budgetSlack.toExponential(1) + ').' +
+        ' Solver ' + (sol.converged ? 'converged' : '<b>hit its iteration cap</b>') + ';' +
+        ' solved in ' + ms.toFixed(0) + ' ms.';
     }, 10);
   }
 

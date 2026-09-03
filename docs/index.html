@@ -189,7 +189,19 @@ solution = solve_for_budget(
     <p>
       The solver addresses the mean-field relaxation: Poissonized
       population, expected rather than pathwise budget, discrete time and
-      state. The finite-$n$ race with a hard budget, correlated diffusions,
+      state. The controls are per-path and population-blind: each path's
+      keep-or-kill decision depends on its own state and time, plus
+      independent randomization, never on the realized population. That
+      restriction has a price a one-step example makes exact. Start
+      $\mathrm{Poisson}(100)$ paths at zero with budget one and fallback
+      zero: independent thinning to intensity one pays about $0.3469$,
+      while a controller who sees the population and keeps exactly one path
+      whenever any exist pays $1/\sqrt{2\pi} \approx 0.3989$ on the same
+      expected budget. The values here are optimal within the
+      population-blind class, not over all population-aware controls.
+    </p>
+    <p>
+      The finite-$n$ race with a hard budget, correlated diffusions,
       and the continuous-time limit are future work. The tests pin what is
       claimed: the pivotal-value gradient matches finite differences to
       3e-7, spent path-time is monotone in the shadow price, and the

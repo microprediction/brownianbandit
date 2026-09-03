@@ -25,6 +25,8 @@ console.log(JSON.stringify({
   lagrangian_objective: lag.objective,
   budget_objective: sol.objective,
   budget_path_time: sol.pathTime,
+  budget_certificate: sol.certificate,
+  budget_converged: sol.converged,
   static_objective: st.objective,
   one_shot_objective: os.objective,
 }));

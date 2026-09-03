@@ -62,6 +62,15 @@ One reading of the fallback: a reserve path or outside option has
 already been funded. If a reserve path costs one unit per unit time, add
 the horizon `T` to the optional budget reported here.
 
+The controls are per-path and population-blind: each path's keep-or-kill
+decision depends on its own state and time, plus independent
+randomization, never on the realized population. A population-aware
+controller can do better. With one step, Poisson(100) paths at zero,
+budget one and fallback zero, independent thinning to intensity one pays
+about 0.3469, while keeping exactly one path whenever any exist pays
+1/sqrt(2*pi), about 0.3989, on the same expected budget. The values
+computed here are optimal within the population-blind class.
+
 ## The method
 
 For terminal survivor intensity `m`, the expected maximum `J(m)` is

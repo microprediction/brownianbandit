@@ -36,20 +36,23 @@
   <ul class="demo-list">
     <li><a href="./demo.html"><strong>The budget solve</strong></a>
       <div class="claim">Survivor schedule, wavefront cutoffs, and terminal
-      cloud at any budget and intensity, with the Frank&ndash;Wolfe dual gap
-      as the optimality certificate. Falsified if either baseline ever beats
-      the adaptive policy.</div>
+      cloud at any budget and intensity. The certificate shown is the
+      Frank&ndash;Wolfe gap plus the budget-slackness term &lambda;(B&minus;C);
+      falsified if a baseline beats the returned policy by more than that
+      bound.</div>
     </li>
     <li><a href="./race.html"><strong>Watch a race</strong></a>
       <div class="claim">Sampled paths killed live by the solved wavefront
       policy, replaying continuously. Falsified if the running mean of
-      realized maxima drifts from the predicted expected maximum by more
-      than its shrinking standard error allows.</div>
+      realized maxima leaves a time-uniform confidence band around the
+      predicted expected maximum; ordinary 2-s.e. crossings are expected
+      under continuous monitoring.</div>
     </li>
     <li><a href="./frontier.html"><strong>The budget frontier</strong></a>
       <div class="claim">Expected maximum against budget for the adaptive
       policy and both baselines, ten full solves per sweep. Falsified by a
-      crossing anywhere, or by a convex stretch in the adaptive curve.</div>
+      baseline exceeding the adaptive curve by more than that point's
+      certificate; ties at both ends of the budget range are legitimate.</div>
     </li>
   </ul>
 </main>

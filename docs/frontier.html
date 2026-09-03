@@ -46,14 +46,16 @@
     <div class="readout" id="readout">computing&hellip;</div>
   </div>
 
-  <div class="lookfor">What to look for: the adaptive curve must sit strictly
-  above the one-shot curve, and the one-shot curve must never fall below
-  static thinning; a crossing anywhere would falsify the solver, since both
-  baselines are feasible policies for the same problem. At tight budgets the
-  one-shot policy's best screening date is time zero, when every path still
-  sits at the same starting point, and the two baselines coincide; equality
-  there is expected, a crossing is not. The adaptive curve should also be
-  concave &mdash; each extra unit of budget buys less than the one before.
+  <div class="lookfor">What to look for: no baseline may exceed the adaptive
+  curve by more than that point's certified suboptimality, and one-shot must
+  never fall below static thinning; a larger crossing would falsify the
+  solver, since both baselines are feasible policies for the same problem.
+  The true ordering is adaptive &ge; one-shot &ge; static, with ties at both
+  ends: at tight budgets the best screening date is time zero, when every
+  path still sits at the same starting point, and at slack budgets the whole
+  cloud is funded, so all three policies keep everyone. The adaptive curve
+  should also be concave &mdash; each extra unit of budget buys less than
+  the one before.
   </div>
 
   <p class="muted">
@@ -143,6 +145,7 @@
     const myGeneration = ++generation;
     const budgets = [1, 2, 4, 6, 8, 12, 16, 20, 26, 32];
     const adaptive = budgets.map(() => NaN);
+    const certs = budgets.map(() => NaN);
     const oneShot = budgets.map(() => NaN);
     const staticThin = budgets.map(() => NaN);
     const initial = BB.pointMassInitial(grid, intensity, 0.0);
@@ -151,26 +154,30 @@
     function next() {
       if (myGeneration !== generation) return;
       if (i >= budgets.length) {
-        let ok = true, minGap = Infinity, ties = 0;
+        // A genuine violation is a baseline beating the returned policy by
+        // more than its certificate; ties are legitimate at both ends.
+        let ok = true, ties = 0, maxCert = 0;
         for (let k = 0; k < budgets.length; k++) {
-          if (!(adaptive[k] > oneShot[k] && oneShot[k] >= staticThin[k] - 1e-12)) ok = false;
-          if (Math.abs(oneShot[k] - staticThin[k]) <= 1e-12) ties++;
-          minGap = Math.min(minGap, adaptive[k] - oneShot[k]);
+          if (!(adaptive[k] >= oneShot[k] - certs[k] - 1e-9 &&
+                oneShot[k] >= staticThin[k] - 1e-9)) ok = false;
+          if (Math.abs(oneShot[k] - staticThin[k]) <= 1e-9) ties++;
+          maxCert = Math.max(maxCert, certs[k]);
         }
         chart(budgets, seriesOf(), true);
         readout.innerHTML =
-          'Ordering adaptive &gt; one-shot &ge; static at all ' + budgets.length +
-          ' budgets: <b>' + (ok ? 'true' : 'FALSE') + '</b>. Smallest adaptive-minus-one-shot ' +
-          'gap: <b>' + minGap.toFixed(4) + '</b>.' +
+          'Consistent with adaptive &ge; one-shot &ge; static at all ' + budgets.length +
+          ' budgets: <b>' + (ok ? 'true' : 'FALSE') + '</b>. Largest certified ' +
+          'suboptimality across the sweep: <b>' + maxCert.toExponential(1) + '</b>.' +
           (ties > 0 ? ' The baselines coincide at ' + ties +
-            ' tight budget' + (ties > 1 ? 's' : '') +
-            ', where the best screening date is time zero.' : '');
+            ' budget' + (ties > 1 ? 's' : '') +
+            ' (screening at time zero, or a budget that funds the whole cloud).' : '');
         return;
       }
       const b = budgets[i];
       const sol = BB.solveForBudget(b, grid, initial, N_STEPS, 0.0,
         { tol: 1e-5, maxIter: 70, budgetTol: 2e-3, bisections: 18 });
       adaptive[i] = sol.objective;
+      certs[i] = sol.certificate;
       oneShot[i] = BB.oneShotScreeningBaseline(b, grid, initial, N_STEPS, 0.0).objective;
       staticThin[i] = BB.staticThinningBaseline(b, grid, initial, N_STEPS, 0.0).objective;
       i++;

@@ -291,7 +291,16 @@ const BB = (function () {
       for (const a of atoms) totalWeight += a.weight;
       for (const a of atoms) a.weight /= totalWeight;
     }
+    // Recompute the gap at the final iterate: the loop's last gap belongs
+    // to the iterate before its last update, so it would be stale here.
     const stats = terminalMaximumStats(current.terminalMass, grid.x, fallback);
+    const finalCandidate = bestResponse(stats.gradient, lambda, grid, initial, nSteps);
+    dualGap = -lambda * (finalCandidate.pathTime - current.pathTime);
+    for (let j = 0; j < grid.n; j++) {
+      dualGap += stats.gradient[j] * (finalCandidate.terminalMass[j] - current.terminalMass[j]);
+    }
+    dualGap = Math.max(dualGap, 0);
+    const scale = Math.max(1, Math.abs(stats.value - lambda * current.pathTime));
     return {
       lambda,
       objective: stats.value,
@@ -302,21 +311,76 @@ const BB = (function () {
       keepFirst: current.keepFirst,
       atoms,
       dualGap,
+      converged: dualGap <= tol * scale,
       stats,
     };
   }
 
+  /* Make a solution feasible for the budget and attach a valid
+     suboptimality certificate. Feasibility: if the returned mixture
+     costs more than the budget, thin it by mixing in the kill-all
+     policy, so the returned expected cost is at most the budget.
+     Certificate: for any price lambda >= 0 and any feasible m,
+     V(B) - J(m) <= gap(m; lambda) + lambda * (B - C(m)), where gap is
+     the fresh Frank-Wolfe gap at m. The slackness term is not
+     optional: the gap alone bounds nothing at the requested budget. */
+  function finalize(sol, target, grid, initial, nSteps, fallback, tol) {
+    let s = sol;
+    if (s.pathTime > target) {
+      const theta = target / s.pathTime;
+      const atoms = s.atoms.map(a => Object.assign({}, a, { weight: a.weight * theta }));
+      atoms.push({
+        keepFirst: new Int32Array(nSteps).fill(grid.n),
+        cutoffs: new Float64Array(nSteps).fill(Infinity),
+        terminalMass: new Float64Array(grid.n),
+        pathTime: 0,
+        weight: 1 - theta,
+      });
+      s = Object.assign({}, s, {
+        terminalMass: Float64Array.from(s.terminalMass, v => theta * v),
+        aliveCurve: Float64Array.from(s.aliveCurve, v => theta * v),
+        atoms,
+        pathTime: target,
+      });
+    }
+    const stats = terminalMaximumStats(s.terminalMass, grid.x, fallback);
+    const candidate = bestResponse(stats.gradient, s.lambda, grid, initial, nSteps);
+    let gap = -s.lambda * (candidate.pathTime - s.pathTime);
+    for (let j = 0; j < grid.n; j++) {
+      gap += stats.gradient[j] * (candidate.terminalMass[j] - s.terminalMass[j]);
+    }
+    gap = Math.max(gap, 0);
+    const budgetSlack = s.lambda * Math.max(0, target - s.pathTime);
+    // `converged` reports whether the inner Frank-Wolfe solves reached
+    // their tolerance; `certificate` is the accuracy statement for the
+    // returned policy at the requested budget, and can be materially
+    // larger than tol (a mixture of two prices is not stationary at
+    // either, and an iteration-capped solve carries its residual gap).
+    return Object.assign({}, s, {
+      objective: stats.value,
+      stats,
+      dualGap: gap,
+      budgetSlack,
+      certificate: gap + budgetSlack,
+      converged: s.converged !== false,
+    });
+  }
+
   /* Dual bisection on the shadow price to hit the requested expected
      path-time budget; mixes the bracketing solutions if the dual cost
-     curve jumps over the target. */
+     curve jumps over the target. The returned policy costs at most the
+     budget, and `certificate` bounds its suboptimality at that budget. */
   function solveForBudget(target, grid, initial, nSteps, fallback, opts) {
     const o = Object.assign({ tol: 1e-5, maxIter: 60, budgetTol: 2e-3, bisections: 22 }, opts);
+    const done = function (sol) {
+      return finalize(sol, target, grid, initial, nSteps, fallback, o.tol);
+    };
     const solve = function (lambda) {
       return solveLagrangian(lambda, grid, initial, nSteps, fallback, o.tol, o.maxIter);
     };
     let lowPrice = 0;
     let lowSol = solve(0);
-    if (lowSol.pathTime <= target) return lowSol;
+    if (lowSol.pathTime <= target) return done(lowSol);
     let highPrice = 1;
     let highSol = solve(1);
     while (highSol.pathTime > target) {
@@ -331,16 +395,17 @@ const BB = (function () {
       const mid = 0.5 * (lowPrice + highPrice);
       const midSol = solve(mid);
       if (Math.abs(midSol.pathTime - target) < Math.abs(best.pathTime - target)) best = midSol;
-      if (Math.abs(midSol.pathTime - target) <= absTol) return midSol;
+      if (Math.abs(midSol.pathTime - target) <= absTol) return done(midSol);
       if (midSol.pathTime > target) { lowPrice = mid; lowSol = midSol; }
       else { highPrice = mid; highSol = midSol; }
     }
-    if (Math.abs(best.pathTime - target) <= absTol) return best;
-    // mix the bracketing solutions to hit the expected budget exactly
+    if (Math.abs(best.pathTime - target) <= absTol) return done(best);
+    // mix the bracketing solutions to hit the expected budget exactly;
+    // the certificate is recomputed for the mixture itself in finalize
+    // (the endpoint gaps do not certify the mixture)
     const span = lowSol.pathTime - highSol.pathTime;
     const theta = span > 1e-14 ? (lowSol.pathTime - target) / span : 0;
     const mix = combine(lowSol, highSol, theta);
-    const stats = terminalMaximumStats(mix.terminalMass, grid.x, fallback);
     const atoms = [];
     for (const a of lowSol.atoms) {
       atoms.push(Object.assign({}, a, { weight: a.weight * (1 - theta) }));
@@ -348,18 +413,17 @@ const BB = (function () {
     for (const a of highSol.atoms) {
       atoms.push(Object.assign({}, a, { weight: a.weight * theta }));
     }
-    return {
+    return done({
       lambda: 0.5 * (lowSol.lambda + highSol.lambda),
-      objective: stats.value,
+      objective: NaN,
       pathTime: mix.pathTime,
       terminalMass: mix.terminalMass,
       aliveCurve: mix.aliveCurve,
       cutoffs: mix.cutoffs,
       keepFirst: mix.keepFirst,
       atoms: atoms.filter(a => a.weight > 1e-9),
-      dualGap: Math.max(lowSol.dualGap, highSol.dualGap),
-      stats,
-    };
+      converged: lowSol.converged && highSol.converged,
+    });
   }
 
   function propagateWithoutPruning(mass, grid, nSteps) {

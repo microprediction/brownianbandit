@@ -90,7 +90,18 @@ def test_js_port_matches_python() -> None:
         max_frank_wolfe_iterations=100,
     )
     assert js["budget_objective"] == pytest.approx(solution.objective, abs=3e-3)
+    # The JS returns a policy feasible for the budget by construction, with
+    # a certificate = Frank-Wolfe gap + lambda * (B - C) bounding its
+    # suboptimality at the requested budget (measured: 2.3e-3 here). The
+    # gap alone certifies nothing at the budget when the policy
+    # underspends. `converged` reports whether the inner solves hit their
+    # tolerance; vanilla Frank-Wolfe is O(1/k), so at tol 1e-6 it
+    # legitimately reports False (measured: the certificate falls only
+    # from 2.3e-3 to 8.7e-4 between 100 and 800 iterations).
+    assert js["budget_path_time"] <= 10.0 + 1e-9
     assert js["budget_path_time"] == pytest.approx(10.0, abs=0.03)
+    assert 0.0 <= js["budget_certificate"] < 3e-3
+    assert isinstance(js["budget_converged"], bool)
 
     static = static_random_thinning_baseline(
         target_path_time=10.0,

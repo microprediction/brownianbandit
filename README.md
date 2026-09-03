@@ -74,7 +74,7 @@ randomization, never on the realized population. A population-aware
 controller can do better. With one step, Poisson(100) paths at zero,
 budget one and fallback zero, independent thinning to intensity one pays
 about 0.3469, while keeping exactly one path whenever any exist pays
-1/sqrt(2*pi), about 0.3989, on the same expected budget. The values
+(1 - exp(-100))/sqrt(2*pi), about 0.3989, on the same expected budget. The values
 computed here are optimal within the population-blind class.
 
 ## The method
@@ -104,9 +104,10 @@ numerical example (T=1, initial intensity 100, budget 10, fallback 0,
 
 The one-shot baseline keeps everyone until a single screening date and
 then retains an upper tail; the static baseline thins at random at time
-zero. A 100,000-trial Monte Carlo puts the adaptive policy's expected
-maximum at 1.9609 with standard error 0.0021, against the solver's
-1.9601. The Frank–Wolfe dual gap at termination is below 1e-7.
+zero. The returned policy costs exactly the budget, and its
+certificate (Frank–Wolfe gap plus budget slack) is below 2e-6. A
+100,000-trial Monte Carlo puts the adaptive policy's expected maximum
+at 1.9587 with standard error 0.0021, against the solver's 1.9600.
 
 A JavaScript port of the solver powers three
 [live browser demos](https://brownianbandit.microprediction.org/demos.html):

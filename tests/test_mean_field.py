@@ -180,3 +180,45 @@ def test_finer_grid_is_numerically_consistent() -> None:
         values.append(solution.objective)
     assert abs(values[1] - values[0]) < 0.08
     assert values[1] >= values[0] - 0.02
+
+
+def test_budget_certificate_bounds_feasible_improvements() -> None:
+    grid, initial, n_steps = small_problem(n_steps=50, n_space=301)
+    baseline = best_one_shot_screening_baseline(
+        target_path_time=10.0,
+        grid=grid,
+        initial_mass=initial,
+        n_steps=n_steps,
+        fallback=0.0,
+    )
+
+    # A deliberately crippled bisection returns a poor mixture; the
+    # certificate must be large enough to cover any feasible policy's
+    # advantage over it, the one-shot baseline included.
+    crippled = solve_for_budget(
+        target_path_time=10.0,
+        grid=grid,
+        initial_mass=initial,
+        n_steps=n_steps,
+        fallback=0.0,
+        max_bisection_iterations=0,
+    )
+    assert crippled.path_time <= 10.0 + 1e-9
+    assert crippled.certificate is not None
+    assert crippled.certificate >= baseline.objective - crippled.objective
+
+    # The normal solve is feasible by construction and certified tight.
+    solution = solve_for_budget(
+        target_path_time=10.0,
+        grid=grid,
+        initial_mass=initial,
+        n_steps=n_steps,
+        fallback=0.0,
+        budget_tolerance=2e-3,
+        frank_wolfe_tolerance=1e-6,
+        max_frank_wolfe_iterations=100,
+    )
+    assert solution.path_time <= 10.0 + 1e-9
+    assert solution.certificate is not None
+    assert 0.0 <= solution.certificate < 1e-3
+    assert solution.objective >= baseline.objective - solution.certificate

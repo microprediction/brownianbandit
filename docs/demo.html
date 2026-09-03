@@ -32,7 +32,8 @@
     A Poisson cloud of Brownian paths starts at zero with the intensity you
     choose. The solver prices path-time by dual bisection, generates
     wavefront policies from the obstacle problem, and mixes them by
-    Frank&ndash;Wolfe until the dual gap closes. Move a slider and the whole
+    Frank&ndash;Wolfe; the residual gap joins the certificate in the
+    readout. Move a slider and the whole
     solve reruns; nothing is pre-baked. The port is parity-locked against
     the Python package by
     <a href="https://github.com/microprediction/brownianbandit/blob/main/tests/test_js_parity.py">tests/test_js_parity.py</a>.

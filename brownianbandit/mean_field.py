@@ -20,7 +20,7 @@ stays Poisson by independent thinning. A population-aware controller can do
 better on the same expected budget. One step, Poisson(100) paths at zero,
 budget one, fallback zero: independent thinning to intensity one pays about
 0.3469, while keeping exactly one path whenever any exist pays
-1/sqrt(2*pi) ~ 0.3989. The values computed here are optimal within the
+(1 - exp(-100))/sqrt(2*pi) ~ 0.3989. The values computed here are optimal within the
 population-blind class only.
 
 For terminal survivor intensity m on ordered grid points x, let
@@ -425,7 +425,15 @@ class FrankWolfeIteration:
 
 @dataclass
 class LagrangianSolution:
-    """Optimal relaxed population policy for a fixed path-time price."""
+    """Optimal relaxed population policy for a fixed path-time price.
+
+    When produced by `solve_for_budget`, `certificate` bounds the
+    suboptimality of the returned policy at the requested budget:
+    certificate = dual_gap + budget_slack, where budget_slack is
+    lambda * (B - C) for expected cost C <= B. The dual gap alone bounds
+    nothing at the budget when the policy underspends. `converged`
+    reports whether the Frank--Wolfe solves reached their tolerance.
+    """
 
     lambda_path_time: float
     objective: float
@@ -437,6 +445,9 @@ class LagrangianSolution:
     policies: list[PureCutoffPolicy]
     history: list[FrankWolfeIteration] = field(default_factory=list)
     budget_mixture: bool = False
+    budget_slack: float = 0.0
+    certificate: float | None = None
+    converged: bool = True
 
     @property
     def active_policy_indices(self) -> FloatArray:
@@ -629,6 +640,7 @@ def solve_lagrangian(
         - lambda_path_time * (candidate.path_time - path_time)
     )
 
+    scale = max(1.0, abs(stats.value - lambda_path_time * path_time))
     return LagrangianSolution(
         lambda_path_time=float(lambda_path_time),
         objective=stats.value,
@@ -639,6 +651,7 @@ def solve_lagrangian(
         weights=weights,
         policies=policies,
         history=history,
+        converged=dual_gap <= tolerance * scale,
     )
 
 
@@ -687,23 +700,86 @@ def _combine_budget_bracket(
         + higher_price_solution.lambda_path_time
     )
 
+    # The endpoint gaps do not certify the mixture; the caller recomputes
+    # the gap for the mixture itself in _finalize_budget_solution.
     return LagrangianSolution(
         lambda_path_time=lambda_mid,
         objective=stats.value,
         path_time=float(target_path_time),
         terminal_mass=terminal_mass,
         terminal_stats=stats,
-        dual_gap=max(
-            lower_price_solution.dual_gap,
-            higher_price_solution.dual_gap,
-        ),
+        dual_gap=float("nan"),
         weights=weights,
         policies=policies,
         history=(
             lower_price_solution.history + higher_price_solution.history
         ),
         budget_mixture=True,
+        converged=(
+            lower_price_solution.converged and higher_price_solution.converged
+        ),
     )
+
+
+def _finalize_budget_solution(
+    solution: LagrangianSolution,
+    *,
+    target_path_time: float,
+    grid: BrownianGrid,
+    initial_mass: FloatArray,
+    n_steps: int,
+    fallback: float,
+) -> LagrangianSolution:
+    """Enforce budget feasibility and attach a valid certificate.
+
+    If the mixture costs more than the budget, thin it by mixing in the
+    kill-all policy, so the returned expected cost is at most the budget.
+    For any price lambda >= 0 and any feasible intensity m,
+
+        V(B) - J(m) <= gap(m; lambda) + lambda * (B - C(m)),
+
+    where gap is the fresh Frank--Wolfe gap of the Lagrangian at m. The
+    slackness term is not optional: the gap alone bounds nothing at the
+    requested budget when the returned policy underspends.
+    """
+
+    if solution.path_time > target_path_time:
+        theta = target_path_time / solution.path_time
+        kill_all = PureCutoffPolicy.kill_all(
+            initial_mass=np.asarray(initial_mass, dtype=float),
+            x=grid.x,
+            n_steps=n_steps,
+        )
+        solution.policies = list(solution.policies) + [kill_all]
+        solution.weights = np.append(theta * solution.weights, 1.0 - theta)
+        solution.terminal_mass = theta * solution.terminal_mass
+        solution.path_time = float(target_path_time)
+
+    stats = terminal_maximum_stats(
+        solution.terminal_mass, grid.x, fallback=fallback
+    )
+    candidate = solve_linearized_best_response(
+        terminal_reward=stats.gradient,
+        lambda_path_time=solution.lambda_path_time,
+        grid=grid,
+        initial_mass=np.asarray(initial_mass, dtype=float),
+        n_steps=n_steps,
+    )
+    gap = float(
+        np.dot(stats.gradient, candidate.terminal_mass - solution.terminal_mass)
+        - solution.lambda_path_time
+        * (candidate.path_time - solution.path_time)
+    )
+    gap = max(gap, 0.0)
+    slack = solution.lambda_path_time * max(
+        0.0, target_path_time - solution.path_time
+    )
+    solution.terminal_stats = stats
+    solution.objective = stats.value
+    solution.dual_gap = gap
+    solution.budget_slack = slack
+    solution.certificate = gap + slack
+    return solution
 
 
 def solve_for_budget(
@@ -718,12 +794,26 @@ def solve_for_budget(
     frank_wolfe_tolerance: float = 1e-6,
     max_frank_wolfe_iterations: int = 100,
 ) -> LagrangianSolution:
-    """Solve the constrained expected-path-time problem by dual bisection."""
+    """Solve the constrained expected-path-time problem by dual bisection.
+
+    The returned policy costs at most the budget, and its `certificate`
+    field bounds the suboptimality at that budget.
+    """
 
     if target_path_time < 0:
         raise ValueError("target_path_time must be non-negative")
     initial = np.asarray(initial_mass, dtype=float)
     full_path_time = float(initial.sum()) * n_steps * grid.dt
+
+    def _done(solution: LagrangianSolution) -> LagrangianSolution:
+        return _finalize_budget_solution(
+            solution,
+            target_path_time=target_path_time,
+            grid=grid,
+            initial_mass=initial,
+            n_steps=n_steps,
+            fallback=fallback,
+        )
 
     lower_price = 0.0
     lower_solution = solve_lagrangian(
@@ -736,7 +826,7 @@ def solve_for_budget(
         max_iterations=max_frank_wolfe_iterations,
     )
     if target_path_time >= lower_solution.path_time:
-        return lower_solution
+        return _done(lower_solution)
 
     higher_price = 1.0
     higher_solution = solve_lagrangian(
@@ -784,7 +874,7 @@ def solve_for_budget(
         ):
             best = middle_solution
         if abs(middle_solution.path_time - target_path_time) <= absolute_tolerance:
-            return middle_solution
+            return _done(middle_solution)
 
         if middle_solution.path_time > target_path_time:
             lower_price = midpoint
@@ -794,17 +884,19 @@ def solve_for_budget(
             higher_solution = middle_solution
 
     if abs(best.path_time - target_path_time) <= absolute_tolerance:
-        return best
+        return _done(best)
 
     # Discrete time/state can make the dual cost curve jump. Per-particle
     # randomization between the two bracketing policies is feasible and hits
     # the expected budget exactly.
-    return _combine_budget_bracket(
-        lower_price_solution=lower_solution,
-        higher_price_solution=higher_solution,
-        target_path_time=target_path_time,
-        x=grid.x,
-        fallback=fallback,
+    return _done(
+        _combine_budget_bracket(
+            lower_price_solution=lower_solution,
+            higher_price_solution=higher_solution,
+            target_path_time=target_path_time,
+            x=grid.x,
+            fallback=fallback,
+        )
     )
 
 

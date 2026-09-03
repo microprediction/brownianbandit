@@ -54,16 +54,17 @@
 
   <div class="lookfor">What to look for: the running mean of realized maxima
   must converge to the solver's expected maximum, and the running mean of
-  spent path-time to the solver's expected path-time. The readout monitors
-  the z-score against a time-uniform confidence band of roughly 3.3&ndash;3.6
-  standard errors: under continuous monitoring a correct simulator crosses a
-  plain 2-s.e. band infinitely often (the law of the iterated logarithm), so
-  ordinary excursions past 2 prove nothing. A z-score that leaves the
-  time-uniform band, or grows without shrinking back, falsifies the forward
-  pass. The policy is generally a mixture of a few wavefront atoms (the
-  dashed cutoffs, opacity by weight), and each path independently follows
-  one of them; by Poisson thinning the sampled cloud then has exactly the
-  mixture's intensity, so the targets are exact, not approximate.
+  spent path-time to the solver's expected path-time. Verdicts are issued
+  only at doubling checkpoints (32, 64, 128, &hellip; races), each an
+  empirical-Bernstein bound for payoffs bounded by the grid edge, with
+  levels summing to 1%: a correct simulator shows FAILED with probability
+  at most 1% over the whole session, however long you watch. The z-score is
+  informational only; it wanders past 2 routinely under continuous
+  monitoring, and that proves nothing. The policy is generally a mixture of
+  a few wavefront atoms (the dashed cutoffs, opacity by weight), and each
+  path independently follows one of them; by Poisson thinning the sampled
+  cloud then has exactly the mixture's intensity, so the targets are exact,
+  not approximate.
   </div>
 
   <p class="muted">
@@ -124,6 +125,12 @@
   let policy = null;      // {atoms: [{keepFirst, cutoffs, weight}]}
   let predicted = null;   // {value, pathTime}
   let trials = 0, sumMax = 0, sumSq = 0, sumTime = 0;
+  // Verdicts are issued only at doubling checkpoints n = 32, 64, ...,
+  // each with a Maurer-Pontil empirical-Bernstein bound (payoffs are
+  // bounded in [0, x_max] by the grid) at level alpha/2^(j+1). The
+  // union over all checkpoints keeps the total false-alarm probability
+  // of a correct simulator below alpha = 1%.
+  let nextCheckpoint = 32, checkpointIndex = 0, verdictFailed = false, lastVerdict = null;
   let paths = [];         // per path: {states:[...], deadAt:int|null}
   let step = 0;
   let paused = false;
@@ -146,6 +153,7 @@
       policy = { atoms: sol.atoms };
       predicted = { value: sol.objective, pathTime: sol.pathTime };
       trials = 0; sumMax = 0; sumSq = 0; sumTime = 0;
+      nextCheckpoint = 32; checkpointIndex = 0; verdictFailed = false; lastVerdict = null;
       startRace();
     }, 10);
   }
@@ -191,6 +199,21 @@
       }
       trials++;
       sumMax += best; sumSq += best * best; sumTime += spent;
+      if (trials === nextCheckpoint && predicted) {
+        const mean = sumMax / trials;
+        const varhat = Math.max(0,
+          (sumSq / trials - mean * mean) * trials / (trials - 1));
+        const alphaJ = 0.01 / Math.pow(2, checkpointIndex + 1);
+        const lg = Math.log(4 / alphaJ);
+        const R = grid.x[grid.n - 1];
+        const radius = Math.sqrt(2 * varhat * lg / trials) +
+          7 * R * lg / (3 * (trials - 1));
+        const ok = Math.abs(mean - predicted.value) <= radius;
+        lastVerdict = { n: trials, radius, ok };
+        if (!ok) verdictFailed = true;
+        checkpointIndex++;
+        nextCheckpoint *= 2;
+      }
       startRace();
     }
   }
@@ -252,20 +275,23 @@
       const meanTime = sumTime / trials;
       const se = trials > 1 ?
         Math.sqrt(Math.max(sumSq / trials - meanMax * meanMax, 0) / (trials - 1)) : NaN;
-      // Time-uniform band: a plain 2-s.e. band is crossed infinitely often
-      // by a correct simulator under continuous monitoring (law of the
-      // iterated logarithm), so the check uses a stitched confidence
-      // sequence, roughly 3.3-3.6 s.e. over any realistic trial count.
-      const z = isFinite(se) && se > 0 ? Math.abs(meanMax - predicted.value) / se : 0;
-      const band = Math.sqrt(2 * (Math.log(Math.log(Math.max(Math.E * trials, Math.E * 3))) + Math.log(40)));
-      const within = !isFinite(se) || se === 0 || z <= band;
+      const z = isFinite(se) && se > 0 ? Math.abs(meanMax - predicted.value) / se : NaN;
+      let verdict;
+      if (verdictFailed) {
+        verdict = 'Confidence-sequence verdict: <b>FAILED</b> at n = ' +
+          lastVerdict.n + ' (radius ' + lastVerdict.radius.toFixed(4) + ').';
+      } else if (lastVerdict) {
+        verdict = 'Confidence-sequence verdict through n = ' + lastVerdict.n +
+          ': <b>consistent</b> (radius ' + lastVerdict.radius.toFixed(4) + ').';
+      } else {
+        verdict = 'First verdict at 32 races.';
+      }
       readout.innerHTML =
         'Trials: <b>' + trials + '</b>. Realized mean maximum <b>' + meanMax.toFixed(4) +
         '</b> vs predicted <b>' + predicted.value.toFixed(4) + '</b>' +
-        (isFinite(se) ? ' (z = ' + z.toFixed(2) + ', time-uniform band ' + band.toFixed(2) +
-          ', inside: <b>' + (within ? 'true' : 'FALSE') + '</b>)' : '') +
+        (isFinite(z) ? ' (z = ' + z.toFixed(2) + ', informational only)' : '') +
         '. Mean spent path-time <b>' + meanTime.toFixed(3) +
-        '</b> vs predicted <b>' + predicted.pathTime.toFixed(3) + '</b>.';
+        '</b> vs predicted <b>' + predicted.pathTime.toFixed(3) + '</b>. ' + verdict;
     } else if (predicted) {
       readout.innerHTML = 'Predicted expected maximum for this policy: <b>' +
         predicted.value.toFixed(4) + '</b>; expected path-time <b>' +

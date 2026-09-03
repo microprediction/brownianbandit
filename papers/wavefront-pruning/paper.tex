@@ -98,7 +98,7 @@ The restriction has a price a one-step example makes exact. Start
 $\mathrm{Poisson}(100)$ paths at zero with budget one and fallback zero.
 Independent thinning to intensity one pays about $0.3469$; a controller
 who sees the population and keeps exactly one path whenever any exist
-pays $1/\sqrt{2\pi} \approx 0.3989$ on the same expected budget. The
+pays $(1-e^{-100})/\sqrt{2\pi} \approx 0.3989$ on the same expected budget. The
 values in this paper are optimal within the population-blind class.
 
 \section{The value of the terminal cloud}
@@ -238,10 +238,11 @@ repository\footnote{\texttt{github.com/microprediction/brownianbandit};
 live demos at \texttt{brownianbandit.microprediction.org}.}. In the
 committed example (horizon $1$, initial intensity $100$, budget $10$,
 fallback $0$, $100$ time steps, $601$ state points) the adaptive policy
-reaches an expected maximum of $1.9601$, against $1.6429$ for the best
-one-shot screening policy and $1.5086$ for static random thinning. A
-$100{,}000$-trial Monte Carlo puts the adaptive policy at $1.9609$ with
-standard error $0.0021$. The analytic gradient of \eqref{eq:layercake}
+reaches an expected maximum of $1.9600$, at a cost of exactly the
+budget and with a certificate below $2 \times 10^{-6}$, against
+$1.6429$ for the best one-shot screening policy and $1.5086$ for static
+random thinning. A $100{,}000$-trial Monte Carlo puts the adaptive
+policy at $1.9587$ with standard error $0.0021$. The analytic gradient of \eqref{eq:layercake}
 matches finite differences to $3 \times 10^{-7}$; spent path-time is
 monotone in the shadow price; refining the grid moves the objective by
 less than $0.08$. A dependency-free JavaScript port runs the same solve

@@ -1,0 +1,386 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1.1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage[round,authoryear]{natbib}
+\usepackage[colorlinks=true,allcolors=blue]{hyperref}
+
+\makeatletter
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+  {3.25ex \@plus1ex \@minus.2ex}{-1em}%
+  {\normalfont\normalsize\itshape}}
+\makeatother
+
+\newtheoremstyle{itheads}{\topsep}{\topsep}%
+  {\itshape}{}{\itshape}{.}{ }{\thmname{#1}\thmnumber{ #2}%
+  \thmnote{ (#3)}}
+\theoremstyle{itheads}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+
+\newcommand{\E}{\mathbb{E}}
+
+\title{\textbf{Wavefront Pruning in Budgeted Brownian Races}}
+\author{Peter Cotton}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent In a budgeted Brownian race, a controller watches a cloud of
+Brownian paths, pays per unit time for every path kept alive, may
+irreversibly prune, and spends a finite path-time budget to maximize the
+expected terminal maximum. We solve the mean-field version: a Poissonized
+population under per-path controls, with the budget enforced in
+expectation. The expected maximum of the terminal cloud has an exact
+layer-cake form whose gradient is a pivotal value, the expected
+improvement from one more infinitesimal survivor, and for a fixed shadow
+price on path-time the linearized best response is an obstacle problem
+whose keep sets are upper tails: the \emph{wavefront policy}, which
+retains a path while its propagated future pivotal value exceeds its
+carrying cost. A fully corrective Frank--Wolfe method over wavefront
+policies, with dual bisection on the price, solves the budget problem and
+certifies its answer: the returned policy is feasible and its
+suboptimality is bounded by the Frank--Wolfe gap plus a complementary
+slackness term. In the committed example the adaptive policy improves the
+expected maximum by 19\% over the best single screening date and by 30\%
+over static thinning at the same expected budget. The finite-$n$ race with
+a pathwise budget, and the continuous-time limit, are left to future work.
+\end{abstract}
+
+\section{Introduction}
+
+A search that runs many exploratory processes in parallel faces one
+recurring decision: which of them to keep paying for. The processes drift,
+their ranking changes, killing is irreversible, and only the best survivor
+is paid at the end. This paper studies the cleanest continuous model of
+that decision, which we call a \emph{budgeted Brownian race}: a controller
+observes Brownian paths, pays per unit time for each surviving path, may
+irreversibly prune, and allocates a finite path-time budget to maximize
+the expected terminal maximum over a deterministic fallback.
+
+The distinctive object is the \emph{wavefront}: the narrow region near the
+future head of the race where one more path can still be terminally
+pivotal. The optimal policy has a one-line description: retain a path
+while its propagated future pivotal value exceeds its carrying cost. The
+body of the paper makes the description exact in the mean-field limit and
+computable at scale.
+
+The name is chosen against three neighbors. Branching Brownian motion with
+selection retains a prescribed number of rightmost particles; here nothing
+branches, the survivor count is endogenous, and the resource is cumulative
+path-time rather than a headcount. Finite-fuel stochastic control is the
+classification home of the constraint, not a description of the
+terminal-maximum payoff. Beam search fixes its width in advance; wavefront
+pruning lets the width float under the budget.
+
+\section{The model}
+
+Optional paths form a Poisson cloud with initial intensity measure
+$\mu_0$, and each alive path follows an independent Brownian motion. At
+each decision time a path is either killed irreversibly or kept for one
+more interval; keeping one path for $dt$ costs $dt$. The budget $B$
+constrains expected aggregate path-time. The terminal payoff is the
+maximum of a deterministic fallback $f$ and the surviving paths.
+
+Controls are per-path and population-blind: each path's keep-or-kill
+decision depends on its own state and time, plus independent
+randomization, never on the realized population. Under this restriction
+the surviving cloud remains Poisson at every date, by independent
+thinning, and the terminal intensity $m$ is the object of choice.
+
+The restriction has a price a one-step example makes exact. Start
+$\mathrm{Poisson}(100)$ paths at zero with budget one and fallback zero.
+Independent thinning to intensity one pays about $0.3469$; a controller
+who sees the population and keeps exactly one path whenever any exist
+pays $1/\sqrt{2\pi} \approx 0.3989$ on the same expected budget. The
+values in this paper are optimal within the population-blind class.
+
+\section{The value of the terminal cloud}
+
+Fix a terminal grid $x_1 < \dots < x_J$ and terminal intensity $m$ with
+upper-tail intensity $R_j = \sum_{k \ge j} m_k$. The expected maximum is
+exactly
+\begin{equation}
+J(m) \;=\; f + \sum_{x_j > f} \Delta_j \left(1 - e^{-R_j}\right),
+\label{eq:layercake}
+\end{equation}
+where $\Delta_j$ is the gap to the preceding attainable level. In
+English: each layer above the fallback pays its width times the
+probability that at least one survivor clears it. $J$ is concave in $m$,
+and its gradient is the \emph{pivotal value}
+\begin{equation}
+\frac{\partial J}{\partial m_j} \;=\; \E\big[(x_j - M)^+\big],
+\label{eq:pivotal}
+\end{equation}
+the expected improvement from placing one more infinitesimal path at
+$x_j$, where $M$ is the current maximum.
+
+\section{Wavefront policies}
+
+For a shadow price $\lambda \ge 0$ on path-time, linearizing $J$ at the
+current intensity gives a one-particle obstacle problem,
+\begin{equation}
+v_N = \E[(x - M)^+], \qquad
+v_k(x) = \max\!\big(0,\; \E[\,v_{k+1}(X_{k+1}) \mid X_k = x\,] -
+\lambda\, dt\big),
+\label{eq:obstacle}
+\end{equation}
+whose keep set at each step is an upper tail of the state space: one
+kill-below cutoff per time step. We call this the wavefront policy. The
+optimal population policy is in general a mixture of a few wavefront
+atoms, and the mixture is implementable per path: each path independently
+follows one atom, and by Poisson thinning the population intensity is
+exactly the mixture's.
+
+\section{The algorithm and its certificate}
+
+A fully corrective Frank--Wolfe (column-generation) method repeatedly
+computes the pivotal-value gradient \eqref{eq:pivotal}, solves the
+obstacle problem \eqref{eq:obstacle} for the best-response wavefront
+policy, and re-optimizes the mixture of active atoms; bisection in
+$\lambda$ enforces the budget. The scheme is a discrete counterpart of
+the coupled obstacle/Fokker--Planck KKT system.
+
+The Frank--Wolfe gap alone does not certify accuracy at the requested
+budget, because the returned policy may underspend. The correct bound
+carries a complementary slackness term.
+
+\begin{lemma}[Budget suboptimality certificate]
+Let $C(m)$ denote expected path-time, $V(B) = \max\{J(m) : C(m) \le B\}$,
+and let $m$ be any feasible intensity, with $g$ the Frank--Wolfe gap of
+the Lagrangian $J - \lambda C$ at $m$. Then for every $\lambda \ge 0$,
+\[
+V(B) - J(m) \;\le\; g + \lambda\,(B - C(m)).
+\]
+\end{lemma}
+
+\begin{proof}
+By concavity of $J$, the Lagrangian optimum satisfies $L^\star \le
+L(m) + g$. For any feasible $m'$, $J(m') \le L(m') + \lambda B \le
+L^\star + \lambda B \le L(m) + g + \lambda B$, and $L(m) = J(m) -
+\lambda C(m)$.
+\end{proof}
+
+The implementation returns a policy with $C(m) \le B$, thinning with the
+kill-all policy when the bisection overspends, and reports the two terms
+of the certificate separately. The slackness term is not small in
+practice: in one representative solve it exceeds the gap by a factor of
+seventy.
+
+\section{Related work}
+
+\paragraph{Selection in branching systems.}
+\citet{brunet1997} quantified what truncating a population does to its
+leading edge; \citet{berestycki2013} worked out absorption at a moving
+barrier as a selection mechanism; \citet{maillard2016} pinned the speed
+and fluctuations of $N$-particle branching Brownian motion under spatial
+selection. In all three the population size is exogenous. The budgeted
+race replaces the fixed-$N$ constraint with cumulative path-time, and
+nothing branches.
+
+\paragraph{Budgets as fuel.}
+\citet{benes1980} solved the original finite-fuel control problems in
+closed form. The label classifies the constraint here, a bounded
+cumulative control effort, but not the payoff.
+
+\paragraph{Search, indices, and optionality.}
+\citet{weitzman1979} opened boxes in reservation-value order;
+\citet{gittins1979} priced the next unit of attention with an index;
+\citet{audibert2010} studied pure exploration under a hard budget of
+pulls. The bandit literature closest in payoff is the max-$k$-armed
+bandit of \citet{cicirello2005} and the extreme bandits of
+\citet{carpentier2014}, where the criterion is the maximum reward found
+rather than the sum. The race is their continuous cousin: arms drift as
+diffusions, attention is metered in path-time, and killing is
+irreversible.
+
+\paragraph{Mean-field control.}
+\citet{lasry2007} coupled a value function to a density through a
+consistency condition; \citet{carmona2018} treat control of
+McKean--Vlasov dynamics, the honest label for the population problem
+here. The race's version replaces the HJB by an obstacle problem, since
+the only control is stopping.
+
+\paragraph{The algorithmic tools.}
+\citet{frank1956} linearize and call an oracle; \citet{jaggi2013}
+supplies the duality-gap toolkit. The oracle here is the obstacle
+problem, and the atoms it returns are wavefront policies.
+
+\paragraph{Budgeted rollouts of language models.}
+Best-of-$n$ sampling is a budgeted race: partial generations drift,
+compute is metered per token kept alive, and only the best completion is
+paid \citep{chen2021}. \citet{sun2024} kill low-reward generations
+mid-decode and reach best-of-$n$ quality at a fraction of the cost;
+\citet{bi2026} learn a prefix-level pruning signal for parallel
+reasoning under a fixed budget; \citet{kalayci2025} stop sequential
+generation by Pandora's-box reasoning; \citet{nomand2026} allocate a
+rollout budget by a two-threshold stopping rule. Each learns, scores,
+or proves its kill rule in a one-shot or sequential relaxation. None
+models the drifting value of a partial trajectory as a diffusion and
+derives the kill boundary; that is the gap this paper fills, and the
+learned rules are the ones its wavefront would predict.
+\citet{yao2023} and \citet{snell2024} frame the wider test-time-compute
+allocation problem; \citet{malladi2026} train for coverage, shaping the
+distribution whose maximum is paid. The estimation side, predicting the
+expected maximum of a batch from few samples, is treated in a companion
+note \citep{cotton2026passk}.
+
+\section{Numerical certificates}
+
+Every numerical claim is backed by a committed, seeded script in the
+repository\footnote{\texttt{github.com/microprediction/brownianbandit};
+live demos at \texttt{brownianbandit.microprediction.org}.}. In the
+committed example (horizon $1$, initial intensity $100$, budget $10$,
+fallback $0$, $100$ time steps, $601$ state points) the adaptive policy
+reaches an expected maximum of $1.9601$, against $1.6429$ for the best
+one-shot screening policy and $1.5086$ for static random thinning. A
+$100{,}000$-trial Monte Carlo puts the adaptive policy at $1.9609$ with
+standard error $0.0021$. The analytic gradient of \eqref{eq:layercake}
+matches finite differences to $3 \times 10^{-7}$; spent path-time is
+monotone in the shadow price; refining the grid moves the objective by
+less than $0.08$. A dependency-free JavaScript port runs the same solve
+in the browser and is held to the Python at stated tolerances by a
+committed parity test.
+
+\section{Closing}
+
+The mean-field, population-blind race is solved, certified, and cheap.
+Three problems remain open, in increasing order of difficulty: the value
+of population awareness beyond the one-step example of Section~2; the
+finite-$n$ race under a pathwise hard budget, where the Poisson structure
+is lost; and the continuous-time limit, where we expect the wavefront
+cutoff to become a free boundary and the pivotal-value flux across it a
+collision local time. We leave to future work the correlated race, where
+paths share factors and the pruning decision must price a rival's
+strength.
+
+\begin{thebibliography}{99}
+
+\bibitem[Audibert et al.(2010)]{audibert2010}
+Audibert, J.-Y., Bubeck, S., and Munos, R. (2010).
+Best arm identification in multi-armed bandits.
+In \emph{COLT}.
+
+\bibitem[Bene\v{s} et al.(1980)]{benes1980}
+Bene\v{s}, V. E., Shepp, L. A., and Witsenhausen, H. S. (1980).
+Some solvable stochastic control problems.
+\emph{Stochastics}, 4(1):39--83.
+
+\bibitem[Berestycki et al.(2013)]{berestycki2013}
+Berestycki, J., Berestycki, N., and Schweinsberg, J. (2013).
+The genealogy of branching Brownian motion with absorption.
+\emph{Annals of Probability}, 41(2):527--618.
+
+\bibitem[Bi et al.(2026)]{bi2026}
+Bi, J., Luo, T., Du, W., Tang, Z., and Wang, B. (2026).
+Cut your losses! Learning to prune paths early for efficient parallel
+reasoning.
+arXiv:2604.16029.
+
+\bibitem[Brunet and Derrida(1997)]{brunet1997}
+Brunet, E., and Derrida, B. (1997).
+Shift in the velocity of a front due to a cutoff.
+\emph{Physical Review E}, 56(3):2597--2604.
+
+\bibitem[Carmona and Delarue(2018)]{carmona2018}
+Carmona, R., and Delarue, F. (2018).
+\emph{Probabilistic Theory of Mean Field Games with Applications},
+vols.\ I--II. Springer.
+
+\bibitem[Carpentier and Valko(2014)]{carpentier2014}
+Carpentier, A., and Valko, M. (2014).
+Extreme bandits.
+In \emph{NeurIPS}.
+
+\bibitem[Chen et al.(2021)]{chen2021}
+Chen, M., et al. (2021).
+Evaluating large language models trained on code.
+arXiv:2107.03374.
+
+\bibitem[Cicirello and Smith(2005)]{cicirello2005}
+Cicirello, V. A., and Smith, S. F. (2005).
+The max $k$-armed bandit: a new model of exploration applied to search
+heuristic selection.
+In \emph{AAAI}.
+
+\bibitem[Cotton(2026)]{cotton2026passk}
+Cotton, P. (2026).
+Posterior-predictive pass-at-$k$.
+Working note, \texttt{brownianbandit.microprediction.org}.
+
+\bibitem[Frank and Wolfe(1956)]{frank1956}
+Frank, M., and Wolfe, P. (1956).
+An algorithm for quadratic programming.
+\emph{Naval Research Logistics Quarterly}, 3:95--110.
+
+\bibitem[Gittins(1979)]{gittins1979}
+Gittins, J. C. (1979).
+Bandit processes and dynamic allocation indices.
+\emph{Journal of the Royal Statistical Society, Series B},
+41(2):148--177.
+
+\bibitem[Jaggi(2013)]{jaggi2013}
+Jaggi, M. (2013).
+Revisiting Frank--Wolfe: projection-free sparse convex optimization.
+In \emph{ICML}.
+
+\bibitem[Kalayci et al.(2025)]{kalayci2025}
+Kalayci, Y., Raman, V., and Dughmi, S. (2025).
+Optimal stopping vs best-of-$N$ for inference time optimization.
+arXiv:2510.01394.
+
+\bibitem[Lasry and Lions(2007)]{lasry2007}
+Lasry, J.-M., and Lions, P.-L. (2007).
+Mean field games.
+\emph{Japanese Journal of Mathematics}, 2(1):229--260.
+
+\bibitem[Maillard(2016)]{maillard2016}
+Maillard, P. (2016).
+Speed and fluctuations of $N$-particle branching Brownian motion with
+spatial selection.
+\emph{Probability Theory and Related Fields}, 166:1061--1173.
+
+\bibitem[Malladi et al.(2026)]{malladi2026}
+Malladi, S., Jelassi, S., Foster, D., Ash, J. T., and Krishnamurthy, A.
+(2026).
+TailSFT: filtered fine-tuning improves post-training performance.
+arXiv:2608.25756.
+
+\bibitem[Nomand et al.(2026)]{nomand2026}
+Nomand, P., Voss, E., Hale, M., and Reyes, S. (2026).
+Early verdicts, better budgets: sequential adaptive rollout allocation
+for compute-efficient RLVR.
+arXiv:2607.26253.
+
+\bibitem[Snell et al.(2024)]{snell2024}
+Snell, C., Lee, J., Xu, K., and Kumar, A. (2024).
+Scaling LLM test-time compute optimally can be more effective than
+scaling model parameters.
+arXiv:2408.03314.
+
+\bibitem[Sun et al.(2024)]{sun2024}
+Sun, H., Haider, M., Zhang, R., Yang, H., Qiu, J., Yin, M., Wang, M.,
+Bartlett, P., and Zanette, A. (2024).
+Fast best-of-$N$ decoding via speculative rejection.
+In \emph{NeurIPS}.
+
+\bibitem[Weitzman(1979)]{weitzman1979}
+Weitzman, M. L. (1979).
+Optimal search for the best alternative.
+\emph{Econometrica}, 47(3):641--654.
+
+\bibitem[Yao et al.(2023)]{yao2023}
+Yao, S., Yu, D., Zhao, J., Shafran, I., Griffiths, T. L., Cao, Y., and
+Narasimhan, K. (2023).
+Tree of Thoughts: deliberate problem solving with large language models.
+In \emph{NeurIPS}.
+
+\end{thebibliography}
+
+\end{document}

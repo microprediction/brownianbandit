@@ -15,6 +15,12 @@ version of the problem: the mean-field relaxation of the race, not yet
 the finite-n, pathwise-hard-budget control problem. Core depends only on
 numpy and scipy.
 
+The search-side sibling is
+[browniansearch](https://github.com/microprediction/browniansearch):
+there a searcher samples *one* path a few times (and provably never
+backtracks inside its bracket); here a controller prunes *many* under
+budget. Both maximize an expected extreme.
+
 [![CI](https://github.com/microprediction/brownianbandit/workflows/CI/badge.svg)](https://github.com/microprediction/brownianbandit/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 

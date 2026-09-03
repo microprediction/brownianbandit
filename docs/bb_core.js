@@ -155,7 +155,25 @@ const BB = (function () {
       pathTime += grid.dt * total;
       mass = applyTt(grid, alive);
     }
-    return { terminalMass: mass, pathTime, cutoffs, aliveCurve };
+    return { terminalMass: mass, pathTime, cutoffs, aliveCurve, keepFirst };
+  }
+
+  /* Population forward pass under a given wavefront policy, so a demo
+     can display the exact expectations its sampled races should hit. */
+  function propagateUnderCutoffs(keepFirst, grid, initial, nSteps) {
+    const n = grid.n;
+    let mass = Float64Array.from(initial);
+    let pathTime = 0;
+    const aliveCurve = new Float64Array(nSteps);
+    for (let k = 0; k < nSteps; k++) {
+      const alive = new Float64Array(n);
+      let total = 0;
+      for (let j = keepFirst[k]; j < n; j++) { alive[j] = mass[j]; total += mass[j]; }
+      aliveCurve[k] = total;
+      pathTime += grid.dt * total;
+      mass = applyTt(grid, alive);
+    }
+    return { terminalMass: mass, pathTime, aliveCurve };
   }
 
   function combine(a, b, theta) {
@@ -173,6 +191,7 @@ const BB = (function () {
       pathTime: (1 - theta) * a.pathTime + theta * b.pathTime,
       aliveCurve,
       cutoffs: theta > 0.5 ? b.cutoffs : a.cutoffs,
+      keepFirst: theta > 0.5 ? b.keepFirst : a.keepFirst,
     };
   }
 
@@ -200,14 +219,39 @@ const BB = (function () {
     return best;
   }
 
-  /* Frank-Wolfe with exact line search for a fixed shadow price. */
+  /* Two atoms are the same if they have the same effect on this initial
+     mass: equal path-time and (nearly) equal terminal intensity. Policies
+     differing only where no mass ever goes collapse together. */
+  function sameEffect(a, candidate, initialTotal) {
+    if (Math.abs(a.pathTime - candidate.pathTime) > 1e-10) return false;
+    let distance = 0;
+    for (let j = 0; j < a.terminalMass.length; j++) {
+      distance += Math.abs(a.terminalMass[j] - candidate.terminalMass[j]);
+    }
+    return distance <= 1e-8 * Math.max(1, initialTotal);
+  }
+
+  /* Frank-Wolfe with exact line search for a fixed shadow price. The
+     solution carries its atom decomposition: deterministic wavefront
+     policies with weights, so a sampled race can randomize over them
+     per path and reproduce the mixture exactly in distribution. */
   function solveLagrangian(lambda, grid, initial, nSteps, fallback, tol, maxIter) {
     let current = {
       terminalMass: new Float64Array(grid.n),
       pathTime: 0,
       aliveCurve: new Float64Array(nSteps),
       cutoffs: new Float64Array(nSteps).fill(Infinity),
+      keepFirst: new Int32Array(nSteps).fill(grid.n),
     };
+    let initialTotal = 0;
+    for (let j = 0; j < grid.n; j++) initialTotal += initial[j];
+    let atoms = [{
+      keepFirst: current.keepFirst,
+      cutoffs: current.cutoffs,
+      terminalMass: current.terminalMass,
+      pathTime: 0,
+      weight: 1,
+    }];
     let dualGap = Infinity;
     for (let iter = 0; iter < maxIter; iter++) {
       const stats = terminalMaximumStats(current.terminalMass, grid.x, fallback);
@@ -222,7 +266,30 @@ const BB = (function () {
       const theta = lineSearch(current, candidate, grid.x, fallback, lambda);
       const mixed = combine(current, candidate, theta);
       mixed.cutoffs = candidate.cutoffs; // representative wavefront policy
+      mixed.keepFirst = candidate.keepFirst;
       current = mixed;
+      for (const a of atoms) a.weight *= (1 - theta);
+      let merged = false;
+      for (const a of atoms) {
+        if (sameEffect(a, candidate, initialTotal)) {
+          a.weight += theta;
+          merged = true;
+          break;
+        }
+      }
+      if (!merged && theta > 0) {
+        atoms.push({
+          keepFirst: candidate.keepFirst,
+          cutoffs: candidate.cutoffs,
+          terminalMass: candidate.terminalMass,
+          pathTime: candidate.pathTime,
+          weight: theta,
+        });
+      }
+      atoms = atoms.filter(a => a.weight > 1e-9);
+      let totalWeight = 0;
+      for (const a of atoms) totalWeight += a.weight;
+      for (const a of atoms) a.weight /= totalWeight;
     }
     const stats = terminalMaximumStats(current.terminalMass, grid.x, fallback);
     return {
@@ -232,6 +299,8 @@ const BB = (function () {
       terminalMass: current.terminalMass,
       aliveCurve: current.aliveCurve,
       cutoffs: current.cutoffs,
+      keepFirst: current.keepFirst,
+      atoms,
       dualGap,
       stats,
     };
@@ -272,6 +341,13 @@ const BB = (function () {
     const theta = span > 1e-14 ? (lowSol.pathTime - target) / span : 0;
     const mix = combine(lowSol, highSol, theta);
     const stats = terminalMaximumStats(mix.terminalMass, grid.x, fallback);
+    const atoms = [];
+    for (const a of lowSol.atoms) {
+      atoms.push(Object.assign({}, a, { weight: a.weight * (1 - theta) }));
+    }
+    for (const a of highSol.atoms) {
+      atoms.push(Object.assign({}, a, { weight: a.weight * theta }));
+    }
     return {
       lambda: 0.5 * (lowSol.lambda + highSol.lambda),
       objective: stats.value,
@@ -279,6 +355,8 @@ const BB = (function () {
       terminalMass: mix.terminalMass,
       aliveCurve: mix.aliveCurve,
       cutoffs: mix.cutoffs,
+      keepFirst: mix.keepFirst,
+      atoms: atoms.filter(a => a.weight > 1e-9),
       dualGap: Math.max(lowSol.dualGap, highSol.dualGap),
       stats,
     };
@@ -342,6 +420,7 @@ const BB = (function () {
     pointMassInitial,
     terminalMaximumStats,
     bestResponse,
+    propagateUnderCutoffs,
     solveLagrangian,
     solveForBudget,
     staticThinningBaseline,

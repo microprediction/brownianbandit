@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>The budget frontier &mdash; Budgeted Brownian Races</title>
+  <link rel="stylesheet" href="./style.css" />
+  <link rel="stylesheet" href="./demos.css" />
+</head>
+<body>
+<header class="site-header">
+  <div class="nav-inner">
+    <a class="brand" href="./index.html">brownianbandit</a>
+    <nav>
+      <a href="./index.html">Home</a>
+      <a href="./demos.html">Demos</a>
+      <a href="./papers.html">Papers</a>
+      <a href="./bibliography.html">Bibliography</a>
+      <a href="https://github.com/microprediction/brownianbandit">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <p class="demo-nav"><a href="./demos.html">&larr; All demos</a>
+  <span><a href="./demo.html">the budget solve</a> &middot;
+  <a href="https://github.com/microprediction/brownianbandit/blob/main/docs/bb_core.js">bb_core.js</a></span></p>
+  <h1>The budget frontier</h1>
+  <p class="subtitle">Expected maximum as a function of the path-time budget, adaptive against both baselines.</p>
+
+  <p>
+    Every point is a full solve: dual bisection on the shadow price, wavefront
+    policies from the obstacle problem, Frank&ndash;Wolfe mixing. The one-shot
+    baseline keeps everyone until its best single screening date and then
+    retains an upper tail; static thinning spends the same budget on a random
+    subset chosen at time zero. Change the intensity and the sweep reruns.
+  </p>
+
+  <div class="widget">
+    <div class="controls">
+      <label for="intensity">initial intensity</label>
+      <input type="range" id="intensity" min="25" max="300" step="5" value="100" />
+      <span class="val" id="intensityVal">100</span>
+    </div>
+    <canvas id="frontier" width="820" height="320"></canvas>
+    <div class="readout" id="readout">computing&hellip;</div>
+  </div>
+
+  <div class="lookfor">What to look for: the adaptive curve must sit strictly
+  above the one-shot curve, and the one-shot curve must never fall below
+  static thinning; a crossing anywhere would falsify the solver, since both
+  baselines are feasible policies for the same problem. At tight budgets the
+  one-shot policy's best screening date is time zero, when every path still
+  sits at the same starting point, and the two baselines coincide; equality
+  there is expected, a crossing is not. The adaptive curve should also be
+  concave &mdash; each extra unit of budget buys less than the one before.
+  </div>
+
+  <p class="muted">
+    Discretization: 40 time steps on a 241-point state grid, chosen so the
+    ten-point sweep completes in about a second. Finer grids shift the curves
+    by a few hundredths without changing their order.
+  </p>
+</main>
+
+<script src="./bb_core.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  const N_STEPS = 40;
+  const N_SPACE = 241;
+  const grid = BB.buildGrid(-6, 6, N_SPACE, 1 / N_STEPS, 1.0);
+
+  const intensityEl = document.getElementById('intensity');
+  const intensityVal = document.getElementById('intensityVal');
+  const readout = document.getElementById('readout');
+  let generation = 0;
+
+  function chart(budgets, series, done) {
+    const c = document.getElementById('frontier');
+    const cx = c.getContext('2d');
+    const W = c.width, H = c.height;
+    cx.clearRect(0, 0, W, H);
+    const padL = 52, padB = 30;
+    let ymin = Infinity, ymax = -Infinity;
+    for (const s of series) {
+      for (const v of s.ys) {
+        if (isFinite(v)) { ymin = Math.min(ymin, v); ymax = Math.max(ymax, v); }
+      }
+    }
+    if (!isFinite(ymin)) { ymin = 0; ymax = 1; }
+    const pad = (ymax - ymin) * 0.1 || 0.01;
+    ymin -= pad; ymax += pad;
+    const X = v => padL + (v - budgets[0]) / (budgets[budgets.length - 1] - budgets[0]) * (W - padL - 14);
+    const Y = v => H - padB - (v - ymin) / (ymax - ymin) * (H - padB - 26);
+    cx.strokeStyle = '#e2e2e2'; cx.lineWidth = 1;
+    cx.beginPath();
+    cx.moveTo(padL, 14); cx.lineTo(padL, H - padB); cx.lineTo(W - 14, H - padB);
+    cx.stroke();
+    cx.fillStyle = '#5a5a5a'; cx.font = '12px sans-serif'; cx.textAlign = 'left';
+    cx.fillText('Expected terminal maximum vs path-time budget', padL, 12);
+    cx.fillStyle = '#9a9a9a'; cx.font = '10px sans-serif'; cx.textAlign = 'center';
+    for (const b of budgets) cx.fillText(b, X(b), H - padB + 14);
+    cx.textAlign = 'right';
+    const yticks = 5;
+    for (let i = 0; i <= yticks; i++) {
+      const v = ymin + (ymax - ymin) * i / yticks;
+      cx.fillText(v.toFixed(2), padL - 6, Y(v) + 3);
+    }
+    for (const s of series) {
+      cx.strokeStyle = s.color; cx.lineWidth = 2;
+      cx.beginPath();
+      let started = false;
+      for (let i = 0; i < budgets.length; i++) {
+        if (!isFinite(s.ys[i])) continue;
+        if (started) cx.lineTo(X(budgets[i]), Y(s.ys[i]));
+        else { cx.moveTo(X(budgets[i]), Y(s.ys[i])); started = true; }
+      }
+      cx.stroke();
+      cx.fillStyle = s.color;
+      for (let i = 0; i < budgets.length; i++) {
+        if (!isFinite(s.ys[i])) continue;
+        cx.beginPath(); cx.arc(X(budgets[i]), Y(s.ys[i]), 2.5, 0, 7); cx.fill();
+      }
+    }
+    cx.font = '11px sans-serif'; cx.textAlign = 'left';
+    let ly = 30;
+    for (const s of series) {
+      cx.fillStyle = s.color;
+      cx.fillText(s.label, padL + 12, ly);
+      ly += 14;
+    }
+    if (!done) {
+      cx.fillStyle = '#9a9a9a';
+      cx.fillText('computing…', W - 110, 30);
+    }
+  }
+
+  function recompute() {
+    const intensity = +intensityEl.value;
+    intensityVal.textContent = intensity.toFixed(0);
+    const myGeneration = ++generation;
+    const budgets = [1, 2, 4, 6, 8, 12, 16, 20, 26, 32];
+    const adaptive = budgets.map(() => NaN);
+    const oneShot = budgets.map(() => NaN);
+    const staticThin = budgets.map(() => NaN);
+    const initial = BB.pointMassInitial(grid, intensity, 0.0);
+    let i = 0;
+
+    function next() {
+      if (myGeneration !== generation) return;
+      if (i >= budgets.length) {
+        let ok = true, minGap = Infinity, ties = 0;
+        for (let k = 0; k < budgets.length; k++) {
+          if (!(adaptive[k] > oneShot[k] && oneShot[k] >= staticThin[k] - 1e-12)) ok = false;
+          if (Math.abs(oneShot[k] - staticThin[k]) <= 1e-12) ties++;
+          minGap = Math.min(minGap, adaptive[k] - oneShot[k]);
+        }
+        chart(budgets, seriesOf(), true);
+        readout.innerHTML =
+          'Ordering adaptive &gt; one-shot &ge; static at all ' + budgets.length +
+          ' budgets: <b>' + (ok ? 'true' : 'FALSE') + '</b>. Smallest adaptive-minus-one-shot ' +
+          'gap: <b>' + minGap.toFixed(4) + '</b>.' +
+          (ties > 0 ? ' The baselines coincide at ' + ties +
+            ' tight budget' + (ties > 1 ? 's' : '') +
+            ', where the best screening date is time zero.' : '');
+        return;
+      }
+      const b = budgets[i];
+      const sol = BB.solveForBudget(b, grid, initial, N_STEPS, 0.0,
+        { tol: 1e-5, maxIter: 70, budgetTol: 2e-3, bisections: 18 });
+      adaptive[i] = sol.objective;
+      oneShot[i] = BB.oneShotScreeningBaseline(b, grid, initial, N_STEPS, 0.0).objective;
+      staticThin[i] = BB.staticThinningBaseline(b, grid, initial, N_STEPS, 0.0).objective;
+      i++;
+      chart(budgets, seriesOf(), false);
+      readout.textContent = 'computing… ' + i + ' / ' + budgets.length + ' budgets solved';
+      setTimeout(next, 5);
+    }
+
+    function seriesOf() {
+      return [
+        { ys: adaptive, color: '#4a3aff', label: 'adaptive wavefront pruning' },
+        { ys: oneShot, color: '#8a80e8', label: 'best one-shot screening' },
+        { ys: staticThin, color: '#b9b9b9', label: 'static random thinning' },
+      ];
+    }
+
+    chart(budgets, seriesOf(), false);
+    readout.textContent = 'computing…';
+    setTimeout(next, 5);
+  }
+
+  intensityEl.addEventListener('change', recompute);
+  intensityEl.addEventListener('input', function () { intensityVal.textContent = (+intensityEl.value).toFixed(0); });
+  recompute();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Demos &mdash; Budgeted Brownian Races</title>
+  <link rel="stylesheet" href="./style.css" />
+  <link rel="stylesheet" href="./demos.css" />
+</head>
+<body>
+<header class="site-header">
+  <div class="nav-inner">
+    <a class="brand" href="./index.html">brownianbandit</a>
+    <nav>
+      <a href="./index.html">Home</a>
+      <a href="./demos.html">Demos</a>
+      <a href="./papers.html">Papers</a>
+      <a href="./bibliography.html">Bibliography</a>
+      <a href="https://github.com/microprediction/brownianbandit">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <h1>Demos</h1>
+  <p class="subtitle">The solver, ported to dependency-free JavaScript and run live. Each page says what would falsify it.</p>
+
+  <p>
+    All three demos call <a href="https://github.com/microprediction/brownianbandit/blob/main/docs/bb_core.js">bb_core.js</a>,
+    a direct port of <code>brownianbandit/mean_field.py</code> held to the
+    Python at stated tolerances by
+    <a href="https://github.com/microprediction/brownianbandit/blob/main/tests/test_js_parity.py">tests/test_js_parity.py</a>.
+    Nothing is pre-baked; every chart is computed when you move a control.
+  </p>
+
+  <ul class="demo-list">
+    <li><a href="./demo.html"><strong>The budget solve</strong></a>
+      <div class="claim">Survivor schedule, wavefront cutoffs, and terminal
+      cloud at any budget and intensity, with the Frank&ndash;Wolfe dual gap
+      as the optimality certificate. Falsified if either baseline ever beats
+      the adaptive policy.</div>
+    </li>
+    <li><a href="./race.html"><strong>Watch a race</strong></a>
+      <div class="claim">Sampled paths killed live by the solved wavefront
+      policy, replaying continuously. Falsified if the running mean of
+      realized maxima drifts from the predicted expected maximum by more
+      than its shrinking standard error allows.</div>
+    </li>
+    <li><a href="./frontier.html"><strong>The budget frontier</strong></a>
+      <div class="claim">Expected maximum against budget for the adaptive
+      policy and both baselines, ten full solves per sweep. Falsified by a
+      crossing anywhere, or by a convex stretch in the adaptive curve.</div>
+    </li>
+  </ul>
+</main>
+
+<footer>
+  <a href="https://github.com/microprediction/brownianbandit">Source</a> &middot;
+  Maintained by <a href="https://github.com/microprediction">Peter Cotton</a>.
+</footer>
+</body>
+</html>

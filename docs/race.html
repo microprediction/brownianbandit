@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Watch a race &mdash; Budgeted Brownian Races</title>
+  <link rel="stylesheet" href="./style.css" />
+  <link rel="stylesheet" href="./demos.css" />
+</head>
+<body>
+<header class="site-header">
+  <div class="nav-inner">
+    <a class="brand" href="./index.html">brownianbandit</a>
+    <nav>
+      <a href="./index.html">Home</a>
+      <a href="./demos.html">Demos</a>
+      <a href="./papers.html">Papers</a>
+      <a href="./bibliography.html">Bibliography</a>
+      <a href="https://github.com/microprediction/brownianbandit">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <p class="demo-nav"><a href="./demos.html">&larr; All demos</a>
+  <span><a href="./demo.html">the budget solve</a> &middot;
+  <a href="https://github.com/microprediction/brownianbandit/blob/main/docs/bb_core.js">bb_core.js</a></span></p>
+  <h1>Watch a race</h1>
+  <p class="subtitle">Sampled paths under the solved wavefront policy, against the value the solver promised.</p>
+
+  <p>
+    The solver prices path-time for your budget and returns a wavefront
+    policy: one kill-below cutoff per time step. Here that policy is applied
+    to actual sampled paths &mdash; a Poisson number of them, stepping
+    through the same Markov chain the solver planned over. Paths dropping
+    below the cutoff die (gray); survivors (blue) run to maturity, where the
+    best of them, or the fallback at zero, is the payoff. Races replay
+    continuously and the running mean accumulates.
+  </p>
+
+  <div class="widget">
+    <div class="controls">
+      <label for="budget">path-time budget</label>
+      <input type="range" id="budget" min="1" max="40" step="0.5" value="10" />
+      <span class="val" id="budgetVal">10.0</span>
+      <label for="intensity">initial intensity</label>
+      <input type="range" id="intensity" min="25" max="300" step="5" value="100" />
+      <span class="val" id="intensityVal">100</span>
+      <button id="pause">pause</button>
+    </div>
+    <canvas id="race" width="820" height="300"></canvas>
+    <div class="readout" id="readout">solving&hellip;</div>
+  </div>
+
+  <div class="lookfor">What to look for: the running mean of realized maxima
+  must converge to the solver's expected maximum, and the running mean of
+  spent path-time to the solver's expected path-time &mdash; each staying
+  within about two standard errors of its target as trials accumulate. A
+  drift that does not shrink would falsify the forward pass. The optimal
+  policy is generally a mixture of a few wavefront atoms (the dashed
+  cutoffs, opacity by weight), and each path independently follows one of
+  them; by Poisson thinning the sampled cloud then has exactly the
+  mixture's intensity, so the targets are exact, not approximate.
+  </div>
+
+  <p class="muted">
+    Paths are sampled from the identical discrete transition kernel the
+    solver plans over, so the comparison is exact in distribution: any
+    persistent gap is a bug, not discretization. 50 time steps, 301 state
+    points.
+  </p>
+</main>
+
+<script src="./bb_core.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  const N_STEPS = 50;
+  const N_SPACE = 301;
+  const grid = BB.buildGrid(-6, 6, N_SPACE, 1 / N_STEPS, 1.0);
+
+  // per-row sampling CDFs for the exact transition kernel
+  const rowCdf = grid.rows.map(function (row) {
+    const cdf = new Float64Array(row.probs.length);
+    let acc = 0;
+    for (let k = 0; k < row.probs.length; k++) { acc += row.probs[k]; cdf[k] = acc; }
+    return cdf;
+  });
+  function stepIndex(j) {
+    const u = Math.random();
+    const cdf = rowCdf[j];
+    let lo = 0, hi = cdf.length - 1;
+    while (lo < hi) {
+      const mid = (lo + hi) >> 1;
+      if (cdf[mid] < u) lo = mid + 1; else hi = mid;
+    }
+    return grid.rows[j].cols[lo];
+  }
+
+  function poisson(lambda) {
+    let n = 0;
+    while (lambda > 0) {
+      const chunk = Math.min(lambda, 30);
+      const L = Math.exp(-chunk);
+      let k = 0, p = 1;
+      do { k++; p *= Math.random(); } while (p > L);
+      n += k - 1;
+      lambda -= chunk;
+    }
+    return n;
+  }
+
+  const budgetEl = document.getElementById('budget');
+  const intensityEl = document.getElementById('intensity');
+  const budgetVal = document.getElementById('budgetVal');
+  const intensityVal = document.getElementById('intensityVal');
+  const readout = document.getElementById('readout');
+  const pauseBtn = document.getElementById('pause');
+
+  let policy = null;      // {atoms: [{keepFirst, cutoffs, weight}]}
+  let predicted = null;   // {value, pathTime}
+  let trials = 0, sumMax = 0, sumSq = 0, sumTime = 0;
+  let paths = [];         // per path: {states:[...], deadAt:int|null}
+  let step = 0;
+  let paused = false;
+  let generation = 0;
+
+  function solve() {
+    const budget = +budgetEl.value;
+    const intensity = +intensityEl.value;
+    budgetVal.textContent = budget.toFixed(1);
+    intensityVal.textContent = intensity.toFixed(0);
+    readout.textContent = 'solving…';
+    const myGeneration = ++generation;
+    setTimeout(function () {
+      if (myGeneration !== generation) return;
+      const initial = BB.pointMassInitial(grid, intensity, 0.0);
+      const sol = BB.solveForBudget(budget, grid, initial, N_STEPS, 0.0,
+        { tol: 1e-5, maxIter: 90, budgetTol: 2e-3, bisections: 20 });
+      // Each path independently follows one atom of the optimal mixture,
+      // so the sampled cloud has exactly the mixture's intensity.
+      policy = { atoms: sol.atoms };
+      predicted = { value: sol.objective, pathTime: sol.pathTime };
+      trials = 0; sumMax = 0; sumSq = 0; sumTime = 0;
+      startRace();
+    }, 10);
+  }
+
+  function startRace() {
+    const intensity = +intensityEl.value;
+    const n = poisson(intensity);
+    // point mass at x0 = 0, split like the solver's initial intensity
+    const t = (0 - grid.x[0]) / grid.dx;
+    const left = Math.floor(t);
+    const w = t - left;
+    paths = [];
+    for (let i = 0; i < n; i++) {
+      const j0 = Math.random() < w ? left + 1 : left;
+      let u = Math.random();
+      let atom = policy.atoms[policy.atoms.length - 1];
+      for (const a of policy.atoms) {
+        u -= a.weight;
+        if (u <= 0) { atom = a; break; }
+      }
+      paths.push({ states: [j0], deadAt: null, keepFirst: atom.keepFirst });
+    }
+    step = 0;
+  }
+
+  function advance() {
+    if (!policy) return;
+    for (const p of paths) {
+      if (p.deadAt !== null) continue;
+      const j = p.states[p.states.length - 1];
+      if (j < p.keepFirst[step]) { p.deadAt = step; continue; }
+      p.states.push(stepIndex(j));
+    }
+    step++;
+    if (step >= N_STEPS) {
+      let best = 0; // the fallback
+      let spent = 0;
+      for (const p of paths) {
+        const alive = p.deadAt === null;
+        const lastIdx = p.states.length - 1;
+        spent += grid.dt * (alive ? N_STEPS : p.deadAt);
+        if (alive) best = Math.max(best, grid.x[p.states[lastIdx]]);
+      }
+      trials++;
+      sumMax += best; sumSq += best * best; sumTime += spent;
+      startRace();
+    }
+  }
+
+  function draw() {
+    const c = document.getElementById('race');
+    const cx = c.getContext('2d');
+    const W = c.width, H = c.height;
+    cx.clearRect(0, 0, W, H);
+    const padL = 44, padB = 22;
+    const yLo = -3.2, yHi = 3.2;
+    const X = k => padL + k / N_STEPS * (W - padL - 12);
+    const Y = v => H - padB - (Math.min(Math.max(v, yLo), yHi) - yLo) / (yHi - yLo) * (H - padB - 12);
+    cx.strokeStyle = '#e2e2e2'; cx.lineWidth = 1;
+    cx.beginPath(); cx.moveTo(padL, Y(0)); cx.lineTo(W - 12, Y(0)); cx.stroke();
+    cx.beginPath(); cx.moveTo(W - 12, 12); cx.lineTo(W - 12, H - padB); cx.stroke();
+    cx.fillStyle = '#9a9a9a'; cx.font = '10px sans-serif'; cx.textAlign = 'left';
+    cx.fillText('0', 4, Y(0) + 3); cx.fillText('T', W - 10, H - 8);
+
+    if (policy) {
+      cx.setLineDash([5, 4]); cx.lineWidth = 1.4;
+      let labeled = false;
+      for (const atom of policy.atoms) {
+        if (atom.weight < 0.02) continue;
+        cx.strokeStyle = '#4a3aff';
+        cx.globalAlpha = 0.2 + 0.5 * atom.weight;
+        cx.beginPath();
+        let started = false;
+        for (let k = 0; k < N_STEPS; k++) {
+          const v = atom.cutoffs[k];
+          if (!isFinite(v)) { started = false; continue; }
+          if (started) cx.lineTo(X(k), Y(v)); else { cx.moveTo(X(k), Y(v)); started = true; }
+        }
+        cx.stroke();
+        if (!labeled) {
+          cx.globalAlpha = 1;
+          cx.fillStyle = '#4a3aff'; cx.font = '10px sans-serif';
+          cx.fillText('kill below', padL + 6, Y(atom.cutoffs.find(isFinite) || 0) + 14);
+          labeled = true;
+        }
+      }
+      cx.setLineDash([]); cx.globalAlpha = 1;
+    }
+
+    for (const p of paths) {
+      const dead = p.deadAt !== null;
+      cx.strokeStyle = dead ? '#c9c9c9' : '#4a3aff';
+      cx.globalAlpha = dead ? 0.7 : 0.75;
+      cx.lineWidth = dead ? 1 : 1.5;
+      cx.beginPath();
+      cx.moveTo(X(0), Y(grid.x[p.states[0]]));
+      for (let k = 1; k < p.states.length; k++) cx.lineTo(X(k), Y(grid.x[p.states[k]]));
+      cx.stroke();
+    }
+    cx.globalAlpha = 1;
+
+    if (predicted && trials > 0) {
+      const meanMax = sumMax / trials;
+      const meanTime = sumTime / trials;
+      const se = trials > 1 ?
+        Math.sqrt(Math.max(sumSq / trials - meanMax * meanMax, 0) / (trials - 1)) : NaN;
+      const within = isFinite(se) && Math.abs(meanMax - predicted.value) <= 2 * se + 1e-9;
+      readout.innerHTML =
+        'Trials: <b>' + trials + '</b>. Realized mean maximum <b>' + meanMax.toFixed(4) +
+        '</b> vs predicted <b>' + predicted.value.toFixed(4) + '</b>' +
+        (isFinite(se) ? ' (s.e. ' + se.toFixed(4) + ', within 2 s.e.: <b>' +
+          (within ? 'true' : 'FALSE') + '</b>)' : '') +
+        '. Mean spent path-time <b>' + meanTime.toFixed(3) +
+        '</b> vs predicted <b>' + predicted.pathTime.toFixed(3) + '</b>.';
+    } else if (predicted) {
+      readout.innerHTML = 'Predicted expected maximum for this policy: <b>' +
+        predicted.value.toFixed(4) + '</b>; expected path-time <b>' +
+        predicted.pathTime.toFixed(3) + '</b>. First race running…';
+    }
+  }
+
+  function tick() {
+    if (!paused && policy) { advance(); advance(); }
+    draw();
+    requestAnimationFrame(tick);
+  }
+
+  budgetEl.addEventListener('change', solve);
+  intensityEl.addEventListener('change', solve);
+  budgetEl.addEventListener('input', function () { budgetVal.textContent = (+budgetEl.value).toFixed(1); });
+  intensityEl.addEventListener('input', function () { intensityVal.textContent = (+intensityEl.value).toFixed(0); });
+  pauseBtn.addEventListener('click', function () {
+    paused = !paused;
+    pauseBtn.textContent = paused ? 'resume' : 'pause';
+    pauseBtn.classList.toggle('on', paused);
+  });
+
+  solve();
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>

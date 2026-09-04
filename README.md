@@ -117,6 +117,20 @@ predicted value, and the full budget frontier against both baselines.
 `tests/test_js_parity.py` holds the port to the Python at stated
 tolerances.
 
+## Applications
+
+Every application names the same three objects: the paths, the
+carrying cost, and the terminal maximum. Test-time compute is the
+metered case (parallel rollouts, tokens per path kept alive, best
+completion paid); stage-gated R&D reviewed at phase gates is the
+one-shot screening baseline generalized; long-shot portfolios and
+hiring funnels share the payoff shape but violate the model's caveats
+hardest (correlated candidates, hard budgets, population-aware
+deciders). The
+[applications page](https://brownianbandit.microprediction.org/applications.html)
+carries the mapping table and what would falsify the pitch in each
+domain.
+
 ## Papers
 
 The manuscript in preparation is *Wavefront Pruning in Budgeted

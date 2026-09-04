@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Applications &mdash; Budgeted Brownian Races</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+<header class="site-header">
+  <div class="nav-inner">
+    <a class="brand" href="./index.html">brownianbandit</a>
+    <nav>
+      <a href="./index.html">Home</a>
+      <a href="./demos.html">Demos</a>
+      <a href="./applications.html">Applications</a>
+      <a href="./papers.html">Papers</a>
+      <a href="./bibliography.html">Bibliography</a>
+      <a href="https://github.com/microprediction/brownianbandit">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <h1>Applications</h1>
+  <p class="subtitle">Where the race is run for money.</p>
+
+  <p class="lead">
+    Every application below is the same problem wearing different clothes,
+    and naming the clothes is most of the work: what the paths are, what one
+    unit of path-time costs, and what maximum is paid at the end. Once those
+    three are named, the machinery on this site applies as is: the wavefront
+    policy says which paths to keep, the budget frontier says what another
+    unit of budget buys, and the certificate says how far the answer can be
+    from optimal.
+  </p>
+
+  <div class="table-wrap">
+    <table class="impl">
+      <thead>
+        <tr><th>Domain</th><th>The paths</th><th>Path-time cost</th><th>Terminal maximum</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Test-time compute</td>
+          <td class="mode">parallel generations or reasoning paths</td>
+          <td class="mode">tokens per rollout kept alive</td>
+          <td class="mode">the best completion, scored by a verifier</td>
+        </tr>
+        <tr>
+          <td>Research-agent fleets</td>
+          <td class="mode">agent trajectories on one task</td>
+          <td class="mode">compute and API spend per live agent</td>
+          <td class="mode">the best finding that survives review</td>
+        </tr>
+        <tr>
+          <td>Stage-gated R&amp;D</td>
+          <td class="mode">drug candidates, prototypes, projects</td>
+          <td class="mode">burn per candidate per month</td>
+          <td class="mode">the one candidate that ships</td>
+        </tr>
+        <tr>
+          <td>Long-shot portfolios</td>
+          <td class="mode">early-stage companies, exploratory bets</td>
+          <td class="mode">follow-on capital and attention</td>
+          <td class="mode">the best exit, which dominates fund returns</td>
+        </tr>
+        <tr>
+          <td>Hiring funnels</td>
+          <td class="mode">candidates in process</td>
+          <td class="mode">interviewer hours per candidate per round</td>
+          <td class="mode">the quality of the one hire made</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Test-time compute</h2>
+  <p>
+    This is the application with a meter on it: inference spend is billed
+    per token, and best-of-$n$ pays only the best completion. The two
+    baselines on the <a href="./demo.html">demo page</a> are the two
+    policies the industry actually runs. Choosing $n$ up front and letting
+    every rollout finish is static thinning; a single mid-run evaluation
+    that keeps the top scorers is one-shot screening. In the committed
+    example the adaptive wavefront policy beats them by 19% and 30% of
+    expected terminal value at the same expected budget, and those two
+    numbers are the honest size of the opportunity, not a multiplier on
+    revenue. Speculative rejection and learned prefix pruning (see the
+    <a href="./bibliography.html">bibliography</a>) are this policy built
+    empirically; the race says what the kill rule should be, rather than
+    fitting it.
+  </p>
+
+  <h2>Stage-gated R&amp;D</h2>
+  <p>
+    A pipeline reviewed at fixed phase gates is one-shot screening
+    generalized: keep everyone until the gate, then retain an upper tail.
+    The wavefront policy replaces the gate with a continuous kill-below bar
+    that rises toward the deadline, and the gap between the two is
+    measurable per portfolio with the committed solver: feed in the
+    initial candidate cloud, the monthly burn, and the budget, and read
+    off the difference. The survivor schedule on the demo page is the
+    staffing plan that falls out: cull hard immediately, then carry a
+    slowly thinning elite.
+  </p>
+
+  <h2>Long-shot portfolios and funnels</h2>
+  <p>
+    Seed portfolios and hiring funnels share the payoff shape, since the
+    best exit or the one hire is what is paid, and both meter attention
+    rather than calendar time. Here the model's caveats bind hardest:
+    real candidates are correlated, budgets are hard rather than expected,
+    and a partner who sees the whole portfolio is not population-blind.
+    The mean-field answer is a stylized benchmark for these domains, not a
+    deployable policy, and the three caveats are exactly the open problems
+    listed in the <a href="./wavefront_pruning_draft.pdf">paper's</a>
+    closing section.
+  </p>
+
+  <h2>What would falsify the pitch</h2>
+  <p>
+    The claim behind every row is graded, not binary: adaptive pruning
+    beats a single screening date, which beats up-front thinning, by
+    margins the solver computes per configuration. If a domain's measured
+    margins come out near zero, the extra machinery is not worth its
+    complexity there, and the <a href="./frontier.html">budget
+    frontier</a> makes that check cheap to run before anything is built.
+  </p>
+</main>
+
+<footer>
+  <a href="https://github.com/microprediction/brownianbandit">Source</a> &middot;
+  Maintained by <a href="https://github.com/microprediction">Peter Cotton</a>.
+</footer>
+</body>
+</html>

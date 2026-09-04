@@ -37,20 +37,19 @@ Brownian paths, pays per unit time for every path kept alive, may
 irreversibly prune, and spends a finite path-time budget to maximize the
 expected terminal maximum. We solve the mean-field version: a Poissonized
 population under per-path controls, with the budget enforced in
-expectation. The expected maximum of the terminal cloud has an exact
-layer-cake form whose gradient is a pivotal value, the expected
-improvement from one more infinitesimal survivor, and for a fixed shadow
-price on path-time the linearized best response is an obstacle problem
-whose keep sets are upper tails: the \emph{wavefront policy}, which
-retains a path while its propagated future pivotal value exceeds its
-carrying cost. A fully corrective Frank--Wolfe method over wavefront
-policies, with dual bisection on the price, solves the budget problem and
-certifies its answer: the returned policy is feasible and its
-suboptimality is bounded by the Frank--Wolfe gap plus a complementary
-slackness term. In the committed example the adaptive policy improves the
-expected maximum by 19\% over the best single screening date and by 30\%
-over static thinning at the same expected budget. The finite-$n$ race with
-a pathwise budget, and the continuous-time limit, are left to future work.
+expectation. The expected maximum has an exact layer-cake form whose
+gradient is a pivotal value, and for a fixed price on path-time the
+linearized best response is an obstacle problem whose keep sets are upper
+tails: the \emph{wavefront policy}, which retains a path while its
+propagated future pivotal value exceeds its carrying cost. A fully
+corrective Frank--Wolfe method over wavefront policies, with dual
+bisection on the price, solves the budget problem and certifies its
+answer, bounding suboptimality by the Frank--Wolfe gap plus a
+complementary slackness term. In the committed example the adaptive
+policy improves the expected maximum by 19\% over the best single
+screening date and by 30\% over static thinning at the same expected
+budget; the finite-$n$ race with a pathwise budget is left to future
+work.
 \end{abstract}
 
 \section{Introduction}

@@ -139,9 +139,10 @@ tracks it. The strategic sibling replaces the planner with a race for a
 prize: *Research Prizes with Uncertain Compute Costs* sets up the entry
 game and the coupled stopping equilibrium, and
 [*Clay Shooting*](https://brownianbandit.microprediction.org/clay_shooting.html)
-closes its free parameters and calibrates them to the Millennium Prize
-Problems, where the rival hazard turns out to supply under a tenth of the
-impatience facing an attempt. A companion note,
+closes its free parameters — a Brownian attempt buys success probability
+`p` at cost `zeta^2 p/(1-p)`, and optimising that against the shared
+reward competes the effective prize down exactly to the purse at which a
+lone researcher breaks even. A companion note,
 [*Posterior-Predictive Pass-at-k*](docs/passk_posterior.pdf), covers
 the estimation side of the rollout application: pass@k is the
 expected-maximum payoff of a best-of-k batch, and the note replaces the

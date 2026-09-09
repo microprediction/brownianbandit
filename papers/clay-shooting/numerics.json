@@ -1,362 +1,856 @@
 {
   "seed": 20260909,
-  "reduction": {
-    "V": 100.0,
+  "price": {
     "c": 1.0,
     "sigma": 1.0,
     "d": 4.0,
     "zeta": 4.0,
-    "V_min": 16.0,
-    "width": 10.0,
-    "p": 0.6,
-    "k": 24.0,
-    "k_identity_p_1_minus_p_V": 24.0,
-    "value": 36.0,
-    "value_identity_V_p_squared": 36.0,
-    "value_identity_sqrt_form": 36.0,
+    "zeta_sq": 16.0,
+    "widths": [
+      {
+        "L": 5.0,
+        "p": 0.19999999999999996,
+        "k": 4.0,
+        "price_formula": 3.999999999999999,
+        "residual": 8.881784197001252e-16
+      },
+      {
+        "L": 6.0,
+        "p": 0.33333333333333337,
+        "k": 8.0,
+        "price_formula": 8.000000000000002,
+        "residual": -1.7763568394002505e-15
+      },
+      {
+        "L": 8.0,
+        "p": 0.5,
+        "k": 16.0,
+        "price_formula": 16.0,
+        "residual": 0.0
+      },
+      {
+        "L": 10.0,
+        "p": 0.6,
+        "k": 24.0,
+        "price_formula": 23.999999999999996,
+        "residual": 3.552713678800501e-15
+      },
+      {
+        "L": 20.0,
+        "p": 0.8,
+        "k": 64.0,
+        "price_formula": 64.00000000000001,
+        "residual": -1.4210854715202004e-14
+      }
+    ],
+    "optimal_against_A": {
+      "A": 100.0,
+      "p": 0.6,
+      "k": 24.0,
+      "k_identity_p_1_minus_p_A": 24.0,
+      "value": 36.0,
+      "value_identity_A_p_sq": 36.0,
+      "value_identity_sqrt_form": 36.0,
+      "max_spend_share_of_reward": 0.25
+    },
     "monte_carlo": {
       "n_paths": 50000,
       "dt": 0.002,
       "p_hat": 0.60514,
       "p_se": 0.0021860940483299806,
       "k_hat": 24.04632400000061,
-      "k_se": 0.09171349092583445,
-      "value_hat": 36.46767599999939
+      "k_se": 0.09171349092583445
     }
   },
-  "universal_entry": [
+  "equilibrium_finite": [
+    {
+      "V_over_V_min": 1.5,
+      "n": 1,
+      "p_star": 0.18350341907227397,
+      "n_p": 0.18350341907227397,
+      "A_star": 24.0,
+      "A_over_V_min": 1.5,
+      "payoff": 0.8081641154691505,
+      "solve_probability": 0.18350341907227397
+    },
+    {
+      "V_over_V_min": 1.5,
+      "n": 2,
+      "p_star": 0.1508517754750791,
+      "n_p": 0.3017035509501582,
+      "A_star": 22.189778694299054,
+      "A_over_V_min": 1.386861168393691,
+      "payoff": 0.504956332569134,
+      "solve_probability": 0.2789472927861746
+    },
+    {
+      "V_over_V_min": 1.5,
+      "n": 3,
+      "p_star": 0.12824308347533275,
+      "n_p": 0.38472925042599826,
+      "A_star": 21.0537363042661,
+      "A_over_V_min": 1.3158585190166312,
+      "payoff": 0.3462558204051794,
+      "solve_probability": 0.33749950779195514
+    },
+    {
+      "V_over_V_min": 1.5,
+      "n": 5,
+      "p_star": 0.09883549728283025,
+      "n_p": 0.49417748641415127,
+      "A_star": 19.702068740783385,
+      "A_over_V_min": 1.2313792962989616,
+      "payoff": 0.19245878220827506,
+      "solve_probability": 0.4056799503116315
+    },
+    {
+      "V_over_V_min": 1.5,
+      "n": 10,
+      "p_star": 0.06298461860326598,
+      "n_p": 0.6298461860326598,
+      "A_star": 18.223279767774574,
+      "A_over_V_min": 1.138954985485911,
+      "payoff": 0.07229288397321125,
+      "solve_probability": 0.4782443024474563
+    },
+    {
+      "V_over_V_min": 1.5,
+      "n": 100,
+      "p_star": 0.0084113521558422,
+      "n_p": 0.8411352155842201,
+      "A_star": 16.2725978011454,
+      "A_over_V_min": 1.0170373625715876,
+      "payoff": 0.0011513000462340614,
+      "solve_probability": 0.5703106274825727
+    },
+    {
+      "V_over_V_min": 1.5,
+      "n": 1000,
+      "p_star": 0.0008707861876563648,
+      "n_p": 0.8707861876563647,
+      "A_star": 16.027901597201662,
+      "A_over_V_min": 1.001743849825104,
+      "payoff": 1.215345425842824e-05,
+      "solve_probability": 0.5815364719982747
+    },
+    {
+      "V_over_V_min": 1.5,
+      "n": 10000,
+      "p_star": 8.738730544898414e-05,
+      "n_p": 0.8738730544898413,
+      "A_star": 16.00279676037106,
+      "A_over_V_min": 1.0001747975231912,
+      "payoff": 1.2220601603381528e-07,
+      "solve_probability": 0.5826838702235664
+    },
+    {
+      "V_over_V_min": 2.0,
+      "n": 1,
+      "p_star": 0.2928932188134524,
+      "n_p": 0.2928932188134524,
+      "A_star": 32.0,
+      "A_over_V_min": 2.0,
+      "payoff": 2.7451660040609576,
+      "solve_probability": 0.2928932188134524
+    },
+    {
+      "V_over_V_min": 2.0,
+      "n": 2,
+      "p_star": 0.24512233375330728,
+      "n_p": 0.49024466750661455,
+      "A_star": 28.078042659947084,
+      "A_over_V_min": 1.7548776662466927,
+      "payoff": 1.6870680281152117,
+      "solve_probability": 0.4301597090019468
+    },
+    {
+      "V_over_V_min": 2.0,
+      "n": 3,
+      "p_star": 0.21122602091071235,
+      "n_p": 0.633678062732137,
+      "A_star": 25.716675937894788,
+      "A_over_V_min": 1.6072922461184243,
+      "payoff": 1.1473863209287725,
+      "solve_probability": 0.5092529183823541
+    },
+    {
+      "V_over_V_min": 2.0,
+      "n": 5,
+      "p_star": 0.16594908535260272,
+      "n_p": 0.8297454267630135,
+      "A_star": 23.000371816599376,
+      "A_over_V_min": 1.437523238537461,
+      "payoff": 0.6334095148695185,
+      "solve_probability": 0.5963891665210075
+    },
+    {
+      "V_over_V_min": 2.0,
+      "n": 10,
+      "p_star": 0.10857074682333903,
+      "n_p": 1.0857074682333903,
+      "A_star": 20.13474895278515,
+      "A_over_V_min": 1.2584218095490718,
+      "payoff": 0.237340509023508,
+      "solve_probability": 0.6831389784076022
+    },
+    {
+      "V_over_V_min": 2.0,
+      "n": 100,
+      "p_star": 0.015205899472065534,
+      "n_p": 1.5205899472065534,
+      "A_star": 16.49791668724227,
+      "A_over_V_min": 1.031119792952642,
+      "payoff": 0.003814638047168694,
+      "solve_probability": 0.7839551957647449
+    },
+    {
+      "V_over_V_min": 2.0,
+      "n": 1000,
+      "p_star": 0.0015859774596348858,
+      "n_p": 1.585977459634886,
+      "A_star": 16.050872270103415,
+      "A_over_V_min": 1.0031795168814635,
+      "payoff": 4.03731523070062e-05,
+      "solve_probability": 0.7955100508707078
+    },
+    {
+      "V_over_V_min": 2.0,
+      "n": 10000,
+      "p_star": 0.00015928559545096583,
+      "n_p": 1.5928559545096583,
+      "A_star": 16.005098357164375,
+      "A_over_V_min": 1.0003186473227734,
+      "payoff": 4.0607976970351984e-07,
+      "solve_probability": 0.7966817568975633
+    },
+    {
+      "V_over_V_min": 4.0,
+      "n": 1,
+      "p_star": 0.5,
+      "n_p": 0.5,
+      "A_star": 64.0,
+      "A_over_V_min": 4.0,
+      "payoff": 16.0,
+      "solve_probability": 0.5
+    },
+    {
+      "V_over_V_min": 4.0,
+      "n": 2,
+      "p_star": 0.43480228261636056,
+      "n_p": 0.8696045652327211,
+      "A_star": 50.08632695627646,
+      "A_over_V_min": 3.1303954347672787,
+      "payoff": 9.468971620640254,
+      "solve_probability": 0.6805515402643236
+    },
+    {
+      "V_over_V_min": 4.0,
+      "n": 3,
+      "p_star": 0.3861819534111388,
+      "n_p": 1.1585458602334164,
+      "A_star": 42.465933672683235,
+      "A_over_V_min": 2.654120854542702,
+      "payoff": 6.333220765606099,
+      "solve_probability": 0.7687301821474063
+    },
+    {
+      "V_over_V_min": 4.0,
+      "n": 5,
+      "p_star": 0.3174748255861759,
+      "n_p": 1.5873741279308795,
+      "A_star": 34.34651150877938,
+      "A_over_V_min": 2.146656969298711,
+      "payoff": 3.4617939927072543,
+      "solve_probability": 0.8518869336518217
+    },
+    {
+      "V_over_V_min": 4.0,
+      "n": 10,
+      "p_star": 0.2223357960136706,
+      "n_p": 2.223357960136706,
+      "A_star": 26.456705626363014,
+      "A_over_V_min": 1.6535441016476884,
+      "payoff": 1.30783978431054,
+      "solve_probability": 0.9191051102088718
+    },
+    {
+      "V_over_V_min": 4.0,
+      "n": 100,
+      "p_star": 0.03622645886603382,
+      "n_p": 3.6226458866033817,
+      "A_star": 17.22542651263736,
+      "A_over_V_min": 1.076589157039835,
+      "payoff": 0.02260589738253132,
+      "solve_probability": 0.97502532032804
+    },
+    {
+      "V_over_V_min": 4.0,
+      "n": 1000,
+      "p_star": 0.003888281770911446,
+      "n_p": 3.8882817709114463,
+      "A_star": 16.125154496624948,
+      "A_over_V_min": 1.0078221560390592,
+      "payoff": 0.00024379193976483738,
+      "solve_probability": 0.9796741294118364
+    },
+    {
+      "V_over_V_min": 4.0,
+      "n": 10000,
+      "p_star": 0.00039174206540328515,
+      "n_p": 3.9174206540328513,
+      "A_star": 16.01254311611091,
+      "A_over_V_min": 1.0007839447569318,
+      "payoff": 2.4573144226534522e-06,
+      "solve_probability": 0.9801229238538192
+    },
+    {
+      "V_over_V_min": 10.0,
+      "n": 1,
+      "p_star": 0.683772233983162,
+      "n_p": 0.683772233983162,
+      "A_star": 160.0,
+      "A_over_V_min": 10.0,
+      "payoff": 74.80711487461184,
+      "solve_probability": 0.683772233983162
+    },
+    {
+      "V_over_V_min": 10.0,
+      "n": 2,
+      "p_star": 0.6193905423274364,
+      "n_p": 1.2387810846548728,
+      "A_star": 110.44875661380507,
+      "A_over_V_min": 6.903047288362817,
+      "payoff": 42.37307390302643,
+      "solve_probability": 0.855136440730197
+    },
+    {
+      "V_over_V_min": 10.0,
+      "n": 3,
+      "p_star": 0.5691904323181842,
+      "n_p": 1.7075712969545527,
+      "A_star": 86.20834406869379,
+      "A_over_V_min": 5.388021504293362,
+      "payoff": 27.929585191095395,
+      "solve_probability": 0.9200430868105237
+    },
+    {
+      "V_over_V_min": 10.0,
+      "n": 5,
+      "p_star": 0.49438952247494417,
+      "n_p": 2.471947612374721,
+      "A_star": 62.587535762886766,
+      "A_over_V_min": 3.911720985180423,
+      "payoff": 15.297708074507389,
+      "solve_probability": 0.9669569349592837
+    },
+    {
+      "V_over_V_min": 10.0,
+      "n": 10,
+      "p_star": 0.3805390737416795,
+      "n_p": 3.8053907374167952,
+      "A_star": 41.69578431383339,
+      "A_over_V_min": 2.605986519614587,
+      "payoff": 6.037965969604631,
+      "solve_probability": 0.991679696357438
+    },
+    {
+      "V_over_V_min": 10.0,
+      "n": 100,
+      "p_star": 0.08390913362825214,
+      "n_p": 8.390913362825215,
+      "A_star": 19.065266324553086,
+      "A_over_V_min": 1.1915791452845679,
+      "payoff": 0.1342336348171941,
+      "solve_probability": 0.9998437373032129
+    },
+    {
+      "V_over_V_min": 10.0,
+      "n": 1000,
+      "p_star": 0.009804358322244092,
+      "n_p": 9.804358322244092,
+      "A_star": 16.31841455222856,
+      "A_over_V_min": 1.019900909514285,
+      "payoff": 0.0015686148133828444,
+      "solve_probability": 0.9999473970060699
+    },
+    {
+      "V_over_V_min": 10.0,
+      "n": 10000,
+      "p_star": 0.0009979590640528872,
+      "n_p": 9.979590640528873,
+      "A_star": 16.031982558008163,
+      "A_over_V_min": 1.0019989098755102,
+      "payoff": 1.596660883892933e-05,
+      "solve_probability": 0.9999538942813775
+    },
+    {
+      "V_over_V_min": 100.0,
+      "n": 1,
+      "p_star": 0.8999999999999999,
+      "n_p": 0.8999999999999999,
+      "A_star": 1600.0,
+      "A_over_V_min": 100.0,
+      "payoff": 1295.9999999999998,
+      "solve_probability": 0.8999999999999999
+    },
+    {
+      "V_over_V_min": 100.0,
+      "n": 2,
+      "p_star": 0.8671305708486627,
+      "n_p": 1.7342611416973255,
+      "A_star": 906.2955433210698,
+      "A_over_V_min": 56.64347145756686,
+      "payoff": 681.4576003541266,
+      "solve_probability": 0.9823457147969977
+    },
+    {
+      "V_over_V_min": 100.0,
+      "n": 3,
+      "p_star": 0.8408532476916728,
+      "n_p": 2.5225597430750186,
+      "A_star": 631.7197019085947,
+      "A_over_V_min": 39.48248136928717,
+      "payoff": 446.64742405272,
+      "solve_probability": 0.9959691805887325
+    },
+    {
+      "V_over_V_min": 100.0,
+      "n": 5,
+      "p_star": 0.7999715290003142,
+      "n_p": 3.999857645001571,
+      "A_star": 399.88614031457723,
+      "A_over_V_min": 24.992883769661077,
+      "payoff": 255.90891387239586,
+      "solve_probability": 0.9996797721671454
+    },
+    {
+      "V_over_V_min": 100.0,
+      "n": 10,
+      "p_star": 0.7298435520849036,
+      "n_p": 7.298435520849036,
+      "A_star": 219.22461081327288,
+      "A_over_V_min": 13.701538175829555,
+      "payoff": 116.7747265075064,
+      "solve_probability": 0.9999979291274353
+    },
+    {
+      "V_over_V_min": 100.0,
+      "n": 100,
+      "p_star": 0.3819660112501051,
+      "n_p": 38.19660112501051,
+      "A_star": 41.888543819998326,
+      "A_over_V_min": 2.6180339887498953,
+      "payoff": 6.111456180001682,
+      "solve_probability": 1.0
+    },
+    {
+      "V_over_V_min": 100.0,
+      "n": 1000,
+      "p_star": 0.08392021690038398,
+      "n_p": 83.92021690038398,
+      "A_star": 19.06572765295938,
+      "A_over_V_min": 1.1916079783099613,
+      "payoff": 0.1342723470406144,
+      "solve_probability": 1.0
+    },
+    {
+      "V_over_V_min": 100.0,
+      "n": 10000,
+      "p_star": 0.009804864072151701,
+      "n_p": 98.04864072151702,
+      "A_star": 16.31843122174845,
+      "A_over_V_min": 1.0199019513592782,
+      "payoff": 0.001568778251544272,
+      "solve_probability": 1.0
+    }
+  ],
+  "equilibrium_limit": [
+    {
+      "V_over_entry": 1.02,
+      "y_star": 0.039736837549148446,
+      "solve_probability": 0.038957683871714166
+    },
+    {
+      "V_over_entry": 1.5,
+      "y_star": 0.874217465798717,
+      "solve_probability": 0.5828116438658113
+    },
+    {
+      "V_over_entry": 2.0,
+      "y_star": 1.5936242600400399,
+      "solve_probability": 0.7968121300200199
+    },
+    {
+      "V_over_entry": 4.0,
+      "y_star": 3.920690394872886,
+      "solve_probability": 0.9801725987182216
+    },
+    {
+      "V_over_entry": 10.0,
+      "y_star": 9.999545794446533,
+      "solve_probability": 0.9999545794446535
+    },
+    {
+      "V_over_entry": 100.0,
+      "y_star": 100.0,
+      "solve_probability": 1.0
+    }
+  ],
+  "deviation_certificate": [
     {
       "n": 2,
-      "p_star": 0.0,
-      "p_star_closed_form": null,
-      "closed_form_error": null,
-      "asymptote": 0.25
+      "V_over_V_min": 4.0,
+      "p_star": 0.43480228261636056,
+      "max_unilateral_gain": -4.1744385725905886e-12
     },
     {
       "n": 3,
-      "p_star": 0.0,
-      "p_star_closed_form": null,
-      "closed_form_error": null,
-      "asymptote": 0.5555555555555556
-    },
-    {
-      "n": 4,
-      "p_star": 0.5857864376269051,
-      "p_star_closed_form": 0.5,
-      "closed_form_error": 0.08578643762690508,
-      "asymptote": 0.6875
-    },
-    {
-      "n": 5,
-      "p_star": 0.724317796349015,
-      "p_star_closed_form": 0.7236067977499789,
-      "closed_form_error": 0.0007109985990361167,
-      "asymptote": 0.76
-    },
-    {
-      "n": 6,
-      "p_star": 0.7887008253491522,
-      "p_star_closed_form": 0.7886751345948129,
-      "closed_form_error": 2.5690754339335875e-05,
-      "asymptote": 0.8055555555555556
-    },
-    {
-      "n": 8,
-      "p_star": 0.8535534279921602,
-      "p_star_closed_form": 0.8535533905932737,
-      "closed_form_error": 3.739888643217171e-08,
-      "asymptote": 0.859375
+      "V_over_V_min": 2.0,
+      "p_star": 0.21122602091071235,
+      "max_unilateral_gain": -1.4210854715202004e-14
     },
     {
       "n": 10,
-      "p_star": 0.887298334663422,
-      "p_star_closed_form": 0.8872983346207417,
-      "closed_form_error": 4.268030373566489e-11,
-      "asymptote": 0.89
-    },
-    {
-      "n": 20,
-      "p_star": 0.947213595499958,
-      "p_star_closed_form": 0.9472135954999579,
-      "closed_form_error": 1.1102230246251565e-16,
-      "asymptote": 0.9475
-    },
-    {
-      "n": 50,
-      "p_star": 0.9795831523312719,
-      "p_star_closed_form": 0.9795831523312719,
-      "closed_form_error": 0.0,
-      "asymptote": 0.9796
-    },
-    {
-      "n": 100,
-      "p_star": 0.9898979485566356,
-      "p_star_closed_form": 0.9898979485566356,
-      "closed_form_error": 0.0,
-      "asymptote": 0.9899
-    },
-    {
-      "n": 1000,
-      "p_star": 0.9989989979949859,
-      "p_star_closed_form": 0.998998997994986,
-      "closed_form_error": 1.1102230246251565e-16,
-      "asymptote": 0.998999
+      "V_over_V_min": 10.0,
+      "p_star": 0.3805390737416795,
+      "max_unilateral_gain": -3.694822225952521e-13
     }
   ],
-  "free_entry": [
+  "setup_cost": [
     {
-      "p": 0.001,
-      "y_star": 0.0020013344454979905,
-      "entrants": 2.0013344454979904,
-      "solve_probability": 0.0019993331110524926,
-      "spend_over_V": 0.0019993331110524926,
-      "entrants_expansion_2_plus_4p_over_3": 2.001333333333333,
-      "entrants_finite_n_50": 2.0421502073650726,
-      "entrants_finite_n_1000": 2.003336460927636
+      "V": 100.0,
+      "zeta_sq": 1.0,
+      "K": 1.0,
+      "V_entry": 4.0,
+      "y_star": 24.9999999996528,
+      "p_star": 0.5,
+      "entrants": 49.9999999993056,
+      "A_star": 4.0,
+      "A_star_predicted": 4.0,
+      "attempt_cost": 1.0,
+      "attempt_cost_predicted": 1.0,
+      "entrant_payoff": 0.0,
+      "aggregate_effort": 99.9999999986112,
+      "expected_payout": 99.99999999861122
     },
     {
-      "p": 0.005,
-      "y_star": 0.01003347285485083,
-      "entrants": 2.0066945709701662,
-      "solve_probability": 0.009983305490576577,
-      "spend_over_V": 0.009983305490576577,
-      "entrants_expansion_2_plus_4p_over_3": 2.006666666666667,
-      "entrants_finite_n_50": 2.0475078811164433,
-      "entrants_finite_n_1000": 2.008696556016985
+      "V": 100.0,
+      "zeta_sq": 1.0,
+      "K": 0.01,
+      "V_entry": 1.2100000000000002,
+      "y_star": 82.64462809917353,
+      "p_star": 0.09090909090909091,
+      "entrants": 909.0909090909088,
+      "A_star": 1.2100000000000004,
+      "A_star_predicted": 1.2100000000000002,
+      "attempt_cost": 0.10000000000000003,
+      "attempt_cost_predicted": 0.1,
+      "entrant_payoff": 3.469446951953614e-18,
+      "aggregate_effort": 99.99999999999997,
+      "expected_payout": 100.0
     },
     {
-      "p": 0.01,
-      "y_star": 0.020134454614765297,
-      "entrants": 2.01344546147653,
-      "solve_probability": 0.019933110068617643,
-      "spend_over_V": 0.019933110068617643,
-      "entrants_expansion_2_plus_4p_over_3": 2.013333333333333,
-      "entrants_finite_n_50": 2.054255269243183,
-      "entrants_finite_n_1000": 2.0154474045830937
-    },
-    {
-      "p": 0.02,
-      "y_star": 0.04054238651761756,
-      "entrants": 2.0271193258808777,
-      "solve_probability": 0.03973153878726521,
-      "spend_over_V": 0.03973153878726521,
-      "entrants_expansion_2_plus_4p_over_3": 2.026666666666667,
-      "entrants_finite_n_50": 2.067920632373948,
-      "entrants_finite_n_1000": 2.029121117929684
-    },
-    {
-      "p": 0.05,
-      "y_star": 0.10347883154622264,
-      "entrants": 2.0695766309244528,
-      "solve_probability": 0.09830488996891151,
-      "spend_over_V": 0.09830488996891151,
-      "entrants_expansion_2_plus_4p_over_3": 2.066666666666667,
-      "entrants_finite_n_50": 2.110339723269572,
-      "entrants_finite_n_1000": 2.0715773726558115
-    },
-    {
-      "p": 0.1,
-      "y_star": 0.21455574127132948,
-      "entrants": 2.145557412713295,
-      "solve_probability": 0.19310016714419653,
-      "spend_over_V": 0.19310016714419653,
-      "entrants_expansion_2_plus_4p_over_3": 2.1333333333333333,
-      "entrants_finite_n_50": 2.186208980690395,
-      "entrants_finite_n_1000": 2.1475541561854787
-    },
-    {
-      "p": 0.25,
-      "y_star": 0.6058599779190001,
-      "entrants": 2.4234399116760006,
-      "solve_probability": 0.4543949834392501,
-      "spend_over_V": 0.4543949834392501,
-      "entrants_expansion_2_plus_4p_over_3": 2.3333333333333335,
-      "entrants_finite_n_50": 2.4632585006746615,
-      "entrants_finite_n_1000": 2.42540112101361
-    },
-    {
-      "p": 0.5,
-      "y_star": 1.5936242600400399,
-      "entrants": 3.1872485200800798,
-      "solve_probability": 0.7968121300200199,
-      "spend_over_V": 0.7968121300200199,
-      "entrants_expansion_2_plus_4p_over_3": 2.6666666666666665,
-      "entrants_finite_n_50": 3.222261923445599,
-      "entrants_finite_n_1000": 3.1889876844071168
-    },
-    {
-      "p": 0.75,
-      "y_star": 3.920690394872886,
-      "entrants": 5.227587193163848,
-      "solve_probability": 0.9801725987182216,
-      "spend_over_V": 0.9801725987182216,
-      "entrants_expansion_2_plus_4p_over_3": 3.0,
-      "entrants_finite_n_50": 5.244666890599562,
-      "entrants_finite_n_1000": 5.228468561352772
-    },
-    {
-      "p": 0.9,
-      "y_star": 9.999545794446536,
-      "entrants": 11.11060643827393,
-      "solve_probability": 0.9999545794446535,
-      "spend_over_V": 0.9999545794446535,
-      "entrants_expansion_2_plus_4p_over_3": 3.2,
-      "entrants_finite_n_50": 11.110952499734456,
-      "entrants_finite_n_1000": 11.110631221271618
-    },
-    {
-      "p": 0.99,
-      "y_star": 99.99999999999991,
-      "entrants": 101.01010101010093,
-      "solve_probability": 1.0,
-      "spend_over_V": 1.0,
-      "entrants_expansion_2_plus_4p_over_3": 3.3200000000000003,
-      "entrants_finite_n_50": 50.0,
-      "entrants_finite_n_1000": 101.01010101010091
+      "V": 100.0,
+      "zeta_sq": 1.0,
+      "K": 0.0001,
+      "V_entry": 1.0201,
+      "y_star": 98.02960494069208,
+      "p_star": 0.009900990099009901,
+      "entrants": 9900.9900990099,
+      "A_star": 1.0201,
+      "A_star_predicted": 1.0201,
+      "attempt_cost": 0.01,
+      "attempt_cost_predicted": 0.01,
+      "entrant_payoff": -1.3552527156068805e-20,
+      "aggregate_effort": 99.99999999999999,
+      "expected_payout": 100.0
     }
   ],
-  "depth": {
-    "c": 1.0,
-    "sigma": 1.0,
-    "rho": 0.05,
-    "rows": [
+  "committed_width": {
+    "profitable_deviation": {
+      "V": 100.0,
+      "c": 1.0,
+      "sigma": 1.0,
+      "d": 5.0,
+      "L_solo": 10.0,
+      "p_solo": 0.5,
+      "A": 75.0,
+      "L_best_response": 8.660254037844387,
+      "payoff_at_solo_width": 12.5,
+      "payoff_at_best_response": 13.39745962155613,
+      "gain": 0.8974596215561306
+    },
+    "pure_equilibria": [
       {
-        "V": 1.0,
-        "width_rho_positive": 0.9958795224423128,
-        "width_ratio": 1.0,
-        "width_rho_zero": 1.0
+        "p": 0.01,
+        "incumbent_of_three": 3.3333333332441484e-07,
+        "p_cubed_over_three": 3.333333333333334e-07,
+        "fourth_entrant": -4.900249999998697e-05,
+        "fourth_formula": -4.9002500000000004e-05,
+        "potential_argmax": 3
       },
       {
-        "V": 2.0,
-        "width_rho_positive": 1.4026859816019348,
-        "width_ratio": 1.4084896315188433,
-        "width_rho_zero": 1.4142135623730951
+        "p": 0.1,
+        "incumbent_of_three": 0.0003333333333332966,
+        "p_cubed_over_three": 0.00033333333333333343,
+        "fourth_entrant": -0.004025000000000015,
+        "fourth_formula": -0.004025000000000001,
+        "potential_argmax": 3
       },
       {
-        "V": 10.0,
-        "width_rho_positive": 3.0434508083896765,
-        "width_ratio": 3.0560431656691396,
-        "width_rho_zero": 3.1622776601683795
+        "p": 0.3,
+        "incumbent_of_three": 0.009000000000000008,
+        "p_cubed_over_three": 0.009,
+        "fourth_entrant": -0.020024999999999987,
+        "fourth_formula": -0.020025,
+        "potential_argmax": 3
       },
       {
-        "V": 100.0,
-        "width_rho_positive": 7.835772176174236,
-        "width_ratio": 7.868192888390402,
-        "width_rho_zero": 10.0
+        "p": 0.5,
+        "incumbent_of_three": 0.041666666666666685,
+        "p_cubed_over_three": 0.041666666666666664,
+        "fourth_entrant": -0.015625,
+        "fourth_formula": -0.015625,
+        "potential_argmax": 3
       },
       {
-        "V": 1000.0,
-        "width_rho_positive": 14.625144214247296,
-        "width_ratio": 14.68565613075398,
-        "width_rho_zero": 31.622776601683793
+        "p": 0.7,
+        "incumbent_of_three": 0.11433333333333329,
+        "p_cubed_over_three": 0.1143333333333333,
+        "fourth_entrant": 0.03797499999999998,
+        "fourth_formula": 0.03797499999999998,
+        "potential_argmax": 4
       },
       {
-        "V": 10000.0,
-        "width_rho_positive": 21.85055529014943,
-        "width_ratio": 21.940962533864273,
-        "width_rho_zero": 100.0
+        "p": 0.9,
+        "incumbent_of_three": 0.24300000000000005,
+        "p_cubed_over_three": 0.24300000000000002,
+        "fourth_entrant": 0.15997500000000003,
+        "fourth_formula": 0.159975,
+        "potential_argmax": 11
+      }
+    ],
+    "pure_threshold_2_minus_sqrt2": 0.5857864376269049,
+    "mixed_entrants_small_p": [
+      {
+        "n": 4,
+        "n_q_at_p_1e_3": 2.6678527086221155,
+        "limit_2n_over_n_minus_1": 2.6666666666666665
+      },
+      {
+        "n": 10,
+        "n_q_at_p_1e_3": 2.2235401439976044,
+        "limit_2n_over_n_minus_1": 2.2222222222222223
+      },
+      {
+        "n": 50,
+        "n_q_at_p_1e_3": 2.0421502081026652,
+        "limit_2n_over_n_minus_1": 2.0408163265306123
+      },
+      {
+        "n": 1000,
+        "n_q_at_p_1e_3": 2.003336475456999,
+        "limit_2n_over_n_minus_1": 2.002002002002002
       }
     ]
   },
   "purse_design": {
-    "M": 49,
-    "purse": 2.0408163265306123,
-    "purse_over_minimum": 2.0408163265306123,
-    "p": 0.30000000000000004,
-    "expected_solved": 26.117175311297466,
-    "solved_per_problem": 0.5330035777815809,
-    "long_odds_M": 44.44444444444444,
-    "long_odds_purse_over_minimum": 2.25,
-    "long_odds_expected_solved": 29.62962962962963
+    "endogenous": {
+      "power": 1,
+      "condition": "exp(y) = 1 + 2.0 y",
+      "y_star": 1.2564312086261697,
+      "purse_over_break_even": 1.7564312086261695,
+      "purse_closed_form": 1.7564312086261697,
+      "solve_probability": 0.7153318629591616,
+      "problems_per_capital": 0.569336274081677,
+      "solved_per_capital": 0.40726437758907386,
+      "brute_force_y": 1.2564315235127619
+    },
+    "committed": {
+      "power": 2,
+      "condition": "exp(y) = 1 + 1.5 y",
+      "y_star": 0.7626885608503393,
+      "purse_over_break_even": 2.0430563664301915,
+      "purse_closed_form": 2.0430563664301915,
+      "solve_probability": 0.533589233919995,
+      "problems_per_capital": 0.48946275610950885,
+      "solved_per_capital": 0.26117205706484214,
+      "brute_force_y": 0.762691317787659
+    }
   },
-  "clay": {
+  "millennium": {
+    "exposure_naive_7x26": 182,
+    "exposure_corrected": 159,
+    "hazard_per_year": 0.006289308176100629,
     "hazard_ci95": [
-      0.00013910883507851592,
-      0.030613425224939
+      0.00015923149675654025,
+      0.035041782332949044
     ],
-    "rivalry_share_at_ci_upper_r05": 0.37975591707605877,
-    "rivalry_share_at_ci_lower_r05": 0.0027744576700811253,
-    "problems": 7,
-    "solved": 1,
-    "years": 26,
-    "problem_years": 182,
-    "hazard_per_year": 0.005494505494505495,
-    "rivalry_shares": [
+    "shares": [
       {
         "r": 0.03,
-        "millennium": 0.15479876160990713,
-        "warm_10yr": 0.7692307692307693,
-        "hot_3yr": 0.9174311926605505
+        "aggregate_share": 0.1733102253032929,
+        "aggregate_share_ci_upper": 0.5387580271642938,
+        "rival_share_N2": 0.094876660341556,
+        "rival_share_N3": 0.1226241569589209,
+        "rival_share_N5": 0.14362657091561942
       },
       {
         "r": 0.05,
-        "millennium": 0.09900990099009901,
-        "warm_10yr": 0.6666666666666666,
-        "hot_3yr": 0.8695652173913043
+        "aggregate_share": 0.111731843575419,
+        "aggregate_share_ci_upper": 0.4120537149110558,
+        "rival_share_N2": 0.0591715976331361,
+        "rival_share_N3": 0.07736943907156672,
+        "rival_share_N5": 0.09142857142857144
       },
       {
         "r": 0.1,
-        "millennium": 0.052083333333333336,
-        "warm_10yr": 0.5,
-        "hot_3yr": 0.7692307692307692
+        "aggregate_share": 0.0591715976331361,
+        "aggregate_share_ci_upper": 0.2594884466686955,
+        "rival_share_N2": 0.03048780487804878,
+        "rival_share_N3": 0.04024144869215292,
+        "rival_share_N5": 0.04790419161676647
       }
     ],
-    "implied_prize": [
-      {
-        "attempt_cost": 600000.0,
-        "p": 0.005,
-        "implied_V": 120603015.07537688,
-        "purse_share_of_implied_V": 0.008291666666666666
-      },
-      {
-        "attempt_cost": 600000.0,
-        "p": 0.01,
-        "implied_V": 60606060.6060606,
-        "purse_share_of_implied_V": 0.0165
-      },
-      {
-        "attempt_cost": 600000.0,
-        "p": 0.02,
-        "implied_V": 30612244.897959184,
-        "purse_share_of_implied_V": 0.03266666666666666
-      },
-      {
-        "attempt_cost": 1000000.0,
-        "p": 0.005,
-        "implied_V": 201005025.12562814,
-        "purse_share_of_implied_V": 0.004975
-      },
+    "surplus_identity_illustration": [
       {
         "attempt_cost": 1000000.0,
         "p": 0.01,
-        "implied_V": 101010101.010101,
-        "purse_share_of_implied_V": 0.0099
+        "zeta_sq": 99000000.0,
+        "V_min": 99000000.0,
+        "A": 101010101.010101,
+        "A_over_V_min": 1.0203040506070808,
+        "surplus": 2010101.0101010054,
+        "surplus_identity": 2010101.01010101,
+        "surplus_over_attempt_cost": 2.0101010101010055,
+        "purse_over_surplus": 0.4974874371859308,
+        "purse_over_twice_cost": 0.5,
+        "purse_over_level": 0.0099
+      },
+      {
+        "attempt_cost": 200000.0,
+        "p": 0.01,
+        "zeta_sq": 19800000.0,
+        "V_min": 19800000.0,
+        "A": 20202020.2020202,
+        "A_over_V_min": 1.0203040506070808,
+        "surplus": 402020.20202020183,
+        "surplus_identity": 402020.202020202,
+        "surplus_over_attempt_cost": 2.010101010101009,
+        "purse_over_surplus": 2.4874371859296494,
+        "purse_over_twice_cost": 2.5,
+        "purse_over_level": 0.0495
+      },
+      {
+        "attempt_cost": 10000000.0,
+        "p": 0.01,
+        "zeta_sq": 990000000.0,
+        "V_min": 990000000.0,
+        "A": 1010101010.10101,
+        "A_over_V_min": 1.0203040506070808,
+        "surplus": 20101010.101009965,
+        "surplus_identity": 20101010.101010103,
+        "surplus_over_attempt_cost": 2.0101010101009966,
+        "purse_over_surplus": 0.0497487437185933,
+        "purse_over_twice_cost": 0.05,
+        "purse_over_level": 0.0009900000000000002
       },
       {
         "attempt_cost": 1000000.0,
-        "p": 0.02,
-        "implied_V": 51020408.16326531,
-        "purse_share_of_implied_V": 0.0196
-      },
-      {
-        "attempt_cost": 1200000.0,
-        "p": 0.005,
-        "implied_V": 241206030.15075377,
-        "purse_share_of_implied_V": 0.004145833333333333
-      },
-      {
-        "attempt_cost": 1200000.0,
-        "p": 0.01,
-        "implied_V": 121212121.2121212,
-        "purse_share_of_implied_V": 0.00825
-      },
-      {
-        "attempt_cost": 1200000.0,
-        "p": 0.02,
-        "implied_V": 61224489.79591837,
-        "purse_share_of_implied_V": 0.01633333333333333
+        "p": 0.5,
+        "zeta_sq": 1000000.0,
+        "V_min": 1000000.0,
+        "A": 4000000.0,
+        "A_over_V_min": 4.0,
+        "surplus": 3000000.0,
+        "surplus_identity": 3000000.0,
+        "surplus_over_attempt_cost": 3.0,
+        "purse_over_surplus": 0.3333333333333333,
+        "purse_over_twice_cost": 0.5,
+        "purse_over_level": 0.25
       }
     ],
-    "diffusive_years_funded_by_1M_at_300k": 3.3333333333333335
-  }
+    "counterfactual": {
+      "k_0.2M_p_0.01": {
+        "with_purse": {
+          "y_star": 0.04033693057295265,
+          "solve_probability": 0.03953422565455089
+        },
+        "without_purse": {
+          "y_star": null,
+          "solve_probability": null,
+          "note": "below the walk-away threshold"
+        }
+      },
+      "k_1M_p_0.01": {
+        "with_purse": {
+          "y_star": 0.04033693057295265,
+          "solve_probability": 0.03953422565455089
+        },
+        "without_purse": {
+          "y_star": 0.0203371482210236,
+          "solve_probability": 0.02013174322939626
+        }
+      },
+      "k_1M_p_0.005": {
+        "with_purse": {
+          "y_star": 0.020083780367344185,
+          "solve_probability": 0.019883444658179927
+        },
+        "without_purse": {
+          "y_star": 0.010083807863320797,
+          "solve_probability": 0.010033136735141501
+        }
+      },
+      "k_1e+01M_p_0.01": {
+        "with_purse": {
+          "y_star": 0.04033693057295265,
+          "solve_probability": 0.03953422565455089
+        },
+        "without_purse": {
+          "y_star": 0.03834287584303518,
+          "solve_probability": 0.03761709353635978
+        }
+      }
+    },
+    "purse_rationalises_at_most": 250000.0
+  },
+  "sensitivity": [
+    {
+      "p": 0.01,
+      "multiple": 2,
+      "p_new": 0.29996428662531804,
+      "dp_dlogV": 0.495
+    },
+    {
+      "p": 0.01,
+      "multiple": 10,
+      "p_new": 0.6869345116433305,
+      "dp_dlogV": 0.495
+    },
+    {
+      "p": 0.1,
+      "multiple": 2,
+      "p_new": 0.36360389693210726,
+      "dp_dlogV": 0.45
+    },
+    {
+      "p": 0.1,
+      "multiple": 10,
+      "p_new": 0.7153950105848459,
+      "dp_dlogV": 0.45
+    },
+    {
+      "p": 0.3,
+      "multiple": 2,
+      "p_new": 0.5050252531694168,
+      "dp_dlogV": 0.35
+    },
+    {
+      "p": 0.3,
+      "multiple": 10,
+      "p_new": 0.7786405637882134,
+      "dp_dlogV": 0.35
+    }
+  ]
 }

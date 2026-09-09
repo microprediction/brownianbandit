@@ -135,7 +135,13 @@ domain.
 
 The manuscript in preparation is *Wavefront Pruning in Budgeted
 Brownian Races*; the [papers page](https://brownianbandit.microprediction.org/papers.html)
-tracks it. A companion note,
+tracks it. The strategic sibling replaces the planner with a race for a
+prize: *Research Prizes with Uncertain Compute Costs* sets up the entry
+game and the coupled stopping equilibrium, and
+[*Clay Shooting*](https://brownianbandit.microprediction.org/clay_shooting.html)
+closes its free parameters and calibrates them to the Millennium Prize
+Problems, where the rival hazard turns out to supply under a tenth of the
+impatience facing an attempt. A companion note,
 [*Posterior-Predictive Pass-at-k*](docs/passk_posterior.pdf), covers
 the estimation side of the rollout application: pass@k is the
 expected-maximum payoff of a best-of-k batch, and the note replaces the

@@ -1,0 +1,802 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Clay Shooting &mdash; Budgeted Brownian Races</title>
+  <link rel="stylesheet" href="./style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+    onload="renderMathInElement(document.body, {delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}]});"></script>
+  <style>
+    .abstract { background: var(--panel); border: 1px solid var(--border);
+      border-radius: 8px; padding: 16px 22px; margin: 22px 0; }
+    .abstract h2 { border: none; font-size: 0.74rem; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--muted); margin: 0 0 8px; }
+    .abstract p { margin: 0; }
+    .byline { color: var(--muted); font-size: 0.95rem; margin: 0 0 18px; }
+    .prop { background: var(--panel); border: 1px solid var(--border);
+      border-left: 3px solid var(--accent); border-radius: 6px;
+      padding: 12px 18px; margin: 20px 0; }
+    .prop .label { font-weight: 600; }
+    .proof { color: var(--muted); font-size: 0.96rem; margin: 12px 0 20px; }
+    .proof .label { font-style: italic; }
+    h3 { font-size: 1.06rem; margin: 1.8em 0 0.4em; color: var(--ink); }
+    h4 { font-size: 1rem; font-style: italic; font-weight: 500;
+      margin: 1.4em 0 0.2em; }
+    table.impl td.num, table.impl th.num { text-align: right;
+      white-space: nowrap; font-variant-numeric: tabular-nums; }
+    table.impl tbody td:first-child { white-space: nowrap; }
+    .caveats li { margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+<header class="site-header">
+  <div class="nav-inner">
+    <a class="brand" href="./index.html">brownianbandit</a>
+    <nav>
+      <a href="./index.html">Home</a>
+      <a href="./demos.html">Demos</a>
+      <a href="./applications.html">Applications</a>
+      <a href="./papers.html">Papers</a>
+      <a href="./bibliography.html">Bibliography</a>
+      <a href="https://github.com/microprediction/brownianbandit">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <p class="pagenav"><a href="./papers.html">&larr; Papers</a></p>
+
+  <h1>Clay Shooting</h1>
+  <p class="subtitle">Equilibrium effort solving outstanding problems.</p>
+  <p class="byline">Peter Cotton &middot; working draft, September 2026 &middot;
+    <a href="https://github.com/microprediction/brownianbandit/blob/main/papers/clay-shooting/paper.tex">tex</a> &middot;
+    <a href="https://github.com/microprediction/brownianbandit/blob/main/papers/clay-shooting/numerics.py">numerics</a> &middot;
+    <a href="https://github.com/microprediction/brownianbandit/blob/main/papers/clay-shooting/numerics.json">output</a></p>
+
+  <div class="abstract">
+    <h2>Abstract</h2>
+    <p>A prize for an unsolved problem is a clay pigeon: it is thrown up,
+    several guns fire, only the first hit counts, and every other shell is
+    spent. This paper closes the parameters of the Brownian stopping race so
+    that the question &ldquo;how much effort does a purse of size \(V\) call
+    forth&rdquo; has an answer. Running one approach to its optimal
+    abandonment boundary generates the reduced form of the entry game
+    exactly: an attempt succeeds with probability \(p\), costs \(p(1-p)V\) in
+    expectation, and is worth \(Vp^{2}\), so the feasible reduced forms trace
+    a single parabola and no optimally run attempt ever spends more than a
+    quarter of the prize. With those costs, free entry is far less crowded
+    than the pool: everybody attempting is an equilibrium only for \(n\le3\)
+    or \(p\ge p^{*}(n)\approx\tfrac12(1+\sqrt{1-4/n})\), and in the long-odds
+    limit the expected number of entrants falls to exactly two however many
+    capable people exist. Persistence, by contrast, grows like \(\log V\), so
+    purses buy guns faster than they buy stamina, and the philanthropist's
+    optimal purse is a fixed multiple of the walk-away threshold, independent
+    of total budget. Calibrating to the Millennium Prize Problems, the rival
+    hazard supplies under a tenth of the impatience facing an attempt and the
+    cash purse is about one percent of the prize that observed effort
+    reveals: those races are run against cost and the clock, not against each
+    other. Clay shooting is the right metaphor only once machine-cost
+    attempts compress time-to-solution from decades to years.</p>
+  </div>
+
+  <h2>1. Introduction</h2>
+
+  <p>The Clay Mathematics Institute committed one million dollars to each of
+  seven problems in May 2000. One has been solved. The purse is famous, and
+  it is almost certainly irrelevant: the effort spent on those seven problems
+  exceeds seven million dollars by orders of magnitude, and the one person
+  who earned a purse declined it. Any model that treats the cash as the
+  incentive gets the wrong answer. A model that takes the cash as a
+  <em>measuring rod</em> can do better, because the same arithmetic that
+  fails to explain the effort tells us what the effort reveals.</p>
+
+  <p>The machinery is a companion paper's. There, \(n\) researchers choose
+  whether to attempt a prize problem; an attempt is a privately observed
+  diffusion that wins on first passage to a target, costs a flow rate while
+  it runs, and may be irreversibly abandoned. That paper supplies two
+  ingredients and stops: a one-period entry game with an exact potential, and
+  a closed-form abandonment boundary for a driftless attempt facing a
+  constant rival hazard. It leaves \((p,k)\) &mdash; the success probability
+  and expected cost of an attempt &mdash; as free parameters of the entry
+  game, which is exactly what makes the entry game unfalsifiable.</p>
+
+  <p>This paper closes that loop and then spends the closure. Three
+  results.</p>
+
+  <p><em>The reduced form is a parabola.</em> An attempt run to its own
+  optimal boundary is not free to have any \((p,k)\). In the driftless
+  undiscounted case, \(k=p(1-p)V\) and the attempt is worth \(Vp^{2}\),
+  identically (Proposition 1). The entry game therefore has one free
+  parameter, not two, and the companion's profitability assumption \(k&lt;Vp\)
+  holds automatically. A corollary that a contest designer should know:
+  expected spend per attempt is at most \(V/4\).</p>
+
+  <p><em>Free entry is thin.</em> Substituting those costs, everybody
+  attempting is an equilibrium for \(n\le3\) at any \(p\), and for \(n\ge4\)
+  only when \(p\) exceeds a threshold \(p^{*}(n)\) that we compute in closed
+  form and that rises to \(1\) like \(1-1/n\) (Proposition 2). In a large pool
+  the interior equilibrium has expected entrants \(N^{*}(p)\) that is
+  increasing in \(p\) with infimum exactly \(2\) (Proposition 3). Long odds do
+  not summon a crowd. They summon two.</p>
+
+  <p><em>Depth is dearer than breadth.</em> The continuation width bought by
+  a purse grows like \(\sqrt V\) undiscounted and like \(\log V\) once
+  discounting or rivalry bites, while entry responds at the margin of a
+  linear comparison. A philanthropist splitting committed capital across
+  identical problems should therefore set each purse at a fixed small
+  multiple of the minimum viable purse &mdash; about \(2.25\) times it in the
+  long-odds closed form, \(2.04\) times it in the exact numerical solve
+  &mdash; and put every remaining dollar into more problems
+  (Proposition 4).</p>
+
+  <p>Section 5 spends the closure on the Millennium problems. Three
+  inversions: the rival hazard supplies between 5% and 16% of the effective
+  impatience facing an attempt, so those races are run against cost and the
+  clock; the purse is 0.4% to 3.3% of the prize that observed effort reveals;
+  and the cash alone funds about three years of one person's diffusive
+  travel. The clay-pigeon metaphor is therefore wrong for the Millennium
+  problems as they have actually been attempted, and becomes right precisely
+  when the cost of an attempt falls to machine prices, which raises the
+  solution hazard and hands abandonment over to rivalry for the first
+  time.</p>
+
+  <h4>What is and is not claimed.</h4>
+  <p>Propositions 1&ndash;4 are proved. Section 5 is a calibration under
+  stated dials, not an estimation: the per-attempt success probability and
+  the cost of a serious assault are stipulated, and the solution hazard is a
+  Poisson rate estimated from a single event. Section 6 lists the modelling
+  assumptions that mathematics violates, one of which &mdash;
+  irreversibility of abandonment &mdash; it violates flatly.</p>
+
+  <h2>2. The race that generates the entry game</h2>
+
+  <p>Fix one researcher and one approach. While working, the researcher
+  observes \(dX_{t}=\sigma\,dW_{t}\) with \(\sigma&gt;0\), starting at
+  \(x_{0}&lt;b\); first passage to \(b\) is a solution worth \(V\); working
+  costs \(c&gt;0\) per unit time; abandonment is irreversible. Write
+  \(d=b-x_{0}\) for the distance still to travel, and let \(\rho=r+h\)
+  collect the discount rate and any constant rival solution hazard. The
+  companion paper's boundary result is that the optimal policy continues on
+  an interval \((a,b)\) of width</p>
+
+  <div class="equation-card">
+    \[ L(V)=b-a=\begin{cases}
+      \dfrac{\sigma}{\sqrt{2\rho}}\,\operatorname{arcosh}\!\left(1+\dfrac{\rho V}{c}\right), & \rho>0,\\[10pt]
+      \sigma\sqrt{V/c}, & \rho=0,\end{cases} \]
+  </div>
+
+  <p>and abandons at or below \(a\). Entry is worthwhile at all only if
+  \(L(V)&gt;d\). The reduced form of an <em>attempt</em> is the pair \(p\),
+  the probability of solving before abandoning, and \(k\), the cost rate
+  times the expected time spent &mdash; both computed without discounting,
+  since these are the objects the one-period entry game consumes. The
+  following identity is the point of this section.</p>
+
+  <div class="prop">
+    <p><span class="label">Proposition 1 (Exact reduction).</span> Let
+    \(\rho=0\) and define the <em>hardness index</em>
+    \(\zeta=d\sqrt c/\sigma\), so that \(\zeta^{2}=c\cdot d^{2}/\sigma^{2}\).
+    If \(V\le\zeta^{2}\) the optimal policy abandons at once and the attempt
+    is worthless. If \(V&gt;\zeta^{2}\), then</p>
+    <div class="equation-card">
+      \[ p=1-\frac{\zeta}{\sqrt V},\qquad k=p(1-p)\,V,\qquad
+         Vp-k=Vp^{2}=\big(\sqrt V-\zeta\big)^{2}, \]
+    </div>
+    <p>and \(Vp^{2}\) is the value of the attempt.</p>
+  </div>
+
+  <p class="proof"><span class="label">Proof.</span> With \(\rho=0\) the
+  boundary is \(a=b-L\), \(L=\sigma\sqrt{V/c}\), and \(x_{0}-a=L-d\). For
+  driftless Brownian motion on the bounded interval \((a,b)\), optional
+  stopping applied to \(X\) and to \(X_{t}^{2}-\sigma^{2}t\) at
+  \(\tau=\tau_{a}\wedge\tau_{b}\) &mdash; legitimate because \(X\) is bounded
+  on the interval and \(\mathbb{E}[\tau]&lt;\infty\) &mdash; gives the two
+  gambler's-ruin identities \(p=(x_{0}-a)/(b-a)=1-d/L\) and
+  \(\mathbb{E}[\tau]=(x_{0}-a)(b-x_{0})/\sigma^{2}=d(L-d)/\sigma^{2}\). Since
+  \(L=\sigma\sqrt{V/c}\) we have \(d/L=\zeta/\sqrt V\), which is the first
+  claim, and \(\sigma^{2}=cL^{2}/V\), so
+  \(k=c\mathbb{E}[\tau]=cd(L-d)/\sigma^{2}=V(d/L)(1-d/L)=V(1-p)p\). Hence
+  \(Vp-k=Vp^{2}=(\sqrt V-\zeta)^{2}\). That this expected net payoff equals
+  the value follows because the policy in question is the optimal one;
+  directly, the companion's closed form gives
+  \(v(x_{0})=c(x_{0}-a)^{2}/\sigma^{2}=Vp^{2}\). Finally \(L&gt;d\) is
+  equivalent to \(V&gt;\zeta^{2}\), and at or below that purse the value is
+  zero. &#9633;</p>
+
+  <p>Three readings.</p>
+
+  <h4>The minimum viable purse is a travel time.</h4>
+  <p>\(V_{\min}=\zeta^{2}=c\,d^{2}/\sigma^{2}\), and \(d^{2}/\sigma^{2}\) is
+  exactly the diffusive time for the state to cover the remaining distance
+  \(d\). So the walk-away threshold is the cost rate times the diffusive
+  traverse: a purse must cover an undirected crossing of the gap before
+  anyone will start, and it must do so out of its own pocket, because at
+  \(\rho=0\) nothing else discounts the effort.</p>
+
+  <h4>The feasible reduced forms are one curve.</h4>
+  <p>\((V,c,\sigma,d)\) enter \(p\), \(k/V\) and \(v/V\) only through the
+  single ratio \(\zeta/\sqrt V=1-p\).</p>
+
+  <div class="prop">
+    <p><span class="label">Corollary 1 (The entry game has one
+    parameter).</span> As \((V,c,\sigma,d)\) range over the positives with
+    \(V&gt;\zeta^{2}\), the attainable pairs \((p,k/V)\) are exactly the arc
+    \(\{(p,p(1-p)):p\in(0,1)\}\). Consequently \(k&lt;Vp\) always holds
+    strictly, and \(k\le V/4\), with equality only at \(p=1/2\).</p>
+  </div>
+
+  <p>The bound is worth stating for its own sake: an attempt run to its own
+  optimal boundary never spends, in expectation, more than a quarter of the
+  prize, and spends that much only when it is a coin flip. Cheap long shots
+  and near-certainties both spend little; the expensive attempts are the
+  genuinely uncertain ones.</p>
+
+  <h4>Discounting breaks the identity, not the method.</h4>
+  <p>For \(\rho&gt;0\) the width is no longer \(\sigma\sqrt{V/c}\), so
+  \(k=c\,d(L-d)/\sigma^{2}\) still holds but the clean relation
+  \(k=p(1-p)V\) does not. The honest statement is that the exact reduction
+  belongs to the undiscounted benchmark, which is also the only case in which
+  feeding undiscounted \((p,k)\) into an undiscounted entry game is
+  internally consistent. With \(\rho&gt;0\) both sides must be discounted
+  together; we do not pursue that here, and every entry result below is a
+  result about the \(\rho=0\) reduced form.</p>
+
+  <h4>A verification.</h4>
+  <p>A committed, seeded Euler simulation of the attempt &mdash; boundary
+  location and increment law as its only inputs &mdash; reproduces the
+  identity. At \(V=100\), \(c=\sigma=1\), \(d=4\), so \(\zeta=4\), \(L=10\)
+  and \(p=0.6\), fifty thousand paths at \(dt=2\times10^{-3}\) give
+  \(\hat p=0.6051\) with standard error \(0.0022\) and \(\hat k=24.05\) with
+  standard error \(0.092\), against \(p=0.6\) and \(k=p(1-p)V=24\). The small
+  upward bias in \(\hat p\) is Euler overshoot of the upper boundary, and it
+  shrinks with \(dt\).</p>
+
+  <h2>3. How many guns</h2>
+
+  <p>Take \(n\) symmetric researchers facing one problem, each with the
+  reduced form of Proposition 1 at common \(p\), each entering with
+  probability \(q\). Ties among successes are broken uniformly and only one
+  purse is paid. The companion's symmetric entry condition is that the gross
+  return to entering against common probability \(q\),
+  \(R(q)=V[1-(1-pq)^{n}]/(nq)\), be compared with \(k\): universal entry
+  \(q=1\) is an equilibrium iff \(k\le R(1)\), and an interior equilibrium
+  solves \(R(q)=k\).</p>
+
+  <h3>3.1 When everybody attempts</h3>
+
+  <div class="prop">
+    <p><span class="label">Proposition 2 (Universal entry).</span> Substitute
+    \(k=p(1-p)V\) and write \(w=1-p\). Then \(q=1\) is a symmetric
+    equilibrium if and only if
+    \(\varphi_{n}(w):=\sum_{j=0}^{n-1}w^{j}-nw\ \ge\ 0\). For \(n=2\) and
+    \(n=3\) this holds at every \(p\), since \(\varphi_{2}(w)=p\) and
+    \(\varphi_{3}(w)=p^{2}\). For \(n\ge4\) there is a unique
+    \(w_{n}\in(0,1)\) with \(\varphi_{n}(w_{n})=0\), and \(q=1\) is an
+    equilibrium exactly when \(p\ge p^{*}(n):=1-w_{n}\). Moreover \(w_{n}\)
+    solves \(n\,w(1-w)=1-w^{n}\), so dropping the term \(w^{n}\) gives the
+    closed form</p>
+    <div class="equation-card">
+      \[ \hat p^{*}(n)=\frac{1+\sqrt{1-4/n}}{2}=1-\frac1n-\frac1{n^{2}}+O(n^{-3}), \]
+    </div>
+    <p>whose discriminant vanishes precisely at \(n=4\).</p>
+  </div>
+
+  <p class="proof"><span class="label">Proof.</span> Universal entry requires
+  \(p(1-p)V\le V[1-(1-p)^{n}]/n\), that is \(n\,p\,w\le
+  1-w^{n}=(1-w)\sum_{j&lt;n}w^{j}=p\sum_{j&lt;n}w^{j}\). Dividing by
+  \(p&gt;0\) gives the condition. Now
+  \(\varphi_{n}'(w)=\sum_{j=1}^{n-1}jw^{j-1}-n\) is nondecreasing on
+  \([0,1]\), so \(\varphi_{n}\) is convex there, with \(\varphi_{n}(0)=1&gt;0\),
+  \(\varphi_{n}(1)=0\), \(\varphi_{n}'(0)=1-n&lt;0\) and
+  \(\varphi_{n}'(1)=n(n-3)/2\). If \(n\le3\) then \(\varphi_{n}'(1)\le0\), and
+  convexity forces \(\varphi_{n}'\le0\) throughout \([0,1]\); a nonincreasing
+  function with \(\varphi_{n}(1)=0\) is nonnegative on \([0,1]\). If
+  \(n\ge4\) then \(\varphi_{n}'(1)&gt;0\), so \(\varphi_{n}&lt;0\) just left
+  of \(1\); combined with \(\varphi_{n}(0)&gt;0\) and convexity,
+  \(\varphi_{n}\) has exactly one zero \(w_{n}\) in \((0,1)\), is positive on
+  \([0,w_{n})\) and negative on \((w_{n},1)\). Hence the condition holds iff
+  \(w\le w_{n}\). The stated equation for \(w_{n}\) is \(\varphi_{n}=0\)
+  multiplied by \(1-w\), and the closed form is the smaller root of
+  \(nw(1-w)=1\) subtracted from one. &#9633;</p>
+
+  <p>The neglected term is \(w_{n}^{n}\approx n^{-n}\), so the closed form is
+  not merely asymptotic but numerically exact very quickly. In the committed
+  table it errs by \(8.6\times10^{-2}\) at \(n=4\), \(7.1\times10^{-4}\) at
+  \(n=5\), \(3.7\times10^{-8}\) at \(n=8\), and by less than machine
+  precision from \(n=20\) on.</p>
+
+  <div class="table-wrap">
+  <table class="impl">
+    <thead><tr><th>n</th><th class="num">p*(n)</th>
+      <th class="num">closed form</th><th class="num">1 &minus; 1/n &minus; 1/n&sup2;</th></tr></thead>
+    <tbody>
+      <tr><td>2, 3</td><td class="num">none</td><td class="num">&mdash;</td><td class="num">&mdash;</td></tr>
+      <tr><td>4</td><td class="num">0.5858</td><td class="num">0.5000</td><td class="num">0.6875</td></tr>
+      <tr><td>5</td><td class="num">0.7243</td><td class="num">0.7236</td><td class="num">0.7600</td></tr>
+      <tr><td>8</td><td class="num">0.8536</td><td class="num">0.8536</td><td class="num">0.8594</td></tr>
+      <tr><td>20</td><td class="num">0.9472</td><td class="num">0.9472</td><td class="num">0.9475</td></tr>
+      <tr><td>100</td><td class="num">0.98990</td><td class="num">0.98990</td><td class="num">0.98990</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>Read the table as a statement about crowding. With four capable people,
+  a problem draws everyone only if a single serious attempt succeeds with
+  probability at least \(0.59\). With twenty, at least \(0.95\). Nobody
+  believes those numbers for an outstanding problem, so universal entry is
+  not the relevant regime; the interior equilibrium is.</p>
+
+  <h3>3.2 The volume of a free-entry race</h3>
+
+  <div class="prop">
+    <p><span class="label">Proposition 3 (Free-entry volume).</span> Let
+    \(n\to\infty\) with expected entrants \(N=nq\) held fixed, so
+    \(q\to0\). The interior symmetric equilibrium condition \(R(q)=k\) with
+    \(k=p(1-p)V\) becomes, in the limit, \(1-e^{-y}=y(1-p)\) with
+    \(y=pN\). Because \(G(y)=(1-e^{-y})/y\) decreases strictly from \(1\) to
+    \(0\) on \((0,\infty)\), this has a unique root \(y^{*}(p)&gt;0\) for
+    every \(p\in(0,1)\), and</p>
+    <div class="equation-card">
+      \[ N^{*}(p)=\frac{y^{*}(p)}{p},\qquad
+         \mathbb{P}(\text{solved})=1-e^{-y^{*}(p)},\qquad
+         \mathbb{E}[\text{solvers}]=y^{*}(p). \]
+    </div>
+    <p>\(N^{*}\) is strictly increasing in \(p\), with
+    \(N^{*}(p)=2+\tfrac43p+O(p^{2})\) as \(p\downarrow0\) and
+    \(N^{*}(p)\to\infty\) as \(p\uparrow1\), so \(\inf_{p}N^{*}=2\).
+    Aggregate expected expenditure equals the expected purse payout:
+    \(N^{*}k=V(1-e^{-y^{*}})\).</p>
+  </div>
+
+  <p class="proof"><span class="label">Proof.</span> \(R(q)=k\) reads
+  \(V[1-(1-pq)^{n}]=nqk=Np(1-p)V\), and \((1-pN/n)^{n}\to e^{-pN}\), giving
+  the limit equation. \(G\) is strictly decreasing with \(G(0^{+})=1\),
+  \(G(\infty)=0\), so the root is unique and \(y^{*}\) is strictly increasing
+  in \(p\). Parametrise by \(y\), with \(p=1-G(y)\) and \(N=y/(1-G(y))\).
+  Then \(dN/dy=[(1-G)+yG']/(1-G)^{2}\) and
+  \((1-G)+yG'=\psi(y)/y\) with \(\psi(y)=y-2+e^{-y}(2+y)\), where
+  \(\psi(0)=0\) and \(\psi'(y)=1-e^{-y}(1+y)&gt;0\) for \(y&gt;0\) because
+  \(e^{y}&gt;1+y\). So \(\psi&gt;0\), \(N\) is strictly increasing along the
+  parametrisation, and hence \(N^{*}\) is strictly increasing in \(p\).
+  Expanding \(G(y)=1-y/2+y^{2}/6-\dots\) gives
+  \(y^{*}=2p+\tfrac43p^{2}+O(p^{3})\) and therefore
+  \(N^{*}=2+\tfrac43p+O(p^{2})\). As \(p\uparrow1\), \(G(y^{*})\to0\) forces
+  \(y^{*}\to\infty\) and \(N^{*}\ge y^{*}\to\infty\). Finally
+  \(N^{*}k=N^{*}p(1-p)V=y^{*}(1-p)V=(1-e^{-y^{*}})V\), which is the expected
+  payout. &#9633;</p>
+
+  <div class="table-wrap">
+  <table class="impl">
+    <thead><tr><th>p</th><th class="num">y*(p)</th><th class="num">N*(p)</th>
+      <th class="num">P(solved)</th><th class="num">N at n = 50</th></tr></thead>
+    <tbody>
+      <tr><td>0.001</td><td class="num">0.00200</td><td class="num">2.0013</td><td class="num">0.0020</td><td class="num">2.042</td></tr>
+      <tr><td>0.01</td><td class="num">0.02013</td><td class="num">2.0134</td><td class="num">0.0199</td><td class="num">2.054</td></tr>
+      <tr><td>0.05</td><td class="num">0.10348</td><td class="num">2.0696</td><td class="num">0.0983</td><td class="num">2.110</td></tr>
+      <tr><td>0.25</td><td class="num">0.60586</td><td class="num">2.4234</td><td class="num">0.4544</td><td class="num">2.463</td></tr>
+      <tr><td>0.50</td><td class="num">1.59362</td><td class="num">3.1872</td><td class="num">0.7968</td><td class="num">3.222</td></tr>
+      <tr><td>0.75</td><td class="num">3.92069</td><td class="num">5.2276</td><td class="num">0.9802</td><td class="num">5.245</td></tr>
+      <tr><td>0.90</td><td class="num">9.99955</td><td class="num">11.111</td><td class="num">0.99996</td><td class="num">11.111</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>The last column solves the exact finite-\(n\) condition at \(n=50\) and
+  shows that the limit is a good description of a merely large pool. At
+  \(p=0.99\) and \(n=50\) it returns \(N=50\): universal entry, consistent
+  with \(p^{*}(50)=0.9796\) from Proposition 2, while at \(n=1000\) the same
+  \(p\) gives an interior \(N=101\), consistent with
+  \(p^{*}(1000)=0.99900\).</p>
+
+  <p>Proposition 3 is the paper's most compressible finding. <strong>At long
+  odds, free entry produces two attempts in expectation, no matter how many
+  people could have attempted.</strong> The two-researcher case of the
+  companion paper reaches the same number from the other direction: its
+  symmetric mixed solution is \(q=(2/p)(1-k/(Vp))=2\), which truncates to
+  \(q=1\), so both enter and \(N=2\) exactly. The infimum is attained in the
+  limit, not at any \(p\), and rent dissipation is complete at every \(p\):
+  the pool spends the purse.</p>
+
+  <h2>4. Breadth and depth</h2>
+
+  <p>Money can buy two things: more attempts, or longer ones. They have very
+  different prices.</p>
+
+  <h4>Depth is logarithmic.</h4>
+  <p>Persistence is the continuation width. Since
+  \(\operatorname{arcosh}(1+z)\sim\log(2z)\) for large \(z\),
+  \(L(V)\approx\frac{\sigma}{\sqrt{2\rho}}\log(2\rho V/c)\) when \(\rho
+  V\gg c\), and only \(\sigma\sqrt{V/c}\) at \(\rho=0\). In units where
+  \(c=\sigma=1\) and \(\rho=0.05\), multiplying the purse by \(100\)
+  multiplies the continuation width by \(7.87\); by \(10{,}000\), only by
+  \(21.9\). Under \(\rho=0\) the same multiples give \(10\) and \(100\).
+  Either way the marginal dollar buys steeply less stamina, and the more
+  competition there is (the larger \(\rho\)), the flatter the curve.</p>
+
+  <h4>Breadth is cheaper per dollar.</h4>
+  <p>Entry responds through \(p(V)=1-\zeta/\sqrt V\) and then through
+  \(N^{*}(p)\), but the decisive asymmetry is that a second problem is bought
+  outright at price \(V\), while a second unit of persistence on one problem
+  is bought at an exponentially rising price. That comparison has a clean
+  consequence.</p>
+
+  <div class="prop">
+    <p><span class="label">Proposition 4 (Optimal purse splitting).</span> A
+    funder commits capital \(B\), fully escrowed, to identical problems of
+    hardness \(\zeta\), choosing the number \(M\) of problems and posting
+    \(V=B/M\) on each; free entry then determines each problem's solve
+    probability by Proposition 3. Maximising the expected number solved,
+    \(\Psi(M)=M(1-e^{-y^{*}(p(B/M))})\) with
+    \(p(V)=(1-\zeta/\sqrt V)_{+}\), in the long-odds regime where
+    \(1-e^{-y^{*}(p)}=2p+O(p^{2})\) gives</p>
+    <div class="equation-card">
+      \[ M^{*}=\frac{4B}{9\zeta^{2}},\qquad
+         V^{*}=\frac94\zeta^{2}=\frac94 V_{\min},\qquad
+         \Psi(M^{*})=\frac{8B}{27\zeta^{2}}, \]
+    </div>
+    <p>so the optimal purse is a fixed multiple of the minimum viable purse,
+    independent of \(B\), and two thirds of funded problems are solved.</p>
+  </div>
+
+  <p class="proof"><span class="label">Proof.</span> With
+  \(p(B/M)=1-\zeta\sqrt{M/B}\) and the long-odds approximation,
+  \(\Psi(M)\approx2M-2\zeta M^{3/2}/\sqrt B\). Differentiating,
+  \(2-3\zeta M^{1/2}/\sqrt B=0\) gives \(\sqrt{M^{*}}=2\sqrt B/(3\zeta)\),
+  hence \(M^{*}=4B/(9\zeta^{2})\) and \(V^{*}=B/M^{*}=\tfrac94\zeta^{2}\).
+  Substituting, \(\Psi=8B/(9\zeta^{2})-16B/(27\zeta^{2})=8B/(27\zeta^{2})\),
+  and \(p(V^{*})=1-\zeta/(\tfrac32\zeta)=\tfrac13\), so the per-problem solve
+  probability is \(2p=\tfrac23\). &#9633;</p>
+
+  <p>The approximation is doing real work and should be checked, since
+  \(p=1/3\) is not long odds. Solving the exact problem numerically at
+  \(B=100\zeta^{2}\) over integer \(M\) returns \(M=49\), a purse of
+  \(2.04\,V_{\min}\), \(p=0.300\), and \(26.1\) problems solved in
+  expectation against the closed form's \(M=44.4\), \(2.25\,V_{\min}\) and
+  \(29.6\). The purse multiple is close; the harvest is overstated by 13%,
+  because \(2p=0.600\) overstates the true solve probability
+  \(1-e^{-y^{*}}=0.533\) at \(p=0.3\). The qualitative conclusion &mdash; set
+  the purse just above the walk-away threshold, spend the rest on more
+  problems &mdash; survives, and the mechanism behind it is worth naming: a
+  purse below \(V_{\min}\) buys nothing at all, a purse far above it buys
+  logarithmically little extra depth, and the free-entry response caps the
+  crowd at two anyway.</p>
+
+  <p>Two caveats. Expected count solved is one objective among many; a funder
+  who cares more about the hardest problem should not spread. And \(B\) is
+  committed capital, not expected outlay &mdash; the escrow is what makes
+  \(M\) the choice variable.</p>
+
+  <h2>5. Clay</h2>
+
+  <p>Seven problems were posted in May 2000 at one million dollars each.
+  Perelman's preprints settled the Poincar&eacute; conjecture in
+  2002&ndash;2003; the prize was awarded in 2010 and declined. Six remain
+  open as of September 2026. Everything below reads that record through
+  Sections 2&ndash;4 with dials stated explicitly. None of it is an estimate
+  of a structural parameter.</p>
+
+  <h3>5.1 Is the prize a clay pigeon?</h3>
+
+  <p>The companion paper's mechanism is that a rival's solution destroys the
+  option, so the rival hazard \(h\) acts as extra discounting: an attempt
+  faces \(\rho=r+h\). The natural diagnostic is therefore the share of
+  effective impatience that competition supplies, \(h/(r+h)\). One solution
+  in \(7\times26=182\) problem-years gives \(\hat h=0.0055\) per
+  problem-year. Then</p>
+
+  <div class="table-wrap">
+  <table class="impl">
+    <thead><tr><th>discount rate r</th>
+      <th class="num">Millennium (h&#770; = 0.0055)</th>
+      <th class="num">warm (h = 0.1)</th>
+      <th class="num">hot (h = 1/3)</th></tr></thead>
+    <tbody>
+      <tr><td>0.03</td><td class="num">0.155</td><td class="num">0.769</td><td class="num">0.917</td></tr>
+      <tr><td>0.05</td><td class="num">0.099</td><td class="num">0.667</td><td class="num">0.870</td></tr>
+      <tr><td>0.10</td><td class="num">0.052</td><td class="num">0.500</td><td class="num">0.769</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>At any plausible discount rate, rivalry supplies well under a sixth of
+  the pressure to quit a Millennium problem. The purse is not a clay pigeon
+  being shot at; it is a target sitting in a field, and the reason people
+  walk away from it is that the shells cost money and the years pass.</p>
+
+  <p>One event is one event, and the sampling uncertainty is enormous: the
+  exact Poisson interval for \(\hat h\) is
+  \([1.4\times10^{-4},\,3.1\times10^{-2}]\) per problem-year. The conclusion
+  survives it in a weak but useful sense &mdash; even at the upper endpoint,
+  the rivalry share at \(r=0.05\) is \(0.38\), still under a half &mdash; and
+  fails to survive it in the sense that the interval cannot rule out rivalry
+  mattering an order of magnitude more than the point estimate says.</p>
+
+  <h3>5.2 What the effort reveals about the prize</h3>
+
+  <p>Invert \(k=p(1-p)V\): an agent who runs a serious attempt costing \(k\)
+  with per-attempt success probability \(p\) reveals \(V=k/(p(1-p))\).</p>
+
+  <div class="table-wrap">
+  <table class="impl">
+    <thead><tr><th>attempt cost k</th><th class="num">p = 0.005</th>
+      <th class="num">p = 0.01</th><th class="num">p = 0.02</th></tr></thead>
+    <tbody>
+      <tr><td>0.6M</td><td class="num">121M</td><td class="num">61M</td><td class="num">31M</td></tr>
+      <tr><td>1.0M</td><td class="num">201M</td><td class="num">101M</td><td class="num">51M</td></tr>
+      <tr><td>1.2M</td><td class="num">241M</td><td class="num">121M</td><td class="num">61M</td></tr>
+    </tbody>
+  </table>
+  <p class="muted" style="font-size:0.9rem">All figures in US dollars.</p>
+  </div>
+
+  <p>Read the dials as: three focused years of a senior mathematician at
+  200k&ndash;400k dollars per year all-in, and a per-attempt success
+  probability between one in two hundred and one in fifty. The implied prize
+  is 31M to 241M, so the one-million-dollar purse is between 0.4% and 3.3%
+  of it &mdash; one percent in the central cell. The purse is a scoreboard.
+  Equivalently, the model says the cash would have to rise by a factor of
+  fifty to two hundred before it became the marginal consideration for anyone
+  already inclined to attempt.</p>
+
+  <p>A second, cruder inversion says the same thing from the cost side. The
+  minimum viable purse is \(V_{\min}=c\,d^{2}/\sigma^{2}\), the cost rate
+  times the diffusive traverse of the remaining distance. At 300k dollars per
+  year, a one-million-dollar purse funds a traverse of \(3.3\) years and no
+  more. The Millennium problems have absorbed careers. Whatever is paying for
+  those careers, it is not the escrow.</p>
+
+  <h3>5.3 Two guns, and a long tail the model forbids</h3>
+
+  <p>Proposition 3 predicts, at \(p\) of a percent, an expected
+  \(N^{*}\approx2.01\) serious attempts per problem regardless of how many
+  mathematicians could mount one, with a solve probability of about \(2p\):
+  free entry buys exactly one extra attempt over the lone-researcher
+  benchmark. The small number of publicly identified long-run attackers per
+  Millennium problem is consistent with that. The very large number of
+  amateur attempts is not, and the mismatch is informative rather than
+  embarrassing: under these dials such attempts have \(D_{i}&lt;0\) in the
+  companion's entry condition, so they cannot be prize-seeking. They are
+  either heterogeneity the symmetric model suppresses &mdash; a few people
+  with much higher private \(p_{i}\) or much lower \(k_{i}\) &mdash; or
+  consumption, in which case the relevant \(V\) is not a prize at all. Either
+  way the homogeneous free-entry count describes the serious tail of the
+  distribution and nothing else.</p>
+
+  <h3>5.4 When clay shooting starts</h3>
+
+  <p>The interesting parameter is not the purse. It is
+  \(\zeta=d\sqrt c/\sigma\) and, through it, the hazard. An attempt run at
+  machine cost lowers \(c\) and, if the search is genuinely broader, raises
+  \(\sigma\); both push \(\zeta\) down, which raises
+  \(p=1-\zeta/\sqrt V\), lowers \(V_{\min}=\zeta^{2}\), and raises
+  \(N^{*}\). The composition of those effects is a rise in the solution
+  hazard, and that is the switch.</p>
+
+  <p>The model's prediction is sharp about what changes and what does not.
+  Doubling the purse does almost nothing, by Section 4. Cutting \(\zeta\) in
+  half quarters the minimum viable purse and moves \(p\) from, say, \(0.01\)
+  to \(0.505\) at fixed \(V\), which by Proposition 3 takes \(N^{*}\) from
+  \(2.01\) to \(3.2\) and the solve probability from \(0.02\) to \(0.80\).
+  Once expected time-to-solution falls from decades to a few years, \(h\)
+  moves from \(0.005\) to order \(0.3\), and the rivalry share moves from
+  \(0.10\) to \(0.87\). Only then is the purse a clay pigeon, and only then
+  does the companion paper's coupled hazard equilibrium, rather than its
+  single-agent boundary, do the explaining. The observable signature would be
+  a burst of entry followed by rapid abandonment by all but the leaders
+  &mdash; a pattern the human record on these problems does not contain,
+  because in the human record nobody is racing anybody.</p>
+
+  <h2>6. What this gets wrong about mathematics</h2>
+
+  <p>The list matters more than usual here, because the calibration in
+  Section 5 is only as good as the modelling choices behind it, and one of
+  them is simply false.</p>
+
+  <ul class="caveats">
+    <li><strong>Abandonment is not irreversible.</strong> Mathematicians
+    shelve problems and come back to them decades later. The baseline's only
+    control is an irreversible kill, which is the right primitive for a
+    metered compute job and the wrong one for a person. The right home for
+    the human version is the intensity extension of the companion paper, in
+    which \(u=0\) is a pause rather than a death; that changes the boundary
+    and, in particular, removes the sharp walk-away threshold that
+    \(V_{\min}\) represents. Every statement here that leans on
+    \(V_{\min}\) &mdash; including Proposition 4 &mdash; should be read as a
+    statement about the committed-attempt reading.</li>
+    <li><strong>Difficulty is common, not private.</strong> The product
+    survival formula behind the rivalry share needs independence across
+    researchers. In mathematics the dominant uncertainty is shared: whether
+    the statement is true, whether the method can work at all. A rival's
+    visible failure is evidence about your own prospects, which turns the
+    game into one with filtering and correlated states, and there the rival
+    hazard is no longer a deterministic function of calendar time.</li>
+    <li><strong>Progress is partly public.</strong> Preprints, seminars and
+    conference talks reveal rival states. That is a joint-state game, and the
+    private-diffusion structure is a simplification chosen for tractability,
+    not realism.</li>
+    <li><strong>Winner-take-all is an approximation.</strong> Partial results
+    are published, cited and rewarded; a lemma that survives into the
+    eventual proof pays something. The all-or-nothing first-passage payoff
+    overstates the waste and therefore, through Corollary 1, understates the
+    effort a given prize should call forth.</li>
+    <li><strong>Verification takes years.</strong> The Poincar&eacute; purse
+    was paid seven years after the preprints. A claimed proof that later
+    fails restarts the race, so the announcement is not an absorbing event,
+    and the hazard conflates &ldquo;someone claims&rdquo; with
+    &ldquo;someone solves&rdquo;.</li>
+    <li><strong>The dials are stipulated.</strong> \(p\), \(k\) and \(r\) in
+    Section 5 are assumptions. The inversions are arithmetic on them, and
+    their only real content is robustness: to overturn the conclusion that
+    the purse is a scoreboard, one needs \(p(1-p)V\) near one million
+    dollars, which at \(k=1\)M requires \(p\) near \(1/2\).</li>
+  </ul>
+
+  <h2>7. Related work</h2>
+
+  <h4>Racing for a prize.</h4>
+  <p>Loury (1979) and Lee and Wilde (1980) set the pattern: a flow of R&amp;D
+  spending buys a Poisson hazard of success, and free entry dissipates the
+  rents. Dasgupta and Stiglitz (1980) added industrial structure, Reinganum
+  (1981) the dynamic game, and Fudenberg, Gilbert, Stiglitz and Tirole (1983)
+  preemption and leapfrogging. Harris and Vickers (1985, 1987) put the race
+  on a state space with observable positions and studied who gives up. What
+  we add to that tradition is a <em>derived</em> rather than assumed relation
+  between the cost of an attempt and its success probability: in
+  Proposition 1 the pair is not chosen, it falls out of running a diffusion
+  to its own optimal boundary, and \(k=p(1-p)V\) is the constraint the
+  Poisson-hazard formulations leave free.</p>
+
+  <h4>Private progress and preemption.</h4>
+  <p>Hopenhayn and Squintani (2011) is the closest neighbour: privately
+  observed progress, an option to stop, and preemption. Bobtcheff, Bolte and
+  Mariotti (2017) model the researcher's own tradeoff between publishing
+  early and polishing under priority risk. Moscarini and Squintani (2010) and
+  Keller, Rady and Cripps (2005) study experimentation when rivals'
+  information is a motive to keep going. All of those keep the strategic loop
+  closed and leave the cost-to-probability mapping in reduced form; we do the
+  opposite, taking the loop as given by the companion paper and closing the
+  mapping instead.</p>
+
+  <h4>Contest design.</h4>
+  <p>Tullock (1980) and Baye, Kovenock and de Vries (1996) price rent
+  dissipation; Taylor (1995) and Che and Gale (2003) design research
+  tournaments; Fullerton and McAfee (1999) auction entry to select
+  contestants; Halac, Kartik and Liu (2017) design contests when the
+  technology must be discovered. Proposition 4 is a design result of the same
+  kind with an unusually crude instrument: the designer chooses only how many
+  purses to post and how large, and the answer is a fixed multiple of the
+  walk-away threshold.</p>
+
+  <h4>Entry games and potentials.</h4>
+  <p>Morgan, Orzen and Sefton (2012) and Fu, Jiao and Lu (2015) study
+  endogenous entry with subsequent effort; the companion paper's
+  fixed-attempt lottery and its exact potential sit in the tradition of
+  Rosenthal (1973) and Monderer and Shapley (1996). Corollary 1 says which
+  points of that game's parameter space a Brownian attempt can actually
+  occupy.</p>
+
+  <h4>Budgeted races.</h4>
+  <p>The forward&ndash;backward architecture of the companion paper is
+  borrowed from the <a href="./papers.html">budgeted Brownian race</a>, where
+  a single controller prunes many paths under a path-time budget and is paid
+  the terminal maximum. The two differ in what closes the loop: there an
+  optimality condition with a shadow price, here a consistency condition
+  between each researcher's stopping rule and the hazard the others
+  generate. Its concavity certificates therefore say nothing about
+  equilibrium here, a point the companion paper makes and this one
+  inherits.</p>
+
+  <h2>8. Closing</h2>
+
+  <p>The arithmetic of this paper is elementary and its conclusion is
+  deflationary. Closing the parameters of a Brownian prize race pins the cost
+  of an attempt to its success probability, and that single constraint is
+  enough to show that free entry is thin, that persistence is expensive, and
+  that a purse should be set just above the threshold at which anyone will
+  start. Applied to the most famous prizes in mathematics, the same
+  arithmetic says that those races are not races: the hazard a rival imposes
+  is a tenth of the impatience an attempt faces, and the cash is a hundredth
+  of the prize the effort reveals.</p>
+
+  <p>That makes the interesting question a forecast rather than a
+  measurement. The model localises the whole of the change in one index,
+  \(\zeta=d\sqrt c/\sigma\), and says that when the cost of an attempt falls
+  to machine prices the rivalry share flips from a tenth to nine tenths. At
+  that point the strategic fixed point of the companion paper stops being an
+  elegant characterisation and starts being the object one has to compute.
+  Three things would have to be settled first: existence and selection for
+  the coupled equilibrium, a convergence guarantee for its iteration, and an
+  honest treatment of common difficulty, which is the assumption mathematics
+  violates most and which no calendar-time hazard can absorb.</p>
+
+  <h2>Numbers</h2>
+  <p>Every figure quoted above is produced by
+  <a href="https://github.com/microprediction/brownianbandit/blob/main/papers/clay-shooting/numerics.py"><code>papers/clay-shooting/numerics.py</code></a>
+  (seed 20260909) and committed to
+  <a href="https://github.com/microprediction/brownianbandit/blob/main/papers/clay-shooting/numerics.json"><code>numerics.json</code></a>.
+  The script re-derives the reduction identities, checks them against a
+  Monte Carlo of the attempt, solves for the universal-entry thresholds and
+  the free-entry volume both exactly in \(n\) and in the limit, optimises the
+  purse split, and computes the Millennium hazard with its exact Poisson
+  interval.</p>
+
+  <h2>References</h2>
+  <div class="bib">
+  <ul>
+    <li>Baye, M. R., Kovenock, D., and de Vries, C. G. (1996). The all-pay
+      auction with complete information. <em>Economic Theory</em>,
+      8(2):291&ndash;305.</li>
+    <li>Bobtcheff, C., Bolte, J., and Mariotti, T. (2017). Researcher's
+      dilemma. <em>Review of Economic Studies</em>, 84(3):969&ndash;1014.</li>
+    <li>Che, Y.-K., and Gale, I. (2003). Optimal design of research contests.
+      <em>American Economic Review</em>, 93(3):646&ndash;671.</li>
+    <li>Clay Mathematics Institute (2000). The Millennium Prize Problems.
+      Rules and problem descriptions,
+      <a href="https://www.claymath.org/millennium-problems/">claymath.org</a>.
+      Accessed September 2026.</li>
+    <li>Cotton, P. (2026a). Wavefront pruning in budgeted Brownian races.
+      Working draft, <a href="./wavefront_pruning_draft.pdf">PDF</a>.</li>
+    <li>Cotton, P. (2026b). Research prizes with uncertain compute costs:
+      from entry games to Brownian stopping races. Working note,
+      <a href="https://github.com/microprediction/brownianbandit/blob/main/papers/research-races/paper.tex">tex</a>.</li>
+    <li>Dasgupta, P., and Stiglitz, J. (1980). Uncertainty, industrial
+      structure, and the speed of R&amp;D. <em>Bell Journal of
+      Economics</em>, 11(1):1&ndash;28.</li>
+    <li>Fu, Q., Jiao, Q., and Lu, J. (2015). Contests with endogenous entry.
+      <em>International Journal of Game Theory</em>,
+      44(2):387&ndash;424.</li>
+    <li>Fudenberg, D., Gilbert, R., Stiglitz, J., and Tirole, J. (1983).
+      Preemption, leapfrogging and competition in patent races.
+      <em>European Economic Review</em>, 22(1):3&ndash;31.</li>
+    <li>Fullerton, R. L., and McAfee, R. P. (1999). Auctioning entry into
+      tournaments. <em>Journal of Political Economy</em>,
+      107(3):573&ndash;605.</li>
+    <li>Halac, M., Kartik, N., and Liu, Q. (2017). Contests for
+      experimentation. <em>Journal of Political Economy</em>,
+      125(5):1523&ndash;1569.</li>
+    <li>Harris, C., and Vickers, J. (1985). Perfect equilibrium in a model of
+      a race. <em>Review of Economic Studies</em>, 52(2):193&ndash;209.</li>
+    <li>Harris, C., and Vickers, J. (1987). Racing with uncertainty.
+      <em>Review of Economic Studies</em>, 54(1):1&ndash;21.</li>
+    <li>Hopenhayn, H., and Squintani, F. (2011). Preemption games with
+      private information. <em>Review of Economic Studies</em>,
+      78(2):667&ndash;692.</li>
+    <li>Keller, G., Rady, S., and Cripps, M. (2005). Strategic
+      experimentation with exponential bandits. <em>Econometrica</em>,
+      73(1):39&ndash;68.</li>
+    <li>Lee, T., and Wilde, L. L. (1980). Market structure and innovation: a
+      reformulation. <em>Quarterly Journal of Economics</em>,
+      94(2):429&ndash;436.</li>
+    <li>Loury, G. C. (1979). Market structure and innovation.
+      <em>Quarterly Journal of Economics</em>, 93(3):395&ndash;410.</li>
+    <li>Monderer, D., and Shapley, L. S. (1996). Potential games.
+      <em>Games and Economic Behavior</em>, 14(1):124&ndash;143.</li>
+    <li>Morgan, J., Orzen, H., and Sefton, M. (2012). Endogenous entry in
+      contests. <em>Economic Theory</em>, 51:435&ndash;463.</li>
+    <li>Moscarini, G., and Squintani, F. (2010). Competition and
+      experimentation with private information. <em>Journal of Economic
+      Theory</em>, 145(2):639&ndash;660.</li>
+    <li>Reinganum, J. F. (1981). Dynamic games of innovation. <em>Journal of
+      Economic Theory</em>, 25(1):21&ndash;41.</li>
+    <li>Rosenthal, R. W. (1973). A class of games possessing pure-strategy
+      Nash equilibria. <em>International Journal of Game Theory</em>,
+      2:65&ndash;67.</li>
+    <li>Taylor, C. R. (1995). Digging for golden carrots: an analysis of
+      research tournaments. <em>American Economic Review</em>,
+      85(4):872&ndash;890.</li>
+    <li>Tullock, G. (1980). Efficient rent seeking. In J. M. Buchanan,
+      R. D. Tollison, and G. Tullock, eds., <em>Toward a Theory of the
+      Rent-Seeking Society</em>. Texas A&amp;M University Press.</li>
+  </ul>
+  </div>
+</main>
+
+<footer>
+  Clay Shooting &middot; working draft, September 2026 &middot;
+  <a href="https://github.com/microprediction/brownianbandit">source</a>
+</footer>
+</body>
+</html>

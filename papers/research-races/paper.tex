@@ -1,0 +1,410 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.9in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,booktabs,microtype}
+\usepackage[colorlinks=true,allcolors=blue]{hyperref}
+\newtheorem{proposition}{Proposition}
+\newcommand{\E}{\mathbb E}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\ind}{\mathbf 1}
+\newcommand{\Lgen}{\mathcal L}
+\DeclareMathOperator{\arcosh}{arcosh}
+\title{Research Prizes with Uncertain Compute Costs:\\From Entry Games to Brownian Stopping Races}
+\author{}
+\date{September 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+We study competition for a research prize when the required computation is
+uncertain and researchers have different costs. A one-period model gives
+explicit mixed-entry conditions and an exact potential, hence a pure
+equilibrium also exists. A continuous-time extension replaces committed
+attempts by privately observed diffusions with irreversible abandonment;
+the first solution wins. Against fixed rival strategies, their solution
+hazard acts as additional discounting. We solve the constant-hazard,
+driftless case in closed form and formulate the general equilibrium as
+coupled stopping and forward-distribution equations. This connects research
+races to Brownian bandit pruning, while distinguishing a strategic fixed
+point from a planner's optimization problem.
+\end{abstract}
+
+\section{Setting and relation to the literature}
+A large mathematical problem can be worth attempting alone even when many
+potential solvers prefer to stay out of a prize contest. The relevant cost
+is not necessarily a known token budget: it may be the random expenditure
+incurred before success, abandonment, or a rival's solution. The question
+is how competition changes participation and continued computation.
+
+The one-period benchmark belongs to the literature on endogenous contest
+entry. Morgan, Orzen, and Sefton~\cite{morgan} study entry and subsequent
+rent-seeking, including the role of the outside option. Their post-entry
+effort game differs from our fixed-attempt lottery. Fu, Jiao, and
+Lu~\cite{fu} analyze complete-information lottery contests with costly
+entry and subsequent bidding; we instead hold each attempt's success
+probability fixed and allow researcher heterogeneity. Fullerton and
+McAfee~\cite{fullerton} study heterogeneous research contestants and
+selection through auctioned entry, rather than the uncoordinated binary
+entry considered here. Our finite-game potential is in the tradition of
+Rosenthal~\cite{rosenthal} and Monderer and Shapley~\cite{monderer}.
+These connections locate the benchmark; we make no novelty claim for
+entry indifference or the potential-game method.
+
+The dynamic model belongs to the research-race tradition represented by
+Loury~\cite{loury}. Its computational connection is to the Brownian bandit
+framework~\cite{cotton}: a backward continuation problem and a forward
+population calculation are coupled. Here the coupling is strategic and
+the payoff is first passage to a solution, rather than a terminal maximum.
+We prove the elementary entry and constant-hazard results below. The
+general dynamic equilibrium is a characterization, not an existence,
+uniqueness, or numerical convergence theorem.
+
+\section{One-period entry with heterogeneous costs}
+There are $n\ge2$ risk-neutral researchers and a prize $V>0$. Researcher
+$i$ enters with probability $q_i$, incurs a random attempt cost with finite
+mean $k_i>0$, and succeeds with probability $p_i\in(0,1]$. Parameters are
+common knowledge. Entry randomizations and successes are independent
+across researchers. Own cost and own success may be dependent. An entrant
+commits to the entire attempt; nonentry pays zero. If several entrants
+succeed, one is selected uniformly to receive $V$; if none succeeds, no
+prize is paid. Assume $k_i<Vp_i$, so each attempt is profitable alone.
+
+\begin{proposition}[Entry equilibrium]\label{prop:entry}
+Define
+\begin{equation}\label{eq:entry}
+D_i(q_{-i})=Vp_i\int_0^1\prod_{j\ne i}
+ (1-q_jp_j+q_jp_jz)\,dz-k_i.
+\end{equation}
+A profile $q\in[0,1]^n$ is a Nash equilibrium exactly when
+\begin{equation}\label{eq:comp}
+q_i=0\Rightarrow D_i\le0,\qquad
+0<q_i<1\Rightarrow D_i=0,\qquad
+q_i=1\Rightarrow D_i\ge0
+\end{equation}
+for every researcher.
+\end{proposition}
+\begin{proof}
+Let $K_{-i}$ count successful opponents. Conditional on own success, the
+prize probability is $(1+K_{-i})^{-1}$. Since
+$1/(k+1)=\int_0^1z^k\,dz$, independence gives the integral in
+\eqref{eq:entry}. Expected payoff is $q_iD_i(q_{-i})$; optimizing this
+linear function on $[0,1]$ yields \eqref{eq:comp}.
+\end{proof}
+
+\paragraph{Two researchers.}
+The fully mixed equilibrium, when it exists, is
+\begin{equation}\label{eq:two}
+q_1=\frac{2}{p_1}\left(1-\frac{k_2}{Vp_2}\right),\qquad
+q_2=\frac{2}{p_2}\left(1-\frac{k_1}{Vp_1}\right).
+\end{equation}
+Both probabilities are interior exactly when
+$Vp_i(1-p_j/2)<k_i<Vp_i$ for $i\ne j$. For $V=100$,
+$p_1=p_2=1$, and $(k_1,k_2)=(60,80)$, the solution is
+$(q_1,q_2)=(0.4,0.8)$. The cheaper researcher enters less often in this
+mixed equilibrium because each probability makes the \emph{opponent}
+indifferent. Both $(1,0)$ and $(0,1)$ are also equilibria. The example
+does not imply a general negative relationship between efficiency and
+participation across selected equilibria.
+
+\paragraph{Symmetric benchmark.}
+For common $p,k$, the gross entry return against common probability $q>0$ is
+\begin{equation}\label{eq:symmetric}
+R(q)=\frac{V[1-(1-pq)^n]}{nq},\qquad R(0)=Vp.
+\end{equation}
+It is strictly decreasing. Under $0<k<Vp$, the unique symmetric equilibrium
+has $q=1$ if $k\le V[1-(1-p)^n]/n$; otherwise its interior probability
+solves $R(q)=k$. For $p=1$, universal entry requires $k\le V/n$.
+In an interior symmetric equilibrium,
+$nqk=V[1-(1-pq)^n]$: expected expenditure equals expected prize payout.
+
+\begin{proposition}[An exact potential]\label{prop:potential}
+For a pure entrant set $A$, let $B_i$ be independent Bernoulli variables
+with parameters $p_i$, and let $H_m=\sum_{\ell=1}^m1/\ell$, with $H_0=0$.
+Then
+\begin{equation}\label{eq:potential}
+\Phi(A)=V\E\!\left[H_{\sum_{i\in A}B_i}\right]
+       -\sum_{i\in A}k_i
+\end{equation}
+is an exact potential. In particular, a pure Nash equilibrium exists.
+\end{proposition}
+\begin{proof}
+Adding $i\notin A$ changes \eqref{eq:potential} by
+$Vp_i\E[(1+\sum_{j\in A}B_j)^{-1}]-k_i$, exactly the entrant's payoff
+change. A maximizing entrant set exists because the set of profiles is
+finite, and admits no profitable unilateral deviation.
+\end{proof}
+Thus mixing is not necessary for existence. When $p_i=1$, the potential
+reduces to $VH_{|A|}-\sum_{i\in A}k_i$, the harmonic form associated with
+a congested common resource. The potential is not social welfare:
+aggregate expected payoff is
+$V[1-\prod_{i\in A}(1-p_i)]-\sum_{i\in A}k_i$.
+
+\section{A continuous-time race with private progress}
+We now change the allocation rule: the \emph{first} verified solution wins.
+Researcher $i$ starts at $x_i<b$ and, while working, observes
+\begin{equation}\label{eq:diffusion}
+dX_i(t)=\mu_i\,dt+\sigma_i\,dW_i(t),\qquad \sigma_i>0.
+\end{equation}
+The Brownian motions are independent. Hitting $b$ produces a solution;
+working costs $c_i>0$ per unit time. Each researcher can abandon
+irreversibly, but cannot pause, restart, or change compute intensity in
+this baseline. Everyone discounts at rate $r\ge0$ and observes the first
+solution announcement immediately. All parameters and initial-state
+distributions are common knowledge; realized rival states and abandonment
+decisions are unobserved. Initial states and private randomizations are
+independent across researchers.
+
+The state $X_i$ is a stylized measure of an approach's promise, not a claim
+that proof completion has a literal observable percentage. The model
+requires such a state to summarize the researcher's predictive information.
+Common uncertainty about problem difficulty would violate independence
+and require additional beliefs.
+
+For each strategy, define its \emph{potential} solution time $T_i$ by
+running it as though no rival ever announced success; set $T_i=\infty$
+if it abandons first. Let $\theta_i$ be the corresponding abandonment
+time and $T_{-i}=\min_{j\ne i}T_j$. Actual payoff is
+\begin{equation}\label{eq:payoff}
+\E\left[V e^{-rT_i}\ind_{\{T_i<T_{-i},\ T_i<\infty\}}
+ -\int_0^{\theta_i\wedge T_i\wedge T_{-i}}e^{-rt}c_i\,dt\right].
+\end{equation}
+Nondegenerate diffusions started below $b$ have no finite-time ties in
+this setting. Infinite times in \eqref{eq:payoff} contribute no prize.
+Unlike Section~2, costs cease when a rival wins.
+
+\subsection{Best response to a rival solution hazard}
+Fix rival strategies and let
+\[
+h_{-i}(t)=-\frac{d}{dt}\log\PP(T_{-i}>t)
+\]
+where the survival probability is positive and differentiable. Independence
+makes this a deterministic function of time, conditional on the prize
+remaining available. Define
+$\Lgen_i=\mu_i\partial_x+(\sigma_i^2/2)\partial_{xx}$ and
+$D_i(t,s)=\exp\{-\int_t^s[r+h_{-i}(u)]\,du\}$.
+Conditional on time $t$, own state $x$, and no prior solution, the value is
+\begin{equation}\label{eq:stopvalue}
+v_i(t,x)=\sup_{\theta\ge t}\E_{t,x}\left[
+ VD_i(t,\tau_b)\ind_{\{\tau_b\le\theta,\ \tau_b<\infty\}}
+ -\int_t^{\theta\wedge\tau_b}D_i(t,s)c_i\,ds\right],
+\end{equation}
+where $\tau_b$ is own first passage to $b$ and immediate abandonment is
+allowed. Success takes precedence at $b$.
+
+Dynamic programming gives the obstacle equation
+\begin{equation}\label{eq:hjb}
+\boxed{\max\{-v_i,\ \partial_t v_i+\Lgen_i v_i
+ -(r+h_{-i})v_i-c_i\}=0,\qquad v_i(t,b)=V.}
+\end{equation}
+The value is the bounded optimal-stopping value in \eqref{eq:stopvalue};
+where classical regularity fails, \eqref{eq:hjb} is interpreted in the
+usual weak or viscosity sense. For a deadline $T$, add
+$v_i(T,x)=0$ for $x<b$. Competition acts as additional discounting, but its
+rate must ultimately be consistent with rival behavior.
+
+\section{An exact constant-hazard benchmark}
+Take one researcher with $\mu=0$, cost rate $c$, volatility $\sigma$,
+an infinite horizon, and constant rival hazard $h$. Write $\rho=r+h$.
+
+\begin{proposition}[Optimal abandonment boundary]\label{prop:boundary}
+For $\rho>0$, define
+\begin{equation}\label{eq:boundary}
+\kappa=\frac{\sqrt{2\rho}}{\sigma},\qquad
+a=b-\frac{1}{\kappa}\arcosh\left(1+\frac{\rho V}{c}\right).
+\end{equation}
+The optimal policy abandons at $x\le a$ and continues on $(a,b)$. Its value is
+\begin{equation}\label{eq:closed}
+v(x)=\begin{cases}
+0,&x\le a,\\[2pt]
+\displaystyle\frac{c}{\rho}\bigl[\cosh(\kappa(x-a))-1\bigr],&a<x<b,\\[2pt]
+V,&x=b.
+\end{cases}
+\end{equation}
+For $\rho=0$, the limiting solution has
+$a=b-\sigma\sqrt{V/c}$ and $v(x)=c(x-a)^2/\sigma^2$ on $(a,b)$.
+\end{proposition}
+\begin{proof}
+On $(a,b)$, solve $(\sigma^2/2)v''-\rho v-c=0$ with
+$v(a)=v'(a)=0$. This yields \eqref{eq:closed}; $v(b)=V$ gives
+\eqref{eq:boundary}. The function is nonnegative, bounded by $V$, and
+continuously differentiable at $a$. In the stopping region the continuation
+operator equals $-c<0$, while in the continuation region it equals zero.
+Discounted It\^o verification therefore bounds every admissible stopping
+payoff above by $v$, with equality for exit from $(a,b)$. For $\rho>0$ the
+bounded terminal remainder vanishes; for $\rho=0$ the proposed interval
+exit has finite expected duration and the quadratic candidate verifies
+directly. Finally, $\arcosh(1+z)\sim\sqrt{2z}$ gives the stated limit.
+\end{proof}
+
+The continuation distance $b-a$ increases with $V$ and decreases with $c$
+and $\rho$. For the last claim, put $z=\rho V/c$ and observe that
+$\arcosh(1+z)/\sqrt z$ decreases for $z>0$. Indeed, writing
+$y=\arcosh(1+z)$ reduces its derivative sign to
+$2\tanh(y/2)<y$. Thus greater competition raises the abandonment threshold.
+These are best-response comparative statics at a prescribed hazard, not
+comparative statics of the full equilibrium. A constant positive hazard
+is a benchmark; it need not be generated by a finite population of
+abandoning researchers.
+
+\section{Closing the equilibrium loop}
+For deterministic time--state stopping policies, potential solution times
+remain independent. Let
+\begin{equation}\label{eq:survival}
+F_i(t)=\PP(T_i\le t),\qquad f_i(t)=F_i'(t),\qquad S_i(t)=1-F_i(t).
+\end{equation}
+The distributions can be defective: $S_i(\infty)>0$ when some paths never
+solve. Then
+\begin{equation}\label{eq:hazard}
+\boxed{h_{-i}(t)=\sum_{j\ne i}\frac{f_j(t)}{S_j(t)}.}
+\end{equation}
+To see this, $\PP(T_{-i}>t)=\prod_{j\ne i}S_j(t)$; logarithmic
+differentiation proves \eqref{eq:hazard}. The same construction allows
+independent private mixtures over policies.
+
+\paragraph{Forward calculation.}
+For a regular continuation region $(a_i(t),b)$, let $m_i(t,x)$ be the
+unconditional density of the potential process still working and unsolved.
+It satisfies
+\begin{equation}\label{eq:forward}
+\partial_t m_i=-\mu_i\partial_xm_i
+ +\frac{\sigma_i^2}{2}\partial_{xx}m_i,
+\qquad m_i(t,a_i(t))=m_i(t,b)=0,
+\end{equation}
+with the specified initial law and absorption at either boundary.
+The solution density is the upper-boundary flux
+\begin{equation}\label{eq:flux}
+f_i(t)=-\frac{\sigma_i^2}{2}\partial_xm_i(t,b^-).
+\end{equation}
+For nonsmooth or jumping stopping regions, use the killed transition law
+and account explicitly for newly abandoned mass instead of assuming
+classical boundary regularity.
+
+Two bookkeeping points matter. First, $S_i(t)$ includes abandoned paths;
+it is \emph{not} $\int m_i(t,x)\,dx$. Second, \eqref{eq:forward} does not
+kill mass at the rival hazard: it describes potential paths without rival
+announcements. Including such killing here and also in \eqref{eq:hjb}
+would count the rival's termination twice.
+
+\paragraph{Equilibrium characterization.}
+A consistent profile consists of strategies optimal for
+\eqref{eq:stopvalue}, together with their forward laws and hazards satisfying
+\eqref{eq:survival}--\eqref{eq:hazard}. Such a profile is a Nash equilibrium
+under the stated private-information structure: fixing rivals fixes their
+hazard, and each researcher already solves the resulting best-response
+problem. Conversely, an equilibrium represented by these Markov stopping
+policies must satisfy this consistency condition. In the symmetric case,
+\begin{equation}\label{eq:symmetricdynamic}
+h_{-i}(t)=(n-1)\frac{f(t)}{1-F(t)},
+\end{equation}
+so one backward problem and one forward law suffice. A finite number of
+researcher types requires one pair per type, with the appropriate count of
+opponents of each type. No large-population limit is needed for this reduction.
+
+The baseline has no setup charge: immediate abandonment supplies the entry
+option. With an additional setup cost $K_i$, entry compares the initial
+continuation value with $K_i$. Mixed entry then requires equality, and
+nonentry contributes mass at $T_i=\infty$. More generally, randomness of
+Brownian outcomes is not strategic mixing; a deterministic stopping rule
+can be optimal. Mixtures must be supported on best responses.
+
+\section{Brownian bandits inside a strategic race}
+The Brownian bandit model~\cite{cotton} uses independent, irreversibly
+prunable paths, an expected path-time budget, and a terminal-maximum
+objective. Its population-blind Poisson relaxation couples a backward
+obstacle problem to a forward survivor calculation through terminal
+pivotal value. The present game reuses this architecture, replacing the
+planner's marginal terminal reward by a first-solution prize and replacing
+the optimization coupling by rival-hazard consistency. Its concavity and
+optimization certificates do not thereby establish equilibrium convergence.
+
+One researcher can also operate a portfolio of approaches $X_{i\ell}$.
+Let $A_i(t)$ be the active set, $C_i(A_i)$ its cost rate, and $\tau_i$ the
+first solution among its active approaches. Against rival hazard $h_{-i}$,
+the researcher optimizes
+\begin{equation}\label{eq:portfolio}
+\sup_{A_i}\E\left[
+VD_i(0,\tau_i)\ind_{\{\tau_i<\infty\}}
+-\int_0^{\tau_i}D_i(0,t)C_i(A_i(t))\,dt\right],
+\end{equation}
+where admissible controls include irreversible pruning and cost becomes
+zero after total abandonment. A hard compute budget requires a remaining-
+budget state. This nests an internal allocation problem inside an external
+prize race. Correlations among approaches may be modeled internally, but
+the simple product survival formula still requires independence across
+researchers.
+
+If compute intensity $u\in[0,\bar u]$ time-changes a single approach,
+$dX=\mu u\,dt+\sigma\sqrt u\,dW$ and cost is $cu\,dt$, the continuation
+operator becomes
+\begin{equation}\label{eq:intensity}
+\partial_t v-(r+h_{-i})v
++\sup_{0\le u\le\bar u}u(\Lgen v-c).
+\end{equation}
+Here $u=0$ permits pausing, so this is a separate extension of the baseline.
+Linearity makes the best intensity an endpoint except at indifference.
+A finite capacity or increasing marginal compute cost is necessary to avoid
+an ill-posed instantaneous-acceleration incentive when $\Lgen v-c>0$.
+
+\section{A numerical route and its limits}
+A finite-deadline approximation suggests the following procedure: initialize
+rival hazards; solve each backward stopping problem; propagate the induced
+potential laws forward; recompute hazards using \eqref{eq:hazard}; and
+iterate, with damping if useful. Fixed-point iteration is a proposed solver,
+not a convergence result. In particular, this is not automatically the
+concave optimization solved by the Brownian bandit implementation.
+
+Validation should compare the stopping solver with
+Proposition~\ref{prop:boundary}, check conservation of active, abandoned,
+and solved mass, and measure each researcher's payoff gain from recomputing
+a best response against the candidate rivals. That unilateral deviation
+gain, rather than successive-iterate agreement alone, measures approximate
+Nash behavior. Time, state, and horizon refinement remain necessary.
+
+The main unresolved mathematical tasks are existence and selection of the
+coupled equilibrium and conditions for convergence of its numerical scheme.
+Publicly observed rival progress requires a joint-state game; correlated
+difficulty requires filtering. Neither extension is captured by a
+deterministic calendar-time hazard alone. The tractable model isolates the
+central mechanism: the option to keep computing is exercised against an
+endogenous risk that a competitor makes the prize unavailable.
+
+\begin{thebibliography}{9}
+\bibitem{fu}
+Q. Fu, Q. Jiao, and J. Lu (2015).
+Contests with endogenous entry. \emph{International Journal of Game Theory}
+44(2), 387--424.
+\href{https://doi.org/10.1007/s00182-014-0435-9}{doi:10.1007/s00182-014-0435-9}.
+
+\bibitem{morgan}
+J. Morgan, H. Orzen, and M. Sefton (2012).
+Endogenous entry in contests. \emph{Economic Theory} 51, 435--463.
+\href{https://doi.org/10.1007/s00199-010-0544-z}{doi:10.1007/s00199-010-0544-z}.
+
+\bibitem{fullerton}
+R. L. Fullerton and R. P. McAfee (1999).
+Auctioning entry into tournaments. \emph{Journal of Political Economy}
+107(3), 573--605.
+\href{https://doi.org/10.1086/250072}{doi:10.1086/250072}.
+
+\bibitem{rosenthal}
+R. W. Rosenthal (1973).
+A class of games possessing pure-strategy Nash equilibria.
+\emph{International Journal of Game Theory} 2, 65--67.
+\href{https://doi.org/10.1007/BF01737559}{doi:10.1007/BF01737559}.
+
+\bibitem{monderer}
+D. Monderer and L. S. Shapley (1996).
+Potential games. \emph{Games and Economic Behavior} 14(1), 124--143.
+\href{https://doi.org/10.1006/game.1996.0044}{doi:10.1006/game.1996.0044}.
+
+\bibitem{loury}
+G. C. Loury (1979).
+Market structure and innovation. \emph{The Quarterly Journal of Economics}
+93(3), 395--410.
+\href{https://doi.org/10.2307/1883165}{doi:10.2307/1883165}.
+
+\bibitem{cotton}
+P. Cotton (2026).
+Budgeted Brownian races: wavefront pruning under a path-time budget.
+Project documentation, accessed September 9, 2026.
+\url{https://brownianbandit.microprediction.org/}.
+\end{thebibliography}
+\end{document}

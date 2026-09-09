@@ -1,0 +1,362 @@
+{
+  "seed": 20260909,
+  "reduction": {
+    "V": 100.0,
+    "c": 1.0,
+    "sigma": 1.0,
+    "d": 4.0,
+    "zeta": 4.0,
+    "V_min": 16.0,
+    "width": 10.0,
+    "p": 0.6,
+    "k": 24.0,
+    "k_identity_p_1_minus_p_V": 24.0,
+    "value": 36.0,
+    "value_identity_V_p_squared": 36.0,
+    "value_identity_sqrt_form": 36.0,
+    "monte_carlo": {
+      "n_paths": 50000,
+      "dt": 0.002,
+      "p_hat": 0.60514,
+      "p_se": 0.0021860940483299806,
+      "k_hat": 24.04632400000061,
+      "k_se": 0.09171349092583445,
+      "value_hat": 36.46767599999939
+    }
+  },
+  "universal_entry": [
+    {
+      "n": 2,
+      "p_star": 0.0,
+      "p_star_closed_form": null,
+      "closed_form_error": null,
+      "asymptote": 0.25
+    },
+    {
+      "n": 3,
+      "p_star": 0.0,
+      "p_star_closed_form": null,
+      "closed_form_error": null,
+      "asymptote": 0.5555555555555556
+    },
+    {
+      "n": 4,
+      "p_star": 0.5857864376269051,
+      "p_star_closed_form": 0.5,
+      "closed_form_error": 0.08578643762690508,
+      "asymptote": 0.6875
+    },
+    {
+      "n": 5,
+      "p_star": 0.724317796349015,
+      "p_star_closed_form": 0.7236067977499789,
+      "closed_form_error": 0.0007109985990361167,
+      "asymptote": 0.76
+    },
+    {
+      "n": 6,
+      "p_star": 0.7887008253491522,
+      "p_star_closed_form": 0.7886751345948129,
+      "closed_form_error": 2.5690754339335875e-05,
+      "asymptote": 0.8055555555555556
+    },
+    {
+      "n": 8,
+      "p_star": 0.8535534279921602,
+      "p_star_closed_form": 0.8535533905932737,
+      "closed_form_error": 3.739888643217171e-08,
+      "asymptote": 0.859375
+    },
+    {
+      "n": 10,
+      "p_star": 0.887298334663422,
+      "p_star_closed_form": 0.8872983346207417,
+      "closed_form_error": 4.268030373566489e-11,
+      "asymptote": 0.89
+    },
+    {
+      "n": 20,
+      "p_star": 0.947213595499958,
+      "p_star_closed_form": 0.9472135954999579,
+      "closed_form_error": 1.1102230246251565e-16,
+      "asymptote": 0.9475
+    },
+    {
+      "n": 50,
+      "p_star": 0.9795831523312719,
+      "p_star_closed_form": 0.9795831523312719,
+      "closed_form_error": 0.0,
+      "asymptote": 0.9796
+    },
+    {
+      "n": 100,
+      "p_star": 0.9898979485566356,
+      "p_star_closed_form": 0.9898979485566356,
+      "closed_form_error": 0.0,
+      "asymptote": 0.9899
+    },
+    {
+      "n": 1000,
+      "p_star": 0.9989989979949859,
+      "p_star_closed_form": 0.998998997994986,
+      "closed_form_error": 1.1102230246251565e-16,
+      "asymptote": 0.998999
+    }
+  ],
+  "free_entry": [
+    {
+      "p": 0.001,
+      "y_star": 0.0020013344454979905,
+      "entrants": 2.0013344454979904,
+      "solve_probability": 0.0019993331110524926,
+      "spend_over_V": 0.0019993331110524926,
+      "entrants_expansion_2_plus_4p_over_3": 2.001333333333333,
+      "entrants_finite_n_50": 2.0421502073650726,
+      "entrants_finite_n_1000": 2.003336460927636
+    },
+    {
+      "p": 0.005,
+      "y_star": 0.01003347285485083,
+      "entrants": 2.0066945709701662,
+      "solve_probability": 0.009983305490576577,
+      "spend_over_V": 0.009983305490576577,
+      "entrants_expansion_2_plus_4p_over_3": 2.006666666666667,
+      "entrants_finite_n_50": 2.0475078811164433,
+      "entrants_finite_n_1000": 2.008696556016985
+    },
+    {
+      "p": 0.01,
+      "y_star": 0.020134454614765297,
+      "entrants": 2.01344546147653,
+      "solve_probability": 0.019933110068617643,
+      "spend_over_V": 0.019933110068617643,
+      "entrants_expansion_2_plus_4p_over_3": 2.013333333333333,
+      "entrants_finite_n_50": 2.054255269243183,
+      "entrants_finite_n_1000": 2.0154474045830937
+    },
+    {
+      "p": 0.02,
+      "y_star": 0.04054238651761756,
+      "entrants": 2.0271193258808777,
+      "solve_probability": 0.03973153878726521,
+      "spend_over_V": 0.03973153878726521,
+      "entrants_expansion_2_plus_4p_over_3": 2.026666666666667,
+      "entrants_finite_n_50": 2.067920632373948,
+      "entrants_finite_n_1000": 2.029121117929684
+    },
+    {
+      "p": 0.05,
+      "y_star": 0.10347883154622264,
+      "entrants": 2.0695766309244528,
+      "solve_probability": 0.09830488996891151,
+      "spend_over_V": 0.09830488996891151,
+      "entrants_expansion_2_plus_4p_over_3": 2.066666666666667,
+      "entrants_finite_n_50": 2.110339723269572,
+      "entrants_finite_n_1000": 2.0715773726558115
+    },
+    {
+      "p": 0.1,
+      "y_star": 0.21455574127132948,
+      "entrants": 2.145557412713295,
+      "solve_probability": 0.19310016714419653,
+      "spend_over_V": 0.19310016714419653,
+      "entrants_expansion_2_plus_4p_over_3": 2.1333333333333333,
+      "entrants_finite_n_50": 2.186208980690395,
+      "entrants_finite_n_1000": 2.1475541561854787
+    },
+    {
+      "p": 0.25,
+      "y_star": 0.6058599779190001,
+      "entrants": 2.4234399116760006,
+      "solve_probability": 0.4543949834392501,
+      "spend_over_V": 0.4543949834392501,
+      "entrants_expansion_2_plus_4p_over_3": 2.3333333333333335,
+      "entrants_finite_n_50": 2.4632585006746615,
+      "entrants_finite_n_1000": 2.42540112101361
+    },
+    {
+      "p": 0.5,
+      "y_star": 1.5936242600400399,
+      "entrants": 3.1872485200800798,
+      "solve_probability": 0.7968121300200199,
+      "spend_over_V": 0.7968121300200199,
+      "entrants_expansion_2_plus_4p_over_3": 2.6666666666666665,
+      "entrants_finite_n_50": 3.222261923445599,
+      "entrants_finite_n_1000": 3.1889876844071168
+    },
+    {
+      "p": 0.75,
+      "y_star": 3.920690394872886,
+      "entrants": 5.227587193163848,
+      "solve_probability": 0.9801725987182216,
+      "spend_over_V": 0.9801725987182216,
+      "entrants_expansion_2_plus_4p_over_3": 3.0,
+      "entrants_finite_n_50": 5.244666890599562,
+      "entrants_finite_n_1000": 5.228468561352772
+    },
+    {
+      "p": 0.9,
+      "y_star": 9.999545794446536,
+      "entrants": 11.11060643827393,
+      "solve_probability": 0.9999545794446535,
+      "spend_over_V": 0.9999545794446535,
+      "entrants_expansion_2_plus_4p_over_3": 3.2,
+      "entrants_finite_n_50": 11.110952499734456,
+      "entrants_finite_n_1000": 11.110631221271618
+    },
+    {
+      "p": 0.99,
+      "y_star": 99.99999999999991,
+      "entrants": 101.01010101010093,
+      "solve_probability": 1.0,
+      "spend_over_V": 1.0,
+      "entrants_expansion_2_plus_4p_over_3": 3.3200000000000003,
+      "entrants_finite_n_50": 50.0,
+      "entrants_finite_n_1000": 101.01010101010091
+    }
+  ],
+  "depth": {
+    "c": 1.0,
+    "sigma": 1.0,
+    "rho": 0.05,
+    "rows": [
+      {
+        "V": 1.0,
+        "width_rho_positive": 0.9958795224423128,
+        "width_ratio": 1.0,
+        "width_rho_zero": 1.0
+      },
+      {
+        "V": 2.0,
+        "width_rho_positive": 1.4026859816019348,
+        "width_ratio": 1.4084896315188433,
+        "width_rho_zero": 1.4142135623730951
+      },
+      {
+        "V": 10.0,
+        "width_rho_positive": 3.0434508083896765,
+        "width_ratio": 3.0560431656691396,
+        "width_rho_zero": 3.1622776601683795
+      },
+      {
+        "V": 100.0,
+        "width_rho_positive": 7.835772176174236,
+        "width_ratio": 7.868192888390402,
+        "width_rho_zero": 10.0
+      },
+      {
+        "V": 1000.0,
+        "width_rho_positive": 14.625144214247296,
+        "width_ratio": 14.68565613075398,
+        "width_rho_zero": 31.622776601683793
+      },
+      {
+        "V": 10000.0,
+        "width_rho_positive": 21.85055529014943,
+        "width_ratio": 21.940962533864273,
+        "width_rho_zero": 100.0
+      }
+    ]
+  },
+  "purse_design": {
+    "M": 49,
+    "purse": 2.0408163265306123,
+    "purse_over_minimum": 2.0408163265306123,
+    "p": 0.30000000000000004,
+    "expected_solved": 26.117175311297466,
+    "solved_per_problem": 0.5330035777815809,
+    "long_odds_M": 44.44444444444444,
+    "long_odds_purse_over_minimum": 2.25,
+    "long_odds_expected_solved": 29.62962962962963
+  },
+  "clay": {
+    "hazard_ci95": [
+      0.00013910883507851592,
+      0.030613425224939
+    ],
+    "rivalry_share_at_ci_upper_r05": 0.37975591707605877,
+    "rivalry_share_at_ci_lower_r05": 0.0027744576700811253,
+    "problems": 7,
+    "solved": 1,
+    "years": 26,
+    "problem_years": 182,
+    "hazard_per_year": 0.005494505494505495,
+    "rivalry_shares": [
+      {
+        "r": 0.03,
+        "millennium": 0.15479876160990713,
+        "warm_10yr": 0.7692307692307693,
+        "hot_3yr": 0.9174311926605505
+      },
+      {
+        "r": 0.05,
+        "millennium": 0.09900990099009901,
+        "warm_10yr": 0.6666666666666666,
+        "hot_3yr": 0.8695652173913043
+      },
+      {
+        "r": 0.1,
+        "millennium": 0.052083333333333336,
+        "warm_10yr": 0.5,
+        "hot_3yr": 0.7692307692307692
+      }
+    ],
+    "implied_prize": [
+      {
+        "attempt_cost": 600000.0,
+        "p": 0.005,
+        "implied_V": 120603015.07537688,
+        "purse_share_of_implied_V": 0.008291666666666666
+      },
+      {
+        "attempt_cost": 600000.0,
+        "p": 0.01,
+        "implied_V": 60606060.6060606,
+        "purse_share_of_implied_V": 0.0165
+      },
+      {
+        "attempt_cost": 600000.0,
+        "p": 0.02,
+        "implied_V": 30612244.897959184,
+        "purse_share_of_implied_V": 0.03266666666666666
+      },
+      {
+        "attempt_cost": 1000000.0,
+        "p": 0.005,
+        "implied_V": 201005025.12562814,
+        "purse_share_of_implied_V": 0.004975
+      },
+      {
+        "attempt_cost": 1000000.0,
+        "p": 0.01,
+        "implied_V": 101010101.010101,
+        "purse_share_of_implied_V": 0.0099
+      },
+      {
+        "attempt_cost": 1000000.0,
+        "p": 0.02,
+        "implied_V": 51020408.16326531,
+        "purse_share_of_implied_V": 0.0196
+      },
+      {
+        "attempt_cost": 1200000.0,
+        "p": 0.005,
+        "implied_V": 241206030.15075377,
+        "purse_share_of_implied_V": 0.004145833333333333
+      },
+      {
+        "attempt_cost": 1200000.0,
+        "p": 0.01,
+        "implied_V": 121212121.2121212,
+        "purse_share_of_implied_V": 0.00825
+      },
+      {
+        "attempt_cost": 1200000.0,
+        "p": 0.02,
+        "implied_V": 61224489.79591837,
+        "purse_share_of_implied_V": 0.01633333333333333
+      }
+    ],
+    "diffusive_years_funded_by_1M_at_300k": 3.3333333333333335
+  }
+}

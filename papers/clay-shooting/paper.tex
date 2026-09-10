@@ -34,72 +34,60 @@
 \maketitle
 
 \begin{abstract}
-\noindent A Brownian attempt on a prize problem has a price list. Running
-one to an abandonment floor buys success probability $p$ at expected cost
-$k(p)=\zeta^{2}p/(1-p)$, where $\zeta^{2}$ is the cost of a diffusive
-traverse of the remaining distance; the identity holds for every floor, so
-an attempt's cost and success rate pin $\zeta^{2}$ with no appeal to
-optimality, discounting, or the size of the prize. Sizing the attempt
-against an effective reward $A$ gives $p=1-\zeta/\sqrt A$, $k=p(1-p)A$ and
-value $(\sqrt A-\zeta)^{2}$; in a lottery for one prize $A$ is the shared
-reward, not the purse, which is where a fixed-attempt entry game misprices
-competition. Closing that loop, the symmetric equilibrium attempt size is
-the unique root of $p=1-\zeta/\sqrt{A(p)}$, and in a large pool it
-collapses to $G(y^{*})=V_{e}/V$, where $G(y)=(1-e^{-y})/y$, $y^{*}$ is the
-expected number of solvers and $V_{e}$ the purse at which a lone
-researcher breaks even: the effective reward is competed down to $V_{e}$
-exactly, rents dissipate completely, and the number of \emph{entrants} is
-not pinned at all. A funder splitting escrowed capital should post purses
-of $(y^{*}+\tfrac12)V_{e}=1.7564\,V_{e}$ where $e^{y}=1+2y$, solving
-$71.5\%$ of funded problems. The reward can exceed the walk-away threshold
-by only $(2-p)/(1-p)$ times the cost of one attempt, so whether a cash
-purse matters is governed by its ratio to twice that cost and not to the
-prize --- which is why nothing here identifies the Millennium purses'
-role, and why this draft withdraws the claim that they are scoreboards.
+\noindent A researcher attacking a prize problem chooses how long to
+persist before giving up, and that choice buys a success probability at a
+price. We observe that the price is exact: running a Brownian attempt
+between a target and an abandonment floor buys success probability $p$ at
+expected cost $\zeta^{2}p/(1-p)$, where $\zeta^{2}$ is the cost of a
+diffusive traverse of the distance still to go. The identity holds at
+every floor, so it fixes the cost curve that entry models usually assume,
+and optimizing against it makes each researcher's best response a
+function of one scalar: the reward conditional on success, which in a
+prize contest is shared rather than won outright. The symmetric
+equilibrium is then a one-dimensional fixed point, and in a large pool it
+collapses to $G(y^{*})=V_{e}/V$ with $G(y)=(1-e^{-y})/y$, where $y^{*}$ is
+the expected number of solvers and $V_{e}$ the purse at which a lone
+researcher breaks even. A funder splitting escrowed capital across
+problems should post $1.7564\,V_{e}$ on each, the root of $e^{y}=1+2y$
+shifted by a half, and expects to solve $71.5\%$ of them. The reward can
+exceed the walk-away threshold by only $(2-p)/(1-p)$ times the cost of one
+attempt, which is why a cash purse worth a percent of the reward can still
+be worth half the surplus, and why the Millennium purses cannot be
+dismissed by comparing them with the prize.
 \end{abstract}
 
-\section{Introduction}
+\section{Two prices}
 
-The Clay Mathematics Institute committed one million dollars to each of
-seven problems in May 2000 \citep{clay2000}; one has been solved, and the
-person entitled to the purse refused it. That refusal is the most
-informative single fact anyone has about the reward structure of famous
-mathematics, and what it says is that the reward is not denominated in the
-purse. It does not say by how much, and neither does this paper.
+A prize contest sets one price and a researcher discovers another. The
+sponsor posts a purse. The researcher, before deciding anything, must know
+what it costs to reach a given chance of success, and that number is not
+posted anywhere. Almost every model of a research race assumes it.
 
-What this paper does is price the attempt. A companion note
-\citep{cotton2026races} sets up a prize race: researchers choose whether
-to attempt a problem, an attempt is a privately observed diffusion that
+This paper derives it. The setting is the companion note's prize race
+\citep{cotton2026races}: an attempt is a privately observed diffusion that
 wins on first passage to a target, costs a flow rate while it runs, and
-may be irreversibly abandoned. It leaves the success probability $p$ and
-expected cost $k$ of an attempt as free parameters of its entry game.
-Here they are derived, and the derivation turns out to constrain the game
-far more than the first draft of this paper recognised.
-
-\paragraph{Three results.}
-First, a \emph{price list} (Section~\ref{sec:price}). For an attempt run
-between a target at distance $d$ and an abandonment floor,
+may be abandoned irreversibly. That note leaves an attempt's success
+probability $p$ and expected cost $k$ as free parameters. They are not
+free. Running the diffusion between the target and any abandonment floor
+gives
 \begin{equation}
 k(p)=\zeta^{2}\,\frac{p}{1-p},
 \qquad
 \zeta^{2}=\frac{c\,d^{2}}{\sigma^{2}},
 \label{eq:intro-price}
 \end{equation}
-where $\zeta^{2}$ is the cost rate times the diffusive traverse of the
-distance still to go. This holds for \emph{every} floor, optimal or not,
-at any discount rate, so an observed $(k,p)$ pair identifies $\zeta^{2}$
-outright. Sizing the attempt optimally against an effective reward $A$
-gives $p=1-\zeta/\sqrt A$, $k=p(1-p)A$ and value
-$(\sqrt A-\zeta)^{2}$. A corollary that matters later: the reward can
-exceed the walk-away threshold $\zeta^{2}$ by only $(2-p)/(1-p)$ times the
-cost of a single attempt, which is between two and three times it over
-most of the range.
+where $d$ is the distance still to travel and $\zeta^{2}$ is the cost rate
+times the diffusive time to cover it. We call \eqref{eq:intro-price} the
+\emph{price list}, and the paper is an optimization against it.
 
-Second, an \emph{equilibrium in attempt sizes} (Section~\ref{sec:eq}).
-In a lottery for one prize the reward conditional on success is shared,
-$A_{i}=V\,\E[(1+K_{-i})^{-1}]<V$, so an attempt sized against the full
-purse is too long. The symmetric equilibrium is the unique root of
-$p=1-\zeta/\sqrt{A(p)}$, and in a large pool it becomes
+The price list buys three things. First, identification: an attempt's cost
+and success rate pin $\zeta^{2}$, whatever floor was used and whether or
+not it was chosen well. Second, a one-dimensional equilibrium. Optimizing
+$Ap-k(p)$ gives $p=1-\zeta/\sqrt A$, so a researcher's best response
+depends on rivals only through the scalar $A$, the reward conditional on
+success. In a contest for one purse that reward is shared,
+$A_{i}=V\,\E[(1+K_{-i})^{-1}]<V$, and the symmetric equilibrium is the
+root of $p=1-\zeta/\sqrt{A(p)}$. In a large pool it becomes
 \begin{equation}
 G(y^{*})=\frac{V_{e}}{V},
 \qquad
@@ -107,119 +95,83 @@ G(y)=\frac{1-e^{-y}}{y},
 \label{eq:intro-eq}
 \end{equation}
 with $y^{*}$ the expected number of solvers and $V_{e}$ the purse at which
-a lone researcher exactly breaks even. The effective reward is competed
-down to $V_{e}$ exactly and rents dissipate completely. What is pinned is
-the number of \emph{solutions}; the number of entrants diverges as the
-setup cost vanishes.
+a lone researcher exactly breaks even. In English: competition bids the
+effective reward down to break-even, exactly, and what free entry pins is
+the number of solutions rather than the number of attempts.
 
-Third, an \emph{exact purse design} (Section~\ref{sec:purse}). A funder
-splitting escrowed capital $B$ across identical problems maximises the
-expected number solved at
-\begin{equation}
-e^{y}=1+2y,
-\qquad
-\frac{V^{*}}{V_{e}}=y^{*}+\tfrac12=1.75643121,
-\qquad
-\PP(\text{solved})=0.71533186,
-\end{equation}
-independent of $B$. The budget chooses the number of problems; the purse
-is a fixed multiple of the break-even purse.
+Third, purse design. A funder with escrowed capital chooses how many
+problems to post and how much on each, and the optimum is
+$V^{*}=1.7564\,V_{e}$ whatever the capital.
 
-\paragraph{Corrections to the first draft.}
-A referee found four substantive errors, and correcting them changes the
-paper's conclusions, not just its wording. They are recorded here rather
-than buried.
-\begin{enumerate}
-\item The reduction $k=p(1-p)V$ was applied inside a competitive entry
-game, where the solo-optimal width is not a best response. It is
-reinstated as $k=p(1-p)A$ against the \emph{effective} reward, and
-Section~\ref{sec:eq} closes the resulting loop. The referee's counterexample
-is reproduced in Section~\ref{sec:committed}.
-\item ``Free entry produces two attempts'' is withdrawn. Even in the
-committed-width game the claim required selecting the symmetric mixed
-equilibrium: for $p<2-\sqrt2$ any three designated entrants form a pure
-equilibrium, and the companion paper's own potential selects three. At
-fixed $n$ the mixed equilibrium gives $2n/(n-1)$, not $2$. Under
-endogenous widths the entrant count is not pinned at all.
-\item ``Doubling the purse does almost nothing'' is withdrawn: it
-contradicts $p=1-\zeta/\sqrt V$, under which
-$dp/d\log V=(1-p)/2$ and doubling the purse moves $p$ from $0.01$ to
-$0.29996$. The logarithmic-width result applies far above threshold with
-positive discounting, which is not where the argument was made.
-\item The Millennium ``revealed prize'' tables are withdrawn along with
-the conclusion that the purses are scoreboards. The dials were stipulated,
-so nothing was estimated; and the diagnostic used --- purse over prize ---
-is the wrong ratio, because the model's own arithmetic keeps the surplus
-small in level whenever attempts are long shots. Section~\ref{sec:clay}
-now says what can and cannot be said, which is less.
-\end{enumerate}
-Two smaller repairs: the exposure for the solution hazard is at most
-$6\times26+3=159$ problem-years, not $7\times26$, since the solved
-problem stopped being exposed in 2003; and the old robustness sentence was
-arithmetically impossible, since $k\le V/4$ means a \$1M purse can
-rationalise an attempt costing at most \$250k.
+One consequence runs against intuition and is the reason the paper has a
+Millennium section at all. Optimal sizing forces
+$A-\zeta^{2}=k(2-p)/(1-p)$, so the reward clears the walk-away threshold by
+about twice the cost of a single attempt, however large the reward. A
+purse worth one percent of the reward can be worth half of the surplus
+that makes attempting worthwhile. Comparing a purse with a prize is the
+wrong comparison.
 
 \paragraph{Scope.}
-Sections~\ref{sec:price}--\ref{sec:purse} are proved for the
-\emph{lottery} allocation of the companion paper --- all entrants pay to
-completion, one winner is drawn among the successes --- with
-undiscounted, driftless attempts. The first-solution race, in which costs
-cease when a rival announces and the rival hazard is a function of
-calendar time, is not solved here; it is the companion's coupled system
-and it remains open. Section~\ref{sec:clay} contains no estimation.
+Sections \ref{sec:price}--\ref{sec:purse} treat the lottery allocation:
+every entrant pays its attempt to completion and one winner is drawn among
+the successes. The first-solution race, in which costs cease when a rival
+announces and the rival hazard varies with calendar time, is the
+companion note's coupled system, and it is not solved here. The
+constants below are lottery constants.
 
-\section{The price of a success probability}
+\section{The price list}
 \label{sec:price}
 
 Fix one researcher and one approach. While working, the researcher
-observes $dX_{t}=\sigma\,dW_{t}$ with $\sigma>0$, starting at $x_{0}$;
-first passage to a target $b>x_{0}$ is a solution; working costs $c>0$ per
-unit time; abandonment at a floor $a<x_{0}$ is irreversible. Write
-$d=b-x_{0}$ for the distance still to travel and $L=b-a$ for the
-continuation width, and define the \emph{hardness index}
+observes $dX_{t}=\sigma\,dW_{t}$ with $\sigma>0$, starting at $x_{0}$.
+First passage to a target $b>x_{0}$ is a solution, working costs $c>0$ per
+unit time, and abandonment at a floor $a<x_{0}$ is irreversible. Write
+$d=b-x_{0}$ for the distance still to travel, $L=b-a$ for the continuation
+width, and
 \begin{equation}
-\zeta^{2}=\frac{c\,d^{2}}{\sigma^{2}},
+\zeta^{2}=\frac{c\,d^{2}}{\sigma^{2}}
 \end{equation}
-the cost rate times $d^{2}/\sigma^{2}$, which is exactly the diffusive
-time for the state to cover the remaining distance.
+for the \emph{hardness}, the cost rate times the diffusive time
+$d^{2}/\sigma^{2}$ to cover the remaining distance.
 
-\begin{proposition}[The price list]\label{prop:price}
-For any width $L>d$, the attempt's undiscounted success probability and
-expected cost are
+\begin{proposition}[Persistence is bought at a convex price]
+\label{prop:price}
+For any width $L>d$,
 \begin{equation}
 p=1-\frac{d}{L},
 \qquad
 k=\frac{c\,d\,(L-d)}{\sigma^{2}}=\zeta^{2}\,\frac{p}{1-p}.
 \label{eq:price}
 \end{equation}
-Hence $k(\cdot)$ is a strictly increasing, strictly convex function of $p$
-on $[0,1)$ with $k(0)=0$ and $k(p)\to\infty$ as $p\to1$; and an observed
-pair $(k,p)$ determines
+The map $k(\cdot)$ is strictly increasing and strictly convex on $[0,1)$,
+with $k(0)=0$ and $k(p)\to\infty$ as $p\to1$, and an observed pair
+$(k,p)$ determines
 \begin{equation}
 \zeta^{2}=k\,\frac{1-p}{p}
 \label{eq:identify}
 \end{equation}
 with no reference to the prize, the discount rate, the rival hazard, or
-whether $L$ was chosen optimally.
+whether $L$ was chosen well.
 \end{proposition}
 
 \begin{proof}
 Optional stopping applied to $X$ and to $X_{t}^{2}-\sigma^{2}t$ at
-$\tau=\tau_{a}\wedge\tau_{b}$ --- legitimate because $X$ is bounded on
-$(a,b)$ and $\E[\tau]<\infty$ --- gives the gambler's-ruin identities
+$\tau=\tau_{a}\wedge\tau_{b}$, legitimate since $X$ is bounded on $(a,b)$
+and $\E[\tau]<\infty$, gives the gambler's-ruin identities
 $p=(x_{0}-a)/(b-a)=1-d/L$ and
 $\E[\tau]=(x_{0}-a)(b-x_{0})/\sigma^{2}=d(L-d)/\sigma^{2}$, so
 $k=c\E[\tau]$. Substituting $L=d/(1-p)$ gives
-$k=c\,d^{2}p/\big(\sigma^{2}(1-p)\big)=\zeta^{2}p/(1-p)$. Convexity and the
-limits are immediate, and \eqref{eq:identify} is \eqref{eq:price}
-inverted.
+$k=c\,d^{2}p/\big(\sigma^{2}(1-p)\big)$. Convexity and the limits follow.
 \end{proof}
 
-Everything else in the paper is an optimisation against this price list.
+The last clause of Proposition~\ref{prop:price} is what makes the rest
+work. Standard race models specify a cost-to-hazard technology and then
+compute; here the technology is a theorem about Brownian motion, and it
+holds off the optimal path as well as on it.
 
 \begin{corollary}[Optimal attempt size]\label{cor:size}
 Let $A>0$ be the expected reward conditional on solving. The attempt
-maximising $Ap-k(p)$ over $p\in[0,1)$ has
+maximizing $Ap-k(p)$ has
 \begin{equation}
 p=\Big(1-\frac{\zeta}{\sqrt A}\Big)_{+},
 \qquad
@@ -228,68 +180,66 @@ k=p(1-p)A,
 \text{value}=Ap^{2}=\big(\sqrt A-\zeta\big)_{+}^{2},
 \label{eq:size}
 \end{equation}
-and the attempt is worth mounting exactly when $A>\zeta^{2}$. Expected
-spend never exceeds $A/4$, with equality only at $p=1/2$.
+and is worth mounting exactly when $A>\zeta^{2}$. Expected spend never
+exceeds $A/4$, with equality only at $p=1/2$.
 \end{corollary}
 
 \begin{proof}
-$Ap-\zeta^{2}p/(1-p)$ has derivative $A-\zeta^{2}/(1-p)^{2}$, which
-vanishes at $(1-p)^{2}=\zeta^{2}/A$ and is decreasing, so the stationary
-point is the maximum when it lies in $(0,1)$, i.e.\ when $A>\zeta^{2}$;
-otherwise the derivative is negative throughout and $p=0$. Substituting
-$1-p=\zeta/\sqrt A$ into $k(p)$ gives $k=\zeta p\sqrt A=p(1-p)A$, and
-$Ap-k=Ap^{2}=A(1-\zeta/\sqrt A)^{2}=(\sqrt A-\zeta)^{2}$. Finally
+$Ap-\zeta^{2}p/(1-p)$ has derivative $A-\zeta^{2}/(1-p)^{2}$, decreasing
+in $p$ and vanishing at $(1-p)^{2}=\zeta^{2}/A$. That stationary point
+lies in $(0,1)$ exactly when $A>\zeta^{2}$; otherwise the derivative is
+negative throughout and $p=0$. Substituting $1-p=\zeta/\sqrt A$ gives
+$k=\zeta p\sqrt A=p(1-p)A$ and $Ap-k=Ap^{2}=(\sqrt A-\zeta)^{2}$. Finally
 $k/A=p(1-p)\le1/4$.
 \end{proof}
 
-For a researcher with no rivals, $A=V$ and \eqref{eq:size} is the
-first draft's Proposition~1. The whole of the trouble in that draft was
-the step of holding $A=V$ inside a game where the prize is shared.
+The threshold $\zeta^{2}$ has a reading. A reward must cover an undirected
+diffusive crossing of the remaining gap before anyone starts at all, and
+the quarter-of-the-reward bound says the expensive attempts are the
+genuinely uncertain ones. Cheap long shots and near-certainties both
+spend little.
 
 \begin{corollary}[The surplus is a small multiple of one attempt]
 \label{cor:surplus}
-If the attempt is optimally sized, the reward exceeds the walk-away
-threshold by
+If the attempt is optimally sized,
 \begin{equation}
-A-\zeta^{2}=k\,\frac{2-p}{1-p}\;\in\;[2k,\infty),
+A-\zeta^{2}=k\,\frac{2-p}{1-p}\;\ge\;2k,
 \label{eq:surplus}
 \end{equation}
-which equals $2k$ in the long-odds limit and $3k$ at $p=1/2$.
+with the bound approached as $p\downarrow0$ and equal to $3k$ at
+$p=1/2$.
 \end{corollary}
 
 \begin{proof}
 $A=\zeta^{2}/(1-p)^{2}$, so
-$A-\zeta^{2}=\zeta^{2}\big(1-(1-p)^{2}\big)/(1-p)^{2}
-=\zeta^{2}p(2-p)/(1-p)^{2}$, and $k=\zeta^{2}p/(1-p)$.
+$A-\zeta^{2}=\zeta^{2}p(2-p)/(1-p)^{2}$, and $k=\zeta^{2}p/(1-p)$.
 \end{proof}
 
-Corollary~\ref{cor:surplus} is the paper's most consequential line and
-its least expected. However enormous the reward, if attempts are long
-shots then the reward only just clears the threshold, and it clears it by
-about twice the cost of a single attempt. A prize that looks like a
-rounding error against the level of the reward can be a large fraction of
-the surplus that makes attempting worthwhile at all. Section~\ref{sec:clay}
-is where the first draft got this backwards.
+Corollary~\ref{cor:surplus} is the least expected line in the paper.
+However enormous the reward, if attempts are long shots then the reward
+barely clears its threshold, and it clears it by roughly twice the cost of
+one attempt. The level of the reward and the surplus it generates are
+different quantities, and only the second governs behavior.
+Section~\ref{sec:clay} is where that distinction earns its keep.
 
 \paragraph{A verification.}
-A committed, seeded Euler simulation --- given only the boundary location
-and the increment law --- reproduces \eqref{eq:size}. At $A=100$,
-$c=\sigma=1$, $d=4$, so $\zeta=4$, $L=10$ and $p=0.6$, fifty thousand
-paths at $dt=2\times10^{-3}$ give $\hat p=0.6051$ (s.e.\ $0.0022$) and
-$\hat k=24.05$ (s.e.\ $0.092$) against $p=0.6$ and $k=p(1-p)A=24$. The
-upward bias in $\hat p$ is Euler overshoot of the upper boundary and
-shrinks with $dt$. The price identity \eqref{eq:price} is checked against
-$k$ computed from the width at five widths, with residuals at $10^{-14}$.
+A seeded Euler simulation, given only the boundary location and the
+increment law, reproduces \eqref{eq:size}. At $A=100$, $c=\sigma=1$ and
+$d=4$, so $\zeta=4$, $L=10$ and $p=0.6$, fifty thousand paths at
+$dt=2\times10^{-3}$ give $\hat p=0.6051$ (s.e.\ $0.0022$) and
+$\hat k=24.05$ (s.e.\ $0.092$) against $p=0.6$ and $k=24$. The upward bias
+in $\hat p$ is Euler overshoot at the upper boundary and shrinks with
+$dt$. The price identity \eqref{eq:price} is checked against $k$ computed
+directly from the width at five widths, with residuals at $10^{-14}$.
 
 \section{Equilibrium attempt size}
 \label{sec:eq}
 
-Take the companion paper's lottery: $n$ researchers attempt the same
-problem, each pays for its own attempt to completion, and if several
-succeed one is drawn uniformly for the prize $V$. Researcher $i$ chooses a
-width, equivalently a success probability $p_{i}\in[0,1)$, and pays
-$k(p_{i})$. Choosing $p_{i}=0$ is not entering. Successes are
-independent.
+Now the contest. There are $n$ researchers, a prize $V$, and a common
+hardness $\zeta^{2}$. Each researcher chooses a width, equivalently a
+success probability $p_{i}\in[0,1)$, and pays $k(p_{i})$; choosing
+$p_{i}=0$ is staying out. Successes are independent, and if several
+researchers succeed one is drawn uniformly for the prize.
 
 Conditional on solving, researcher $i$'s expected reward is
 \begin{equation}
@@ -297,51 +247,46 @@ A_{i}=V\,\E\Big[\frac{1}{1+K_{-i}}\Big]
 =V\int_{0}^{1}\prod_{j\ne i}\big(1-p_{j}+p_{j}z\big)\,dz,
 \label{eq:Ai}
 \end{equation}
-using $1/(m+1)=\int_{0}^{1}z^{m}dz$, where $K_{-i}$ counts successful
-rivals. Payoffs are $A_{i}p_{i}-k(p_{i})$, so by
-Corollary~\ref{cor:size} each researcher's best response is
-$p_{i}=(1-\zeta/\sqrt{A_{i}})_{+}$ and depends on rivals only through the
-scalar $A_{i}$. In the symmetric case \eqref{eq:Ai} collapses to
+by $1/(m+1)=\int_{0}^{1}z^{m}dz$, where $K_{-i}$ counts successful rivals.
+Payoffs are $A_{i}p_{i}-k(p_{i})$, so Corollary~\ref{cor:size} makes each
+best response $p_{i}=(1-\zeta/\sqrt{A_{i}})_{+}$. Rivals enter through one
+number. In the symmetric case \eqref{eq:Ai} collapses to
 \begin{equation}
 A(p)=V\,\frac{1-(1-p)^{n}}{np}.
 \label{eq:Asym}
 \end{equation}
 
-\begin{proposition}[Symmetric equilibrium, finite pool]\label{prop:eqfinite}
-$A(p)$ in \eqref{eq:Asym} is strictly decreasing in $p$ on $(0,1]$, with
+\begin{proposition}[The symmetric equilibrium is a scalar root]
+\label{prop:eqfinite}
+$A$ in \eqref{eq:Asym} is strictly decreasing in $p$ on $(0,1]$, with
 $A(0^{+})=V$ and $A(1)=V/n$, and strictly decreasing in $n$. If
 $V\le\zeta^{2}$ the only symmetric equilibrium is $p=0$. If
-$V>\zeta^{2}$ there is a unique symmetric equilibrium $p_{n}\in(0,1)$,
-namely the root of
+$V>\zeta^{2}$ there is a unique symmetric equilibrium $p_{n}\in(0,1)$, the
+root of
 \begin{equation}
 p=1-\frac{\zeta}{\sqrt{A(p)}},
 \end{equation}
-it is strictly decreasing in $n$, and each researcher earns
-$A(p_{n})p_{n}^{2}>0$.
+it decreases in $n$, and each researcher earns $A(p_{n})p_{n}^{2}>0$.
 \end{proposition}
 
 \begin{proof}
-Write $w=1-p$ and $f(p)=\big(1-w^{n}\big)/(np)$. Then
-$\partial_{p}\big[(1-w^{n})/p\big]$ has the sign of
-$g(p)=np w^{n-1}-1+w^{n}$, and $g(0)=0$ with
-$g'(p)=-n(n-1)pw^{n-2}<0$, so $g<0$ and $A$ is strictly decreasing in
-$p$. For monotonicity in $n$, $(n+1)(1-w^{n})-n(1-w^{n+1})
-=1-(n+1)w^{n}+nw^{n+1}$ vanishes at $w=1$ with derivative
-$n(n+1)w^{n-1}(w-1)<0$, hence is positive for $w<1$, giving
+Write $w=1-p$. Then $\partial_{p}\big[(1-w^{n})/p\big]$ has the sign of
+$g(p)=npw^{n-1}-1+w^{n}$, and $g(0)=0$ with
+$g'(p)=-n(n-1)pw^{n-2}<0$, so $g<0$ and $A$ decreases in $p$. For
+monotonicity in $n$, the difference
+$(n+1)(1-w^{n})-n(1-w^{n+1})=1-(n+1)w^{n}+nw^{n+1}$ vanishes at $w=1$ with
+derivative $n(n+1)w^{n-1}(w-1)<0$, hence is positive for $w<1$, giving
 $A_{n}>A_{n+1}$.
 
-Now $\Phi(p)=(1-\zeta/\sqrt{A(p)})_{+}-p$ is continuous and strictly
+Set $\Phi(p)=(1-\zeta/\sqrt{A(p)})_{+}-p$, continuous and strictly
 decreasing on $[0,1]$: where the positive part is active it is
 $1-\zeta/\sqrt{A(p)}-p$ with $A$ strictly decreasing, and where it is
-clamped it is $-p$.
-$\Phi(0)=1-\zeta/\sqrt V$ and
-$\Phi(1)=-\zeta\sqrt{n}/\sqrt V<0$. If $V\le\zeta^{2}$ then
-$\Phi(0)\le0$ and $p=0$ is the unique root; note that $p=0$ is then
-genuinely an equilibrium, since a deviator facing $A=V\le\zeta^{2}$ has
-best response $0$ by Corollary~\ref{cor:size}. If $V>\zeta^{2}$ then
-$\Phi(0)>0>\Phi(1)$ and strict monotonicity gives exactly one root, which
-decreases in $n$ because $A_{n}$ does. The payoff is
-Corollary~\ref{cor:size}'s value at $A=A(p_{n})>\zeta^{2}$.
+clamped it is $-p$. Now $\Phi(0)=1-\zeta/\sqrt V$ and
+$\Phi(1)=-\zeta\sqrt n/\sqrt V<0$. If $V\le\zeta^{2}$ then $\Phi(0)\le0$
+and $p=0$ is the unique root, and it is an equilibrium, since a deviator
+faces $A=V\le\zeta^{2}$ and has best response $0$. If $V>\zeta^{2}$ then
+$\Phi(0)>0>\Phi(1)$ and there is exactly one root, decreasing in $n$
+because $A_{n}$ is.
 \end{proof}
 
 \begin{proposition}[Large pool]\label{prop:eqlimit}
@@ -352,42 +297,41 @@ equilibrium condition becomes
 \boxed{\;G(y^{*})=\frac{\zeta^{2}}{V}\;}
 \label{eq:limit}
 \end{equation}
-which has a unique positive root whenever $V>\zeta^{2}$. At that root the
+with a unique positive root whenever $V>\zeta^{2}$. At that root the
 expected number of solvers is $y^{*}$, the solve probability is
-$1-e^{-y^{*}}$, the effective reward collapses to
-$A^{*}=\zeta^{2}$, individual effort and payoff vanish, and aggregate
-effort equals the expected payout,
+$1-e^{-y^{*}}$, the effective reward collapses to $A^{*}=\zeta^{2}$,
+individual effort and payoff vanish, and aggregate effort equals the
+expected payout,
 \begin{equation}
 \lim n\,k(p_{n})=y^{*}\zeta^{2}=V\big(1-e^{-y^{*}}\big).
 \end{equation}
-With a setup cost $K>0$ payable on entry, the same computation gives
+With a setup cost $K>0$ payable on entry,
 \begin{equation}
 G(y^{*})=\frac{V_{e}}{V},
-\qquad
+\quad
 V_{e}=\big(\zeta+\sqrt K\big)^{2},
-\qquad
+\quad
 p^{*}=\frac{\sqrt K}{\zeta+\sqrt K},
-\qquad
+\quad
 N^{*}=y^{*}\,\frac{\zeta+\sqrt K}{\sqrt K},
 \end{equation}
 where $V_{e}$ is the purse at which a lone researcher exactly breaks even,
-$A^{*}=V_{e}$, each attempt costs $k=\zeta\sqrt K$, and $N^{*}\to\infty$
-as $K\downarrow0$.
+$A^{*}=V_{e}$, each attempt costs $\zeta\sqrt K$, and $N^{*}\to\infty$ as
+$K\downarrow0$.
 \end{proposition}
 
 \begin{proof}
-$(1-p)^{n}=(1-y/n)^{n}\to e^{-y}$ gives $A\to VG(y)$, and
-$p=1-\zeta/\sqrt A$ with $p\to0$ forces $\zeta/\sqrt{A^{*}}\to1$, i.e.\
-$A^{*}=\zeta^{2}$ and hence \eqref{eq:limit}; uniqueness is strict
-monotonicity of $G$. Then $k=p(1-p)A\to0$ and the payoff $Ap^{2}\to0$,
-while $nk\to y\,A^{*}=y^{*}\zeta^{2}$, which equals
-$V\,y^{*}G(y^{*})=V(1-e^{-y^{*}})$ by \eqref{eq:limit}. With a setup cost,
-free entry requires $Ap^{2}=K$; substituting $p=1-\zeta/\sqrt A$ gives
-$(\sqrt A-\zeta)^{2}=K$, so $\sqrt{A^{*}}=\zeta+\sqrt K$ and
-$A^{*}=V_{e}$. Then $p^{*}=1-\zeta/(\zeta+\sqrt K)$,
-$k=p^{*}(1-p^{*})A^{*}=\zeta\sqrt K$, and $N^{*}=y^{*}/p^{*}$. Finally
-$V_{e}$ is the purse solving $(\sqrt V-\zeta)^{2}=K$, the lone
-researcher's break-even condition in Corollary~\ref{cor:size}.
+$(1-y/n)^{n}\to e^{-y}$ gives $A\to VG(y)$. Since $p=1-\zeta/\sqrt A$ and
+$p\to0$, we need $\zeta/\sqrt{A^{*}}\to1$, so $A^{*}=\zeta^{2}$ and
+\eqref{eq:limit} follows; uniqueness is strict monotonicity of $G$. Then
+$k=p(1-p)A\to0$ and the payoff $Ap^{2}\to0$, while
+$nk\to y\,A^{*}=y^{*}\zeta^{2}=V\,y^{*}G(y^{*})=V(1-e^{-y^{*}})$. With a
+setup cost, free entry requires $Ap^{2}=K$, and substituting
+$p=1-\zeta/\sqrt A$ gives $(\sqrt A-\zeta)^{2}=K$, so
+$\sqrt{A^{*}}=\zeta+\sqrt K$. Then $p^{*}=1-\zeta/(\zeta+\sqrt K)$,
+$k=p^{*}(1-p^{*})A^{*}=\zeta\sqrt K$ and $N^{*}=y^{*}/p^{*}$. Finally
+$V_{e}$ solves $(\sqrt V-\zeta)^{2}=K$, the lone researcher's break-even
+condition in Corollary~\ref{cor:size}.
 \end{proof}
 
 \begin{center}
@@ -395,7 +339,7 @@ researcher's break-even condition in Corollary~\ref{cor:size}.
 \toprule
 $V/V_{e}$ & $y^{*}$ & $\PP(\text{solved})$ & $n p_{n}$ at $n=10^{4}$\\
 \midrule
-1.02 & 0.03974 & 0.0390 & ---\\
+1.02 & 0.03974 & 0.0390 & \\
 1.5  & 0.87422 & 0.5828 & 0.87387\\
 2    & 1.59362 & 0.7968 & 1.59286\\
 4    & 3.92069 & 0.9802 & 3.91742\\
@@ -405,86 +349,70 @@ $V/V_{e}$ & $y^{*}$ & $\PP(\text{solved})$ & $n p_{n}$ at $n=10^{4}$\\
 \end{center}
 
 The last column solves Proposition~\ref{prop:eqfinite} exactly at
-$n=10^{4}$ and confirms the limit. A unilateral-deviation certificate
-backs the fixed points: at three computed equilibria, a two-million-point
-grid search over own success probability against the equilibrium rivals
-improves on the equilibrium payoff by at most $4\times10^{-12}$, which is
-the diagnostic the companion paper asks for and a real test, since the
-grid does not know the closed-form best response.
+$n=10^{4}$. A deviation certificate backs the fixed points: at three
+computed equilibria, a two-million-point grid search over own success
+probability against equilibrium rivals improves on the equilibrium payoff
+by at most $4\times10^{-12}$. The grid does not know the closed-form best
+response, so the check can fail for the right reason.
 
-Three readings.
-
-\paragraph{What is pinned is solutions, not attempts.}
-The expected number of solvers $y^{*}$ and the solve probability depend
-only on $V/V_{e}$. The number of entrants does not: it is
-$y^{*}(\zeta+\sqrt K)/\sqrt K$, which diverges as the setup cost
-vanishes, because with free entry a great many researchers each buy a
-vanishing probability. Any claim about how many people attempt a problem
-is a claim about setup costs, not about the prize.
+\paragraph{Solutions are pinned, attempts are not.}
+Both $y^{*}$ and the solve probability depend only on $V/V_{e}$. The
+entrant count $N^{*}=y^{*}(\zeta+\sqrt K)/\sqrt K$ does not, and it
+diverges as the setup cost vanishes, since a great many researchers each
+buy a vanishing probability. A claim about how many people attempt a
+famous problem is a claim about setup costs.
 
 \paragraph{Competition is competed away exactly.}
-$A^{*}=V_{e}$: in a large pool the effective reward equals the purse at
-which a lone researcher would exactly break even. Every researcher
+$A^{*}=V_{e}$. In a large pool the effective reward equals the purse at
+which a lone researcher would exactly break even, so every researcher
 behaves as though facing no competition and a prize of $V_{e}$, and
-aggregate effort equals the expected payout. This is complete rent
-dissipation, and it is the analogue of the classical free-entry result
-with the cost-probability relation derived rather than assumed.
+aggregate effort equals the expected payout. This is the classical
+free-entry dissipation result with the cost curve derived rather than
+posited.
 
-\paragraph{The fixed point is one dimensional.}
-Best responses depend on rivals only through the scalar $A_{i}$, which is
-why Proposition~\ref{prop:eqfinite} is a one-dimensional root and not a
-system. That is the substantive gain from Proposition~\ref{prop:price}.
-
-\section{The committed-width benchmark, and why it fails}
+\section{The solo width is not a best response}
 \label{sec:committed}
 
-The first draft studied a different game: attempt widths committed at the
-solo-optimal $L=\sigma\sqrt{V/c}$, with only entry chosen. That game is
-not the equilibrium, for a reason worth displaying.
+A tempting shortcut fixes attempt lengths at the solo-optimal
+$L=\sigma\sqrt{V/c}$ and lets researchers choose only whether to enter.
+The shortcut is false, and the failure is exact.
 
-\paragraph{The solo width is not a best response.}
-Take $V=100$, $c=\sigma=1$, $d=5$, and two entrants both using the solo
-width $L=10$, so $p=1/2$ each. Then $A=V(1-p/2)=75$ and the payoff at the
-solo width is $75\cdot\tfrac12-25=12.5$. The best response is
-$L=\sigma\sqrt{A/c}=\sqrt{75}\approx8.6603$, worth $13.3975$: a gain of
-$0.8975$, or $7.2\%$. Competition shortens attempts, and any model that
-fixes their length misprices it.
+Take $V=100$, $c=\sigma=1$, $d=5$, and two entrants at the solo width
+$L=10$, so $p=1/2$ each. Then $A=V(1-p/2)=75$, and the payoff at the solo
+width is $75\cdot\tfrac12-25=12.5$. The best response is
+$L=\sigma\sqrt{A/c}=\sqrt{75}\approx8.6603$, worth $13.3975$, a gain of
+$7.2\%$. Competition shortens attempts, because the prize is diluted and a
+diluted prize does not justify the same persistence.
 
-\paragraph{Even that game did not deliver two attempts.}
-Suppose widths are committed anyway, so $(p,k=p(1-p)V)$ are exogenous.
-Then a set of exactly three entrants, with everyone else out, is a pure
-Nash equilibrium whenever $p<2-\sqrt2\approx0.5858$: each incumbent earns
+The shortcut also misreports how many people attempt. Holding
+$(p,k=p(1-p)V)$ exogenous, any three designated entrants form a pure Nash
+equilibrium whenever $p<2-\sqrt2\approx0.5858$: each incumbent earns
 $V\big[1-(1-p)^{3}\big]/3-p(1-p)V=Vp^{3}/3>0$, while a fourth would earn
 $Vp^{2}\big(-\tfrac12+p-\tfrac{p^{2}}{4}\big)<0$. Two entrants is never a
-pure equilibrium, since the third always gains $Vp^{3}/3>0$ by joining.
-The companion paper's exact potential selects $m=3$ for every $p$ up to
-about $0.5$. So the first draft's ``two attempts'' was the symmetric mixed
-equilibrium and nothing else; the coordinated outcome of the same game is
-three. At fixed $n\ge4$ the mixed equilibrium gives
-$nq\to2n/(n-1)$ as $p\downarrow0$ --- $2.667$ at $n=4$, $2.041$ at
-$n=50$ --- reaching $2$ only in the pool limit. The claim is withdrawn.
-
-\paragraph{It also gets purse design wrong.}
-Section~\ref{sec:purse} solves both models exactly. The committed-width
-answer is a different constant, and the difference is the whole content of
-endogenising the width.
+pure equilibrium, since a third always gains $Vp^{3}/3$ by joining, and
+the companion note's exact potential selects three for every $p$ up to
+about $0.5$. The symmetric mixed equilibrium of the same game gives
+$nq\to2n/(n-1)$ as $p\downarrow0$, which is $2.667$ at $n=4$ and $2.041$
+at $n=50$, reaching two only in the pool limit. Any headline count from
+the shortcut is an equilibrium selection in disguise.
 
 \section{Purse design}
 \label{sec:purse}
 
 A funder commits escrowed capital $B$ to identical problems with
 break-even purse $V_{e}$, choosing the number $M$ of problems and posting
-$V=B/M$ on each; free entry then determines each problem's solve
-probability. Write $H(y)=1-e^{-y}$, so $G=H/y$.
+$V=B/M$ on each. Free entry then sets each problem's solve probability by
+Proposition~\ref{prop:eqlimit}. Write $H(y)=1-e^{-y}$, so $G=H/y$.
 
-\begin{proposition}[Optimal purse]\label{prop:purse}
+\begin{proposition}[The optimal purse is a fixed multiple of break-even]
+\label{prop:purse}
 Under Proposition~\ref{prop:eqlimit}, $V=V_{e}\,y/H(y)$, so
 $M=B\,H(y)/(V_{e}y)$ and the expected number of problems solved is
 \begin{equation}
 \Psi=M\,H(y)=\frac{B}{V_{e}}\cdot\frac{H(y)^{2}}{y}.
 \end{equation}
 Over the continuous relaxation of $M$, $\Psi$ has a unique positive
-maximiser, characterised by
+maximizer, characterized by
 \begin{equation}
 \boxed{\;e^{y}=1+2y\;}
 \end{equation}
@@ -494,209 +422,183 @@ at which, exactly,
 \qquad
 \PP(\text{solved})=\frac{2y^{*}}{1+2y^{*}},
 \qquad
-\Psi^{*}=\frac{B}{V_{e}}\cdot\frac{H(y^{*})^{2}}{y^{*}},
+\Psi^{*}=\frac{B}{V_{e}}\cdot\frac{H(y^{*})^{2}}{y^{*}}.
 \end{equation}
-numerically $y^{*}=1.25643121$, $V^{*}=1.75643121\,V_{e}$,
-$\PP(\text{solved})=0.71533186$ and
-$\Psi^{*}=0.40726438\,B/V_{e}$ on $M^{*}=0.56933627\,B/V_{e}$
-problems. The optimal purse is a fixed multiple of the break-even purse,
-independent of $B$.
+Numerically $y^{*}=1.25643121$, $V^{*}=1.75643121\,V_{e}$,
+$\PP(\text{solved})=0.71533186$, and
+$\Psi^{*}=0.40726438\,B/V_{e}$ on $M^{*}=0.56933627\,B/V_{e}$ problems.
 \end{proposition}
 
 \begin{proof}
-$G(y)=V_{e}/V$ gives $V=V_{e}y/H(y)$ and hence $M$ and $\Psi$.
-Maximising $\log\Psi=2\log H-\log y+\text{const}$ gives
-$2H'/H=1/y$, and with $H'=e^{-y}$ this is $2ye^{-y}=1-e^{-y}$, i.e.\
-$e^{-y}(2y+1)=1$, i.e.\ $e^{y}=1+2y$. That equation has exactly one
-positive root, since $e^{y}-1-2y$ is convex with value $0$ and derivative
-$-1$ at $y=0$ and tends to $+\infty$. At the root
-$H=1-1/(1+2y)=2y/(1+2y)$, so $y/H=(1+2y)/2=y+\tfrac12$, giving
-$V^{*}/V_{e}$ and $\PP(\text{solved})=H(y^{*})$.
+$G(y)=V_{e}/V$ gives $V=V_{e}y/H(y)$, hence $M$ and $\Psi$. Maximizing
+$\log\Psi=2\log H-\log y$ up to a constant gives $2H'/H=1/y$, and with
+$H'=e^{-y}$ this is $2ye^{-y}=1-e^{-y}$, that is $e^{-y}(2y+1)=1$, that is
+$e^{y}=1+2y$. The function $e^{y}-1-2y$ is convex with value $0$ and
+derivative $-1$ at the origin and tends to infinity, so it has exactly one
+positive zero. At that zero $H=1-1/(1+2y)=2y/(1+2y)$, so
+$y/H=(1+2y)/2=y+\tfrac12$.
 \end{proof}
 
-For comparison, running the same program through the committed-width
-model of Section~\ref{sec:committed}, where $V=V_{\min}\,(y/H)^{2}$,
-gives $e^{y}=1+\tfrac32y$, $y^{*}=0.76268856$,
+The purse multiple is independent of $B$: capital chooses how many
+problems to post, not how much to post on each. Running the same program
+through the committed-width shortcut of Section~\ref{sec:committed}, where
+$V=V_{\min}(y/H)^{2}$, gives $e^{y}=1+\tfrac32y$, $y^{*}=0.76268856$,
 $V^{*}=\big(y^{*}+\tfrac23\big)^{2}V_{\min}=2.04305637\,V_{\min}$ and
-$\PP(\text{solved})=0.53358923$. Both constants are confirmed against a
-two-million-point brute-force maximisation of the exact objective; the
-first draft's $9/4$ and two thirds were an approximation to the second of
-these, evaluated at $p=1/3$, where the long-odds approximation it relied
-on is not valid. The general form is
-$e^{y}=1+(1+1/\text{power})y$, where the power is $1$ when widths adjust
-and $2$ when they are committed.
+$\PP(\text{solved})=0.53358923$. Both constants agree with a
+two-million-point brute-force maximization of the exact objective. The
+general form is $e^{y}=1+(1+1/\pi)y$ with $\pi=1$ when widths adjust and
+$\pi=2$ when they are committed.
 
-Two caveats. Integer $M$ reintroduces budget-dependent rounding, so
-budget independence is a property of the relaxation. And expected count
-solved is one objective among many: a funder who cares most about the
-hardest problem should not spread at all.
+Integer $M$ reintroduces budget-dependent rounding, so budget independence
+belongs to the relaxation. And expected count solved is one objective
+among several: a funder who cares most about the single hardest problem
+should not spread at all.
 
-\section{What a purse buys}
-\label{sec:buys}
+\paragraph{Near threshold the purse is powerful.}
+For an attempt sized against $V$, $p=1-\zeta/\sqrt V$, so
+$dp/d\log V=(1-p)/2$ and doubling $V$ sends $p\mapsto1-(1-p)/\sqrt2$. From
+$p=0.01$ that is $p=0.29996$, and a tenfold purse gives $0.68694$.
+Sensitivity is largest where $p$ is smallest, because a small $p$ means
+$V$ only just exceeds $\zeta^{2}$. Equation~\eqref{eq:limit} inherits the
+steepness: near threshold $y^{*}\approx2(V/V_{e}-1)$, so expected solvers
+are proportional to the excess of the purse over break-even, and
+Proposition~\ref{prop:purse} places the optimum at $1.76$ times break-even,
+inside the steep region by construction.
 
-The first draft asserted that purses buy breadth much more cheaply than
-depth, and that doubling a purse does almost nothing. The second half is
-false and the first is not a general truth.
+Far above threshold the picture reverses. The companion note's
+continuation width at discount-plus-hazard $\rho>0$ is
+$L=\sigma(2\rho)^{-1/2}\arcosh(1+\rho V/c)$, which grows like $\log V$
+once $\rho V\gg c$, against $\sigma\sqrt{V/c}$ at $\rho=0$. Purses buy
+persistence logarithmically out there, and breadth beats depth. Neither
+regime dominates, and $V/V_{e}$ selects which one a contest is in.
 
-\paragraph{Near the threshold the purse is powerful.}
-For an attempt sized against reward $V$, $p=1-\zeta/\sqrt V$, so
-\begin{equation}
-\frac{dp}{d\log V}=\frac{1-p}{2},
-\qquad
-p\;\mapsto\;1-\frac{1-p}{\sqrt2}\ \text{ on doubling }V.
-\end{equation}
-From $p=0.01$, doubling the purse gives $p=0.29996$; a tenfold purse
-gives $0.68694$. The sensitivity is largest exactly where $p$ is
-smallest, because small $p$ means $V$ only just exceeds $\zeta^{2}$. In
-equilibrium the same steepness appears in \eqref{eq:limit}: near
-threshold $y^{*}\approx2(V/V_{e}-1)$, so the expected number of solvers is
-proportional to the \emph{excess} of the purse over break-even, and the
-optimal purse of Proposition~\ref{prop:purse} sits at $1.76$ times
-break-even, in the steep region by construction.
-
-\paragraph{What survives of the depth argument.}
-The companion paper's continuation width at discount-plus-hazard
-$\rho>0$ is $L=\sigma(2\rho)^{-1/2}\arcosh(1+\rho V/c)$, which grows like
-$\log V$ once $\rho V\gg c$, against $\sigma\sqrt{V/c}$ at $\rho=0$. That
-is a statement about attempts run far above threshold under positive
-discounting. It does not license any claim about the marginal value of a
-purse near threshold, and it was misused to make one.
-
-\section{The Clay problems: what can and cannot be said}
+\section{The Millennium purses}
 \label{sec:clay}
 
-Nothing in this section is empirical, and the first draft was wrong to
-present it as though it were. There is one datum with real content and one
-theorem with real bite; the rest is arithmetic on stipulated numbers,
-which is why the tables are gone.
+The Clay Mathematics Institute posted one million dollars on each of seven
+problems in May 2000 \citep{clay2000}. Perelman's preprints settled the
+Poincar\'e conjecture in 2002--2003, the purse was awarded in 2010, and he
+declined it. Six remain open.
 
-\paragraph{The datum: the purse is not the prize.}
-Perelman's preprints settled the Poincar\'e conjecture in 2002--2003; the
-million-dollar purse was awarded in 2010 and declined. A prize refused by
-the only person entitled to it is not what was being pursued. The reward
-for settling a famous problem is priority, the historical record, and
-whatever a career is worth, and it is not denominated in escrow. That the
-reward exceeds the notional purse is an observation. \emph{By how much} is
-not measured anywhere, by anyone, including here.
+The refusal is the informative fact. A prize declined by the only person
+entitled to it is not what was being pursued, so the reward for settling a
+famous problem is priority, the record, and whatever a career is worth,
+and it is not denominated in escrow. That the reward exceeds the notional
+purse follows. By how much is unmeasured.
 
-\paragraph{The theorem: the surplus is small even when the reward is huge.}
-Because $V$ is unobserved, the model cannot predict Millennium effort.
-What it can do is say which ratio would settle the question, and
-Corollary~\ref{cor:surplus} says it is not the obvious one. However large
-the reward, the amount by which it exceeds the walk-away threshold is
-$(2-p)/(1-p)$ times the cost of one attempt --- about twice it for long
-shots. So the diagnostic for whether a cash purse changes behaviour is
+Corollary~\ref{cor:surplus} says the usual diagnostic will not recover it.
+The reward exceeds the walk-away threshold by $(2-p)/(1-p)$ times the cost
+of one attempt, about twice it for long shots, whatever the level of the
+reward. So the ratio that governs whether a cash purse changes behavior is
 \begin{equation}
 \frac{\text{purse}}{2k},
 \qquad\text{not}\qquad
 \frac{\text{purse}}{V},
 \end{equation}
-where $k$ is the expected cost of one serious attempt. The first draft
-computed the second ratio, found it near one percent, and concluded that
-the purses were scoreboards. That inference does not follow, and under the
-model it is probably wrong: a purse that is one percent of the level of
-the reward can be half of the surplus, because the model's own arithmetic
-makes the surplus a multiple of a single attempt's cost rather than a
-fraction of the reward.
+where $k$ is the expected cost of one serious attempt. A purse worth one
+percent of the reward is worth half the surplus whenever an attempt costs
+about the purse. Dividing a purse by an unobservable reward and finding a
+small number establishes nothing.
 
-To see the size of the issue, and purely as arithmetic on round numbers:
-if a serious attempt costs \$1M then $\text{purse}/2k=\tfrac12$, and
-deleting the purse from the reward roughly halves the equilibrium number
-of solvers, from $y^{*}=0.0403$ to $0.0203$; if an attempt costs \$10M the
-ratio is $0.05$ and the effect is a five-percent reduction; if an attempt
-costs \$200k the purse is decisive, in that without it the reward falls
-below the walk-away threshold and nothing is attempted at all. Which of
-those is the right order for a Millennium problem is not known to me, and
-the model cannot supply it. The honest output is the ratio to go and
-measure.
+Arithmetic on round numbers gives the range. If a serious attempt costs
+\$1M then $\text{purse}/2k=\tfrac12$, and deleting the purse from the
+reward roughly halves the equilibrium solver count in
+\eqref{eq:limit}, from $y^{*}=0.0403$ to $0.0203$. At \$10M per attempt
+the ratio is $0.05$ and the effect is a five percent reduction. At \$200k
+per attempt the purse is decisive: without it the reward falls below
+$\zeta^{2}$ and the model predicts nothing is attempted. The cost of a
+serious assault on a Millennium problem has not been measured, and it is
+the quantity to go and measure.
 
-\paragraph{An order of magnitude on rivalry.}
-Here the arithmetic belongs to the companion paper's first-solution race,
-not to the lottery of Sections~\ref{sec:eq}--\ref{sec:purse}: there a
-rival's solution destroys the option, so an attempt faces $\rho=r+h$ and
-the share of impatience due to competition is $h/(r+h)$. One solution
-since 2000 over an exposure of $6\times26+3=159$ problem-years gives
-$\hat h=0.0063$ per problem-year, and the exact Poisson interval for one
-event is $[1.6\times10^{-4},\,3.5\times10^{-2}]$. Two corrections both
-push the same way: the observed problem-level hazard is the
-\emph{aggregate}, including the focal researcher, whose own contribution
-must be removed --- with $N$ symmetric attackers the rival hazard is
-$(N-1)/N$ of it --- and any positive discount rate enters the
-denominator. At $r$ between $3\%$ and $10\%$ the aggregate share runs
-$0.06$ to $0.17$, and the rival share with three attackers $0.04$ to
-$0.12$; at the interval's upper endpoint and $r=5\%$ the aggregate share
-is $0.41$. The defensible claim is only the weak, order-of-magnitude one:
-a solution hazard of order $10^{-2}$ per year is not large compared with
-any plausible discount rate, so rivalry is unlikely to be the main reason
-anyone abandons a Millennium problem. One event supports nothing
-stronger, and the interval says so.
+\paragraph{Rivalry.}
+This last calculation belongs to the companion note's first-solution race
+rather than the lottery above, since it needs the option destroyed rather
+than diluted. There an attempt faces $\rho=r+h$ and competition supplies a
+share $h/(r+h)$ of the impatience. One solution since 2000 over an
+exposure of $6\times26+3=159$ problem-years gives $\hat h=0.0063$ per
+problem-year, with exact Poisson interval
+$[1.6\times10^{-4},\,3.5\times10^{-2}]$ for one event. Two adjustments
+push the same way. The problem-level hazard is the aggregate, including
+the focal researcher, whose own contribution must come out: with $N$
+symmetric attackers the rival hazard is $(N-1)/N$ of it. And any positive
+discount rate enters the denominator.
 
-\paragraph{What would change it.}
-The model localises the whole of the interesting variation in
-$\zeta=d\sqrt c/\sigma$. An attempt run at machine cost lowers $c$ and, if
-the search is genuinely broader, raises $\sigma$; both lower $\zeta$,
-which lowers the break-even purse quadratically, raises $p$, and raises
-the expected number of solvers through \eqref{eq:limit}. If that ever
-compresses expected time-to-solution from decades to a few years, $h$ rises
-by two orders of magnitude and the rivalry share flips from under a tenth
-to over four fifths, and only then does the clay-pigeon metaphor of the
-title become the right one. That is a forecast, and it is the one part of
-the paper that could be checked against something.
+\begin{center}
+\begin{tabular}{rccc}
+\toprule
+$r$ & aggregate share & rival share, $N=3$ & aggregate at interval upper\\
+\midrule
+0.03 & 0.173 & 0.123 & 0.539\\
+0.05 & 0.112 & 0.077 & 0.412\\
+0.10 & 0.059 & 0.040 & 0.260\\
+\bottomrule
+\end{tabular}
+\end{center}
 
-\section{What this gets wrong}
-\label{sec:wrong}
+A solution hazard of order $10^{-2}$ per year is small beside any
+plausible discount rate, so rivalry is unlikely to be the main reason
+anyone abandons a Millennium problem. One event supports nothing stronger,
+and the interval says so.
 
-\paragraph{The lottery is not the race.}
-Sections~\ref{sec:eq}--\ref{sec:purse} solve the lottery: everyone pays
-their attempt to completion and a winner is drawn among the successes.
-In the first-solution race, costs cease when a rival announces, the
-rival hazard is a function of calendar time, and the equilibrium is the
-companion paper's coupled stopping and forward-distribution system, which
-is characterised there and solved nowhere. The two games differ in a way
-that matters --- in the race the option is destroyed, in the lottery only
-diluted --- so the constants here should not be quoted for a race.
+\paragraph{When the metaphor of the title applies.}
+All the interesting variation sits in $\zeta=d\sqrt c/\sigma$. An attempt
+run at machine cost lowers $c$, and a genuinely broader search raises
+$\sigma$; both lower $\zeta$, which lowers $V_{e}$ quadratically, raises
+$p$, and raises expected solvers through \eqref{eq:limit}. If that
+compresses expected time-to-solution from decades to a few years, $h$
+rises by two orders of magnitude and the rivalry share moves from under a
+tenth to above four fifths. Only then is the purse a clay pigeon, thrown
+up for several guns with one hit counting. This is a graded, falsifiable
+prediction, and it is the part of the paper that could be checked.
 
-\paragraph{Only symmetric equilibria are proved unique.}
+\section{Assumptions}
+
+\paragraph{The lottery and the race.}
+Sections \ref{sec:price}--\ref{sec:purse} solve the lottery. In the
+first-solution race costs cease when a rival announces, the rival hazard
+is a function of calendar time, and the equilibrium is the companion
+note's coupled stopping and forward-distribution system. The race destroys
+the option where the lottery only dilutes it, so the constants here do not
+transfer.
+
+\paragraph{Symmetry.}
 Best responses fall in rivals' success probabilities, so this is a game of
 strategic substitutes and asymmetric equilibria are not excluded. The
-best-response map is a contraction when
-$\zeta\,|A'(p)|/(2A^{3/2})<1$, which holds at every parameter combination
-reported here, but that is a check and not a theorem.
+best-response map contracts when $\zeta|A'(p)|/(2A^{3/2})<1$, which holds
+at every parameter combination reported here. That is a check, not a
+theorem.
 
-\paragraph{Pausing does not by itself remove the threshold.}
-The first draft claimed that allowing a pause, as the companion's
-intensity extension does with $u=0$, would remove the sharp walk-away
-threshold. It would not. With progress frozen while idle, constant
-discounting and rival hazard, and no information arriving, waiting
-strictly destroys value --- the value function simply decays at rate
-$\rho$ --- so the optimal control is bang-bang and the work-or-stop
-boundary is unchanged. Resumption after decades requires something to
-change while the problem sits: new tools lowering $c$ or raising $\sigma$,
-or information arriving from elsewhere. That is a model in which $\zeta$
-drifts down over time, which is exactly the mechanism of the previous
-section, and it is the honest way to write down a mathematician who comes
-back to a problem in twenty years.
+\paragraph{Pausing.}
+The companion note's intensity extension permits $u=0$, and one might
+expect a pause to soften the walk-away threshold. It does not. With
+progress frozen while idle, constant discounting and rival hazard, and no
+information arriving, the value function decays at rate $\rho$ while
+nothing is gained, so waiting strictly destroys value and the optimal
+control is bang-bang. A mathematician who returns to a problem after
+twenty years needs something to have changed while it sat: new tools
+lowering $c$, or a broader method raising $\sigma$. That is a model in
+which $\zeta$ drifts down, which is the mechanism of
+Section~\ref{sec:clay}.
 
-\paragraph{Difficulty is common, not private.}
+\paragraph{Independence.}
 The product survival formula behind \eqref{eq:Ai} and behind the rivalry
 share needs independence across researchers. In mathematics the dominant
 uncertainty is shared: whether the statement is true, whether the method
 can work at all. A rival's visible failure is evidence about one's own
-prospects, which turns this into a game with filtering and correlated
-states.
+prospects, and pricing that requires filtering and a correlated state.
 
-\paragraph{Progress is partly public, and credit is not winner-take-all.}
-Preprints and talks reveal rival states, which is a joint-state game.
-Partial results are published and rewarded, so the all-or-nothing payoff
-overstates the waste. Verification also takes years --- the Poincar\'e
-purse was paid seven years after the preprints --- so a claimed proof that
-later fails restarts the race and the hazard conflates ``someone claims''
-with ``someone solves''.
+\paragraph{Public progress and partial credit.}
+Preprints and talks reveal rival states, which makes a joint-state game.
+Partial results are published and rewarded, so an all-or-nothing
+first-passage payoff overstates the waste. Verification takes years, the
+Poincar\'e purse being paid seven after the preprints, so a claimed proof
+that later fails restarts the race and the hazard conflates a claim with a
+solution.
 
-\paragraph{And there are no data.}
+\paragraph{Measurement.}
 No parameter in Section~\ref{sec:clay} is estimated. The cost of a serious
 attempt and its success probability would both have to be measured before
-any of this touched the world, and measuring them is harder than the
+any of it touched the world, and measuring them is harder than the
 mathematics here.
 
 \section{Related work}
@@ -705,72 +607,70 @@ mathematics here.
 \citet{loury1979} and \citet{leewilde1980} set the pattern: a flow of R\&D
 spending buys a Poisson hazard of success, and free entry dissipates the
 rents. \citet{dasguptastiglitz1980} added industrial structure,
-\citet{reinganum1981} the dynamic game, and \citet{fudenberg1983}
-preemption and leapfrogging.
-\citet{harrisvickers1985,harrisvickers1987} put the race on a state space
-with observable positions and studied who gives up. What this paper adds
-is a \emph{derived} rather than assumed relation between the cost of an
-attempt and its success probability: Proposition~\ref{prop:price} is a
-price list, not a specification, and it is what makes the equilibrium of
-Section~\ref{sec:eq} a one-dimensional fixed point.
+\citet{reinganum1981} the dynamic game, \citet{fudenberg1983} preemption
+and leapfrogging. \citet{harrisvickers1985,harrisvickers1987} put the race
+on a state space with observable positions and asked who gives up. In all
+of them the cost-to-hazard technology is specified;
+Proposition~\ref{prop:price} derives it, which is what turns
+Section~\ref{sec:eq} into a scalar fixed point.
 
 \paragraph{Private progress and preemption.}
-\citet{hopenhaynsquintani2011} is the closest neighbour: privately
+\citet{hopenhaynsquintani2011} is the closest neighbor, with privately
 observed progress, an option to stop, and preemption. \citet{bbm2017}
-model the tradeoff between publishing early and polishing under priority
-risk. \citet{moscarinisquintani2010} and \citet{krc2005} study
-experimentation when rivals' information is a motive to keep going. Those
-papers keep the strategic loop closed in the harder allocation --- first
-past the post --- and leave the cost-to-probability mapping in reduced
-form. This one closes the mapping in the easier allocation.
+model publishing early against polishing under priority risk.
+\citet{moscarinisquintani2010} and \citet{krc2005} study experimentation
+when a rival's information is itself a motive to continue. Those papers
+close the loop in the harder allocation and leave the cost curve in
+reduced form; this one closes the curve in the easier allocation.
 
 \paragraph{Contest design.}
-\citet{tullock1980} and \citet{baye1996} price rent dissipation;
-\citet{taylor1995} and \citet{chegale2003} design research tournaments;
-\citet{fullerton1999} auction entry to select contestants;
+\citet{tullock1980} and \citet{baye1996} price rent dissipation.
+\citet{taylor1995} and \citet{chegale2003} design research tournaments,
+\citet{fullerton1999} auctions entry to select contestants, and
 \citet{halac2017} design contests when the technology must be discovered.
-Proposition~\ref{prop:purse} is a design result with an unusually crude
-instrument --- how many purses, and how large --- and its answer is a
-fixed multiple of the break-even purse.
+Proposition~\ref{prop:purse} uses a cruder instrument than any of these,
+namely how many purses and how large, and returns a fixed multiple of
+break-even.
 
 \paragraph{Entry games and potentials.}
 \citet{morgan2012} and \citet{fujiaolu2015} study endogenous entry with
-subsequent effort; the companion paper's fixed-attempt lottery and its
+subsequent effort. The companion note's fixed-attempt lottery and its
 exact potential sit in the tradition of \citet{rosenthal1973} and
-\citet{monderershapley1996}. Section~\ref{sec:committed} uses that
-potential against the first draft of this paper.
+\citet{monderershapley1996}, and Section~\ref{sec:committed} uses that
+potential to locate the three-entrant equilibria.
 
 \paragraph{Budgeted races.}
-The forward--backward architecture of the companion paper is borrowed from
-the budgeted Brownian race \citep{cotton2026wavefront}, where one
-controller prunes many paths under a path-time budget and is paid the
-terminal maximum. There an optimality condition with a shadow price closes
-the loop; here a consistency condition between stopping rules and the
-reward they share. Its concavity certificates say nothing about
-equilibrium, a point the companion makes and this paper inherits.
+The forward-backward architecture of the companion note comes from the
+budgeted Brownian race \citep{cotton2026wavefront}, where one controller
+prunes many paths under a path-time budget and is paid the terminal
+maximum. There a shadow price closes the loop. Here it is a consistency
+condition between stopping rules and the reward they share, so the
+concavity certificates of that problem say nothing about equilibrium in
+this one.
 
 \section{Closing}
 
 An attempt on a hard problem has a price list, $k(p)=\zeta^{2}p/(1-p)$,
-and it is remarkably informative: it makes the cost-probability relation a
-theorem rather than a specification, it reduces the competitive
-equilibrium to a one-dimensional fixed point in which the effective reward
-is competed down exactly to the break-even purse, and it delivers an exact
-optimal purse at $1.7564$ times that break-even level. It also says
-something uncomfortable about the empirics: the surplus that makes a long
-shot worth attempting is about twice the cost of one attempt, whatever the
-reward's level, so a purse cannot be dismissed as a rounding error just
-because it is one.
+and the price list carries most of the paper. It makes the cost curve a
+theorem rather than a specification, reduces the competitive equilibrium
+to a scalar root in which the effective reward is competed down exactly to
+break-even, and delivers an optimal purse at $1.7564$ times that level for
+any capital.
 
-The first draft of this paper dismissed the Millennium purses on exactly
-that reasoning, and it was wrong to. The honest position is that the
-reward is unobserved, the cost of a serious attempt is unmeasured, and the
-ratio that decides the question is the purse against twice that cost, not
-the purse against the reward. What is left to prove is harder than what
-is left to measure: existence and selection for the first-solution race's
-coupled equilibrium, whose allocation rule --- the option destroyed rather
-than diluted --- is the one the title's metaphor actually describes, and
-which nobody has solved.
+Neither breadth nor depth dominates. Below about twice break-even the
+marginal dollar buys success probability at rate $(1-p)/2$ per log dollar
+and the purse is the binding instrument; far above it, persistence grows
+like $\log V$ and the same dollar buys another problem instead. The
+boundary is drawn at $V/V_{e}$, and the optimal design sits at $1.76$,
+just inside the steep side.
+
+The same dial appears elsewhere. A controller allocating test-time compute
+across parallel rollouts faces $\zeta$ as the cost of a traverse and the
+identical convex price for reliability, which is why the budgeted race
+\citep{cotton2026wavefront} and this contest share an architecture and
+differ only in what closes the loop. We leave to future work the existence
+and selection theory for the first-solution race, whose allocation rule is
+the one the title describes and which nobody has solved.
 
 \begin{thebibliography}{99}
 

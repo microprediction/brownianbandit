@@ -44,12 +44,29 @@ def bisect(f, lo, hi, iters: int = 400) -> float:
 
 
 def G(y: float) -> float:
-    """(1 - exp(-y)) / y, strictly decreasing from 1 to 0."""
-    return (1.0 - math.exp(-y)) / y
+    """(1 - exp(-y)) / y, strictly decreasing from 1 to 0.
+
+    Written with expm1: the naive form cancels for small y, returning
+    0.9992 at y = 1e-14 instead of 1, which silently breaks any bracket
+    whose target sits within 1e-3 of one.
+    """
+    return -math.expm1(-y) / y
 
 
 def H(y: float) -> float:
-    return 1.0 - math.exp(-y)
+    return -math.expm1(-y)
+
+
+def solve_G(target: float) -> float:
+    """The unique y > 0 with G(y) = target, for target in (0, 1)."""
+    if not 0.0 < target < 1.0:
+        raise ValueError("G has no positive root at %r" % target)
+    hi = 1.0
+    while G(hi) > target:
+        hi *= 2.0
+        if hi > 1e12:
+            raise RuntimeError("no bracket for target %r" % target)
+    return bisect(lambda y: G(y) - target, 1e-12, hi)
 
 
 # --------------------------------- the price of a success probability
@@ -148,7 +165,7 @@ def large_pool(V_over_entry: float) -> dict:
     """G(y*) = V_entry / V: the large-pool equilibrium."""
     if V_over_entry <= 1.0:
         return {"y_star": 0.0, "solve_probability": 0.0}
-    y = bisect(lambda y: G(y) - 1.0 / V_over_entry, 1e-14, 1e6)
+    y = solve_G(1.0 / V_over_entry)
     return {"V_over_entry": V_over_entry, "y_star": y,
             "solve_probability": H(y)}
 
@@ -156,7 +173,7 @@ def large_pool(V_over_entry: float) -> dict:
 def with_setup_cost(V: float, zeta: float, K: float) -> dict:
     """Entry margin restored by a setup cost K: A* = (zeta + sqrt(K))^2."""
     V_entry = (zeta + math.sqrt(K)) ** 2
-    y = bisect(lambda y: G(y) - V_entry / V, 1e-14, 1e6)
+    y = solve_G(V_entry / V)
     p = math.sqrt(K) / (zeta + math.sqrt(K))
     A = V * G(y)
     k = zeta * math.sqrt(K)
@@ -284,6 +301,74 @@ def poisson_interval(count, exposure, level=0.95):
     return lo / exposure, hi / exposure
 
 
+def implied_reward(cost_rate: float, attackers: float, duration: float,
+                   hazard: float, purse: float = 1.0e6) -> dict:
+    """Invert the observed record for the reward a solver is chasing.
+
+    With `attackers` attempts running per problem at all times, each of mean
+    duration `duration` and each succeeding with probability p, completed
+    attempts arrive at rate attackers/duration and solutions at
+    p*attackers/duration, so the observed hazard fixes
+
+        p = hazard * duration / attackers.
+
+    One attempt costs cost_rate * duration, and Corollary 1 inverted gives
+    the reward. Duration then cancels out of the level,
+
+        A = cost_rate * attackers / (hazard * (1 - p)),
+
+    while the surplus over the walk-away threshold keeps it and loses the
+    other two,
+
+        A - zeta^2 = cost_rate * duration * (2 - p) / (1 - p).
+
+    The level and the surplus therefore scale in disjoint parameters, which
+    is why the purse's share of one says nothing about its share of the
+    other.
+    """
+    p = hazard * duration / attackers
+    k = cost_rate * duration
+    A = k / (p * (1.0 - p))
+    zeta_sq = k * (1.0 - p) / p
+    surplus = A - zeta_sq
+    dilution = (1.0 - (1.0 - p) ** attackers) / (attackers * p)
+    return {
+        "cost_rate": cost_rate, "attackers": attackers,
+        "duration": duration, "hazard": hazard,
+        "p": p, "attempt_cost": k,
+        "A": A,
+        "A_closed_form": cost_rate * attackers / (hazard * (1.0 - p)),
+        "A_leading": cost_rate * attackers / hazard,
+        "zeta_sq": zeta_sq,
+        "zeta_sq_closed_form": cost_rate * attackers * (1.0 - p) / hazard,
+        "surplus": surplus,
+        "surplus_closed_form": k * (2.0 - p) / (1.0 - p),
+        "surplus_leading_2k": 2.0 * k,
+        "purse_over_A": purse / A,
+        "purse_over_surplus": purse / surplus,
+        "total_reward_before_dilution": A / dilution,
+        "dilution": dilution,
+    }
+
+
+def purse_deletion(cost_rate: float, attackers: float, duration: float,
+                   hazard: float, purse: float = 1.0e6) -> dict:
+    """Expected solvers with and without the cash purse in the reward."""
+    r = implied_reward(cost_rate, attackers, duration, hazard, purse)
+    zeta_sq, A = r["zeta_sq"], r["A"]
+    out = {"purse_over_surplus": r["purse_over_surplus"]}
+    for tag, V in (("with_purse", A), ("without_purse", A - purse)):
+        if V <= zeta_sq:
+            out[tag] = None
+        else:
+            y = solve_G(zeta_sq / V)
+            out[tag] = {"y_star": y, "solve_probability": H(y)}
+    if out["without_purse"]:
+        out["fractional_fall_in_solvers"] = (
+            1.0 - out["without_purse"]["y_star"] / out["with_purse"]["y_star"])
+    return out
+
+
 def identify(k_attempt: float, p: float) -> dict:
     """Illustrative arithmetic for the surplus identity, NOT an estimate.
 
@@ -319,7 +404,7 @@ def purse_counterfactual(k_attempt: float, p: float,
             out[tag] = {"y_star": None, "solve_probability": None,
                         "note": "below the walk-away threshold"}
         else:
-            y = bisect(lambda y: G(y) - zeta_sq / V, 1e-14, 1e6)
+            y = solve_G(zeta_sq / V)
             out[tag] = {"y_star": y, "solve_probability": H(y)}
     return out
 
@@ -439,11 +524,29 @@ def main() -> None:
             hr = h_hat * (N - 1) / N
             row["rival_share_N%d" % N] = hr / (r + hr)
         shares.append(row)
+    C_RATE, N_ATT, T_ATT = 3.0e5, 2.0, 3.0
     out["millennium"] = {
         "exposure_naive_7x26": exposure_naive,
         "exposure_corrected": exposure,
         "hazard_per_year": h_hat,
         "hazard_ci95": [lo, hi],
+        "central_case": {"cost_rate": C_RATE, "attackers": N_ATT,
+                         "duration": T_ATT},
+        "implied_reward": implied_reward(C_RATE, N_ATT, T_ATT, h_hat),
+        "implied_reward_grid": [
+            implied_reward(c, N, T_ATT, h_hat)
+            for c in (2.0e5, 3.0e5, 4.0e5) for N in (1.0, 2.0, 5.0)
+        ],
+        "duration_cancels": [
+            implied_reward(C_RATE, N_ATT, T, h_hat) for T in (2.0, 3.0, 5.0)
+        ],
+        "hazard_sensitivity": [
+            implied_reward(C_RATE, N_ATT, T_ATT, hh)
+            for hh in (lo, h_hat, hi)
+        ],
+        "purse_deletion": [
+            purse_deletion(C_RATE, N_ATT, T_ATT, hh) for hh in (lo, h_hat, hi)
+        ],
         "shares": shares,
         "surplus_identity_illustration": [identify(k, p)
                                           for k, p in ((1.0e6, 0.01),

@@ -139,10 +139,12 @@ tracks it. The strategic sibling replaces the planner with a race for a
 prize: *Research Prizes with Uncertain Compute Costs* sets up the entry
 game and the coupled stopping equilibrium, and
 [*Clay Shooting*](https://brownianbandit.microprediction.org/clay_shooting.html)
-derives its cost curve: a Brownian attempt buys success probability `p`
-at price `zeta^2 p/(1-p)`, and optimizing against that price competes the
-effective reward down exactly to the purse at which a lone researcher
-breaks even. A companion note,
+derives its cost curve and inverts it. A Brownian attempt buys success
+probability `p` at price `zeta^2 p/(1-p)`, so the observed Millennium
+record implies a solution is worth about $96M to whoever is attacking it
+against a $1M purse — and, less obviously, that the purse is still 55% of
+the *surplus* that makes attacking worthwhile, since optimal sizing holds
+that surplus to about twice the cost of one attempt whatever the reward. A companion note,
 [*Posterior-Predictive Pass-at-k*](docs/passk_posterior.pdf), covers
 the estimation side of the rollout application: pass@k is the
 expected-maximum payoff of a best-of-k batch, and the note replaces the

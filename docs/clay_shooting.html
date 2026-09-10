@@ -57,80 +57,106 @@
 
   <div class="abstract">
     <h2>Abstract</h2>
-    <p>A researcher attacking a prize problem chooses how long to persist
-    before giving up, and that choice buys a success probability at a price.
-    We observe that the price is exact: running a Brownian attempt between a
-    target and an abandonment floor buys success probability \(p\) at expected
-    cost \(\zeta^{2}p/(1-p)\), where \(\zeta^{2}\) is the cost of a diffusive
-    traverse of the distance still to go. The identity holds at every floor,
-    so it fixes the cost curve that entry models usually assume, and
-    optimizing against it makes each researcher's best response a function of
-    one scalar: the reward conditional on success, which in a prize contest is
-    shared rather than won outright. The symmetric equilibrium is then a
-    one-dimensional fixed point, and in a large pool it collapses to
-    \(G(y^{*})=V_{e}/V\) with \(G(y)=(1-e^{-y})/y\), where \(y^{*}\) is the
-    expected number of solvers and \(V_{e}\) the purse at which a lone
-    researcher breaks even. A funder splitting escrowed capital across
-    problems should post \(1.7564\,V_{e}\) on each, the root of
-    \(e^{y}=1+2y\) shifted by a half, and expects to solve 71.5% of them. The
-    reward can exceed the walk-away threshold by only \((2-p)/(1-p)\) times
-    the cost of one attempt, which is why a cash purse worth a percent of the
-    reward can still be worth half the surplus, and why the Millennium purses
-    cannot be dismissed by comparing them with the prize.</p>
+    <p>Two mathematicians at work on the same problem, three years to an
+    attempt, three hundred thousand dollars a year to keep one of them fed,
+    and one Millennium problem solved in a hundred and fifty-nine
+    problem-years. Those four numbers imply that solving one is worth about
+    $96M to whoever is attacking it, against a posted purse of $1M. The
+    inversion runs through a price list: a Brownian attempt run between a
+    target and an abandonment floor buys success probability \(p\) at
+    expected cost \(\zeta^{2}p/(1-p)\), where \(\zeta^{2}\) is the cost of
+    a diffusive traverse of the distance still to go, and the identity holds
+    at every floor, so an attempt's cost and success rate pin
+    \(\zeta^{2}\) outright. Sizing the attempt against a reward \(A\) gives
+    \(p=1-\zeta/\sqrt A\) and \(k=p(1-p)A\), and the observed hazard then
+    fixes \(p\), leaving \(A=cN/(h(1-p))\) in the cost rate, the number of
+    attackers and the hazard, with the duration of an attempt cancelling. The
+    level is not identified by one event: the same arithmetic gives $18M at
+    the top of the hazard interval and $3.8B at the bottom. What is
+    identified is the <em>surplus</em>, since optimal sizing forces
+    \(A-\zeta^{2}=k(2-p)/(1-p)\), about twice the cost of one attempt
+    whatever the reward, so the purse is 1% of the value and 55% of the
+    surplus, and that second share moves by one percentage point across the
+    whole interval. The purse is a rounding error against what a Clay problem
+    is worth and a majority stake in what makes attacking one worthwhile.</p>
   </div>
 
-  <h2>1. Two prices</h2>
+  <h2>1. What a Millennium problem is worth</h2>
 
-  <p>A prize contest sets one price and a researcher discovers another. The
-  sponsor posts a purse. The researcher, before deciding anything, must know
-  what it costs to reach a given chance of success, and that number is not
-  posted anywhere. Almost every model of a research race assumes it.</p>
+  <p>The Clay Mathematics Institute posted one million dollars on each of
+  seven problems in May 2000. One has been solved, in 2002&ndash;2003, and the
+  person entitled to the purse declined it. That refusal says the reward is
+  not denominated in escrow. It does not say what the reward is.</p>
 
-  <p>This paper derives it. The setting is the companion note's prize race:
-  an attempt is a privately observed diffusion that wins on first passage to a
-  target, costs a flow rate while it runs, and may be abandoned irreversibly.
-  That note leaves an attempt's success probability \(p\) and expected cost
-  \(k\) as free parameters. They are not free. Running the diffusion between
-  the target and any abandonment floor gives</p>
+  <p>This paper computes it. Suppose two people are at work on a given
+  problem at any time, an attempt takes about three years, a senior
+  mathematician costs about three hundred thousand dollars a year all in, and
+  problems fall at the observed rate of one per hundred and fifty-nine
+  problem-years. Then solving a Millennium problem is worth about $96M to the
+  person attacking it, and the purse is 1.0% of that.</p>
+
+  <p>The inversion has one moving part, a price list for persistence. An
+  attempt run between a target at distance \(d\) and an abandonment floor
+  buys success probability \(p\) at expected cost</p>
 
   <div class="equation-card">
     \[ k(p)=\zeta^{2}\,\frac{p}{1-p},\qquad \zeta^{2}=\frac{c\,d^{2}}{\sigma^{2}}, \]
   </div>
 
-  <p>where \(d\) is the distance still to travel and \(\zeta^{2}\) is the
-  cost rate times the diffusive time to cover it. We call this the
-  <em>price list</em>, and the paper is an optimization against it.</p>
+  <p>where \(\zeta^{2}\) is the cost rate times the diffusive time to cover
+  the remaining distance. Optimizing \(Ap-k(p)\) against a reward \(A\)
+  gives \(p=1-\zeta/\sqrt A\) and \(k=p(1-p)A\), which inverts to
+  \(A=k/(p(1-p))\). The hazard supplies \(p\) through an accounting
+  identity, and what comes out is</p>
 
-  <p>The price list buys three things. First, identification: an attempt's
-  cost and success rate pin \(\zeta^{2}\), whatever floor was used and whether
-  or not it was chosen well. Second, a one-dimensional equilibrium.
-  Optimizing \(Ap-k(p)\) gives \(p=1-\zeta/\sqrt A\), so a researcher's best
-  response depends on rivals only through the scalar \(A\), the reward
-  conditional on success.</p>
+  <div class="equation-card">
+    \[ A=\frac{cN}{h(1-p)},\qquad p=\frac{hT}{N}, \]
+  </div>
 
-  <p>In a contest for one purse that reward is shared,
-  \(A_{i}=V\,\mathbb{E}[(1+K_{-i})^{-1}]&lt;V\), and the symmetric equilibrium
-  is the root of \(p=1-\zeta/\sqrt{A(p)}\). In a large pool it becomes
-  \(G(y^{*})=V_{e}/V\) with \(G(y)=(1-e^{-y})/y\), where \(y^{*}\) is the
-  expected number of solvers and \(V_{e}\) the purse at which a lone
-  researcher exactly breaks even. In English: competition bids the effective
-  reward down to break-even, exactly, and what free entry pins is the number
-  of solutions rather than the number of attempts.</p>
+  <p>in the cost rate \(c\), the number \(N\) of concurrent attempts, and
+  the hazard \(h\). This is Proposition 2. In English: the duration \(T\) of
+  an attempt cancels, so how long people persist does not enter the level,
+  only how many of them there are and how fast problems fall.</p>
 
-  <p>Third, purse design. A funder with escrowed capital chooses how many
-  problems to post and how much on each, and the optimum is
-  \(V^{*}=1.7564\,V_{e}\) whatever the capital.</p>
+  <p>One event does not identify that level. The exact Poisson interval for
+  the hazard is a factor of two hundred wide, and it carries \(A\) from $18M
+  to $3.8B. Anyone quoting $96M is quoting the midpoint of an interval that
+  contains almost anything.</p>
 
-  <p>One consequence runs against intuition and is the reason the paper has a
-  Millennium section at all. Optimal sizing forces
-  \(A-\zeta^{2}=k(2-p)/(1-p)\), so the reward clears the walk-away threshold
-  by about twice the cost of a single attempt, however large the reward. A
-  purse worth one percent of the reward can be worth half of the surplus that
-  makes attempting worthwhile. Comparing a purse with a prize is the wrong
-  comparison.</p>
+  <p>The surplus is a different matter, and it is the paper's point. Optimal
+  sizing forces</p>
+
+  <div class="equation-card">
+    \[ A-\zeta^{2}=k\,\frac{2-p}{1-p}\;\ge\;2k, \]
+  </div>
+
+  <p>so the reward exceeds the threshold at which anyone would start by about
+  twice the cost of a single attempt, however large the reward. Here \(T\)
+  survives and \(N\) and \(h\) drop out. The surplus is $1.8M, the purse is
+  55% of it, and that share moves from 55.5% to 54.1% across the entire
+  hazard interval. Deleting the purse from the reward costs 55% of the
+  equilibrium solvers.</p>
+
+  <p>So the purse is a rounding error against the value of a Clay problem and
+  a majority stake in the surplus that makes attacking one worthwhile. The
+  two ratios differ by a factor of fifty-three because the level and the
+  surplus scale in disjoint parameters. Dividing a purse by a prize answers
+  the wrong question.</p>
+
+  <p>The rest of the paper earns those three displays and then spends them.
+  Section 2 proves the price list, whose last clause is the useful one: it
+  holds at every floor, optimal or not, at any discount rate, so it
+  identifies \(\zeta^{2}\) from an observed attempt without assuming the
+  attempt was well run. Section 3 does the Millennium inversion. Section 4
+  closes the competitive loop, where the reward is shared rather than won
+  outright and the equilibrium is a scalar root; in a large pool it collapses
+  to \(G(y^{*})=V_{e}/V\) with \(G(y)=(1-e^{-y})/y\), and competition bids
+  the effective reward down to break-even exactly. Section 6 designs the
+  purse: a funder splitting escrowed capital posts 1.7564 times break-even on
+  each problem whatever the capital, and solves 71.5% of them.</p>
 
   <h4>Scope.</h4>
-  <p>Sections 2 to 5 treat the lottery allocation: every entrant pays its
+  <p>Sections 2 to 6 treat the lottery allocation: every entrant pays its
   attempt to completion and one winner is drawn among the successes. The
   first-solution race, in which costs cease when a rival announces and the
   rival hazard varies with calendar time, is the companion note's coupled
@@ -221,7 +247,7 @@
   reward, if attempts are long shots then the reward barely clears its
   threshold, and it clears it by roughly twice the cost of one attempt. The
   level of the reward and the surplus it generates are different quantities,
-  and only the second governs behavior. Section 6 is where that distinction
+  and only the second governs behavior. Section 3 is where that distinction
   earns its keep.</p>
 
   <h4>A verification.</h4>
@@ -234,7 +260,158 @@
   \(dt\). The price identity is checked against \(k\) computed directly from
   the width at five widths, with residuals at \(10^{-14}\).</p>
 
-  <h2>3. Equilibrium attempt size</h2>
+  <h2>3. The implied reward</h2>
+
+  <p>Proposition 1 identifies \(\zeta^{2}\) from an attempt's cost and
+  success rate. Corollary 1 inverts an optimally sized attempt to the reward
+  it was chasing. What is missing is \(p\), and the historical record
+  supplies it.</p>
+
+  <div class="prop">
+    <p><span class="label">Proposition 2 (The implied reward).</span> Let
+    \(N\) attempts run per problem at all times, each of mean duration \(T\)
+    at cost rate \(c\), each succeeding with probability \(p\) and sized
+    optimally against a reward \(A\). If problems are solved at hazard \(h\)
+    per problem-year, then</p>
+    <div class="equation-card">
+      \[ p=\frac{hT}{N},\qquad A=\frac{cN}{h(1-p)},\qquad
+         \zeta^{2}=\frac{cN(1-p)}{h},\qquad
+         A-\zeta^{2}=cT\,\frac{2-p}{1-p}. \]
+    </div>
+    <p>The level \(A\) is free of \(T\) up to the factor \((1-p)\); the
+    surplus \(A-\zeta^{2}\) is free of \(N\) and \(h\), and tends to \(2cT\)
+    as \(p\downarrow0\).</p>
+  </div>
+
+  <p class="proof"><span class="label">Proof.</span> Completed attempts
+  arrive at rate \(N/T\) per problem-year and each solves with probability
+  \(p\), so \(h=pN/T\), which is the first identity. One attempt costs
+  \(k=cT\). Corollary 1 inverted gives \(A=k/(p(1-p))\) and Proposition 1
+  gives \(\zeta^{2}=k(1-p)/p\). Substituting \(k=cT\) and \(p=hT/N\),
+  \(A=cT/((hT/N)(1-p))=cN/(h(1-p))\) and
+  \(\zeta^{2}=cT(1-p)N/(hT)=cN(1-p)/h\), and Corollary 2 gives
+  \(A-\zeta^{2}=k(2-p)/(1-p)\) with \(k=cT\). The limits are immediate.
+  &#9633;</p>
+
+  <p>The two scalings are disjoint, and that is the whole of what follows.
+  The level is \(cN/h\): what a solution is worth rises with the cost of the
+  people chasing it and with how many are chasing, and falls with how often
+  problems fall. The surplus is \(2cT\): what makes chasing worthwhile rises
+  with the cost of one attempt and nothing else. A funder who moves the purse
+  moves the second and leaves the first alone.</p>
+
+  <h4>The Millennium numbers.</h4>
+  <p>One solution since May 2000, with the solved problem exposed only until
+  2003, gives an exposure of \(6\times26+3=159\) problem-years and
+  \(\hat h=0.0063\) per problem-year. At \(c=\$300\)k per year, \(N=2\) and
+  \(T=3\) years, Proposition 2 returns \(p=0.0094\), an attempt cost of
+  $0.9M, \(\zeta^{2}=\$94.5\)M and \(A=\$96.3\)M against a surplus
+  \(A-\zeta^{2}=\$1.81\)M, itself against \(2k=\$1.80\)M. The purse is 1.04%
+  of the level and 55.3% of the surplus, a ratio of fifty-three between the
+  two shares. Dilution is negligible at these odds: the reward before sharing
+  is $96.8M, since \(\mathbb{E}[(1+K)^{-1}]=0.9953\) with two attackers at
+  \(p=0.0094\).</p>
+
+  <div class="table-wrap">
+  <table class="impl">
+    <thead><tr><th>cost rate</th><th class="num">A at N = 1</th>
+      <th class="num">A at N = 2</th><th class="num">A at N = 5</th></tr></thead>
+    <tbody>
+      <tr><td>$200k / yr</td><td class="num">$32M</td><td class="num">$64M</td><td class="num">$160M</td></tr>
+      <tr><td>$300k / yr</td><td class="num">$49M</td><td class="num">$96M</td><td class="num">$239M</td></tr>
+      <tr><td>$400k / yr</td><td class="num">$65M</td><td class="num">$128M</td><td class="num">$319M</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h4>The level is not identified and the surplus is.</h4>
+  <p>The exact Poisson interval for one event in 159 problem-years is
+  \([1.6\times10^{-4},\,3.5\times10^{-2}]\), which is to say a solution every
+  29 to 6280 years. Since \(A\) is proportional to \(1/h\), that interval is
+  inherited whole.</p>
+
+  <div class="table-wrap">
+  <table class="impl">
+    <thead><tr><th>hazard h</th><th class="num">A</th>
+      <th class="num">purse / A</th><th class="num">surplus</th>
+      <th class="num">purse / surplus</th></tr></thead>
+    <tbody>
+      <tr><td>1.6 &times; 10<sup>&minus;4</sup></td><td class="num">$3769M</td><td class="num">0.027%</td><td class="num">$1.800M</td><td class="num">55.5%</td></tr>
+      <tr><td>6.3 &times; 10<sup>&minus;3</sup></td><td class="num">$96.3M</td><td class="num">1.04%</td><td class="num">$1.809M</td><td class="num">55.3%</td></tr>
+      <tr><td>3.5 &times; 10<sup>&minus;2</sup></td><td class="num">$18.1M</td><td class="num">5.53%</td><td class="num">$1.850M</td><td class="num">54.1%</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>The level moves by a factor of two hundred and the purse's share of the
+  surplus moves by one and a half percentage points. This is not a
+  coincidence to be admired: \(h\) enters \(A\) and \(\zeta^{2}\) the same way
+  and cancels in the difference, exactly as Proposition 2 says. The quantity
+  everyone would quote is the one the record cannot pin down, and the quantity
+  that governs behavior is the one it can.</p>
+
+  <h4>What the purse buys.</h4>
+  <p>Deleting the purse from the reward and re-solving the large-pool
+  equilibrium of Proposition 4 takes expected solvers from 0.0380 to 0.0171,
+  a fall of 55.1%, tracking the purse's 55.3% share of the surplus. Near
+  threshold \(y^{*}\approx2(V/V_{e}-1)\), so solvers are proportional to the
+  excess of the reward over break-even and the purse's share of that excess
+  is its share of the effort. Across the hazard interval the fall runs 53% to
+  56%.</p>
+
+  <p>Two of the four inputs come from outside the record. The cost rate
+  \(c\) and the number \(N\) of concurrent attempts are stipulated, and
+  \(A\) is proportional to both, so the level inherits their error too. The
+  duration \(T\) is stipulated and does not matter for the level. The surplus
+  needs only \(c\) and \(T\), and the cost of a serious attempt is the
+  quantity to go and measure.</p>
+
+  <p>Setting \(V_{e}=\zeta^{2}\) assumes no cost of entering beyond the flow
+  cost of working. A setup cost raises \(V_{e}\) to \((\zeta+\sqrt K)^{2}\)
+  and shrinks the excess the purse is measured against, so every share above
+  is a lower bound on the purse's.</p>
+
+  <h4>Why researchers stop.</h4>
+  <p>The remaining Millennium question is not what the reward is but why
+  anyone abandons it, and here the arithmetic belongs to the companion note's
+  first-solution race rather than the lottery, since it needs the option
+  destroyed rather than diluted. There an attempt faces \(\rho=r+h\) and
+  competition supplies a share \(h/(r+h)\) of the impatience. Two adjustments
+  push the same way: the problem-level hazard is the aggregate, including the
+  focal researcher, whose own contribution must come out, and with \(N\)
+  symmetric attackers the rival hazard is \((N-1)/N\) of it; and any positive
+  discount rate enters the denominator.</p>
+
+  <div class="table-wrap">
+  <table class="impl">
+    <thead><tr><th>r</th><th class="num">aggregate share</th>
+      <th class="num">rival share, N = 3</th>
+      <th class="num">aggregate at interval upper</th></tr></thead>
+    <tbody>
+      <tr><td>0.03</td><td class="num">0.173</td><td class="num">0.123</td><td class="num">0.539</td></tr>
+      <tr><td>0.05</td><td class="num">0.112</td><td class="num">0.077</td><td class="num">0.412</td></tr>
+      <tr><td>0.10</td><td class="num">0.059</td><td class="num">0.040</td><td class="num">0.260</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>A solution hazard of order \(10^{-2}\) per year is small beside any
+  plausible discount rate, so rivalry is unlikely to be the main reason anyone
+  abandons a Millennium problem. They stop because the shells cost money and
+  the years pass.</p>
+
+  <h4>When the metaphor of the title applies.</h4>
+  <p>All the interesting variation sits in \(\zeta=d\sqrt c/\sigma\). An
+  attempt run at machine cost lowers \(c\), and a genuinely broader search
+  raises \(\sigma\); both lower \(\zeta\), which lowers the break-even purse
+  quadratically and raises expected solvers. If that compresses expected
+  time-to-solution from decades to a few years, \(h\) rises by two orders of
+  magnitude, and by Proposition 2 the implied level falls in proportion while
+  the rivalry share moves from under a tenth to above four fifths. Only then
+  is the purse a clay pigeon, thrown up for several guns with one hit
+  counting. This is a graded, falsifiable prediction.</p>
+
+  <h2>4. Equilibrium attempt size</h2>
 
   <p>Now the contest. There are \(n\) researchers, a prize \(V\), and a common
   hardness \(\zeta^{2}\). Each researcher chooses a width, equivalently a
@@ -256,7 +433,7 @@
   \(A(p)=V[1-(1-p)^{n}]/(np)\).</p>
 
   <div class="prop">
-    <p><span class="label">Proposition 2 (The symmetric equilibrium is a
+    <p><span class="label">Proposition 3 (The symmetric equilibrium is a
     scalar root).</span> \(A\) is strictly decreasing in \(p\) on \((0,1]\),
     with \(A(0^{+})=V\) and \(A(1)=V/n\), and strictly decreasing in \(n\). If
     \(V\le\zeta^{2}\) the only symmetric equilibrium is \(p=0\). If
@@ -283,7 +460,7 @@
   root, decreasing in \(n\) because \(A_{n}\) is. &#9633;</p>
 
   <div class="prop">
-    <p><span class="label">Proposition 3 (Large pool).</span> Let
+    <p><span class="label">Proposition 4 (Large pool).</span> Let
     \(n\to\infty\) with \(np\to y\). Then \(A\to V\,G(y)\) with
     \(G(y)=(1-e^{-y})/y\), strictly decreasing from 1 to 0, and the
     equilibrium condition becomes</p>
@@ -335,7 +512,7 @@
   </table>
   </div>
 
-  <p>The last column solves Proposition 2 exactly at \(n=10^{4}\). A deviation
+  <p>The last column solves Proposition 3 exactly at \(n=10^{4}\). A deviation
   certificate backs the fixed points: at three computed equilibria, no point
   of a two-million-point grid over own success probability beats the
   equilibrium payoff against equilibrium rivals, the best falling short by
@@ -357,7 +534,7 @@
   free-entry dissipation result with the cost curve derived rather than
   posited.</p>
 
-  <h2>4. The solo width is not a best response</h2>
+  <h2>5. The solo width is not a best response</h2>
 
   <p>A tempting shortcut fixes attempt lengths at the solo-optimal
   \(L=\sigma\sqrt{V/c}\) and lets researchers choose only whether to enter.
@@ -388,7 +565,7 @@
   at \(n=50\), reaching two only in the pool limit. Any headline count from
   the shortcut is an equilibrium selection in disguise.</p>
 
-  <h2>5. Purse design</h2>
+  <h2>6. Purse design</h2>
 
   <p>A funder commits escrowed capital \(B\) to identical problems with
   break-even purse \(V_{e}\), choosing the number \(M\) of problems and posting
@@ -396,8 +573,8 @@
   Proposition 3. Write \(H(y)=1-e^{-y}\), so \(G=H/y\).</p>
 
   <div class="prop">
-    <p><span class="label">Proposition 4 (The optimal purse is a fixed
-    multiple of break-even).</span> Under Proposition 3, \(V=V_{e}\,y/H(y)\),
+    <p><span class="label">Proposition 5 (The optimal purse is a fixed
+    multiple of break-even).</span> Under Proposition 4, \(V=V_{e}\,y/H(y)\),
     so \(M=B\,H(y)/(V_{e}y)\) and the expected number of problems solved is
     \(\Psi=M\,H(y)=(B/V_{e})H(y)^{2}/y\). Over the continuous relaxation of
     \(M\), \(\Psi\) has a unique positive maximizer, characterized by</p>
@@ -424,7 +601,7 @@
 
   <p>The purse multiple is independent of \(B\): capital chooses how many
   problems to post, not how much to post on each. Running the same program
-  through the committed-width shortcut of Section 4, where
+  through the committed-width shortcut of Section 5, where
   \(V=V_{\min}(y/H)^{2}\), gives \(e^{y}=1+\tfrac32y\),
   \(y^{*}=0.76268856\), \(V^{*}=(y^{*}+\tfrac23)^{2}V_{\min}
   =2.04305637\,V_{\min}\) and \(\mathbb{P}(\text{solved})=0.53358923\). Both
@@ -445,10 +622,10 @@
   \(p\mapsto1-(1-p)/\sqrt2\). From \(p=0.01\) that is \(p=0.29996\), and a
   tenfold purse gives \(0.68694\). Sensitivity is largest where \(p\) is
   smallest, because a small \(p\) means \(V\) only just exceeds
-  \(\zeta^{2}\). The equilibrium inherits the steepness: near threshold
-  \(y^{*}\approx2(V/V_{e}-1)\), so expected solvers are proportional to the
-  excess of the purse over break-even, and Proposition 4 places the optimum at
-  1.76 times break-even, inside the steep region by construction.</p>
+  \(\zeta^{2}\). The equilibrium inherits the steepness, which is why the
+  purse carried 55% of the Millennium effort in Section 3 on a 1% share of
+  the level, and why Proposition 5 places the optimum at 1.76 times
+  break-even, inside the steep region by construction.</p>
 
   <p>Far above threshold the picture reverses. The companion note's
   continuation width at discount-plus-hazard \(\rho&gt;0\) is
@@ -457,85 +634,6 @@
   \(\rho=0\). Purses buy persistence logarithmically out there, and breadth
   beats depth. Neither regime dominates, and \(V/V_{e}\) selects which one a
   contest is in.</p>
-
-  <h2>6. The Millennium purses</h2>
-
-  <p>The Clay Mathematics Institute posted one million dollars on each of
-  seven problems in May 2000. Perelman's preprints settled the
-  Poincar&eacute; conjecture in 2002&ndash;2003, the purse was awarded in
-  2010, and he declined it. Six remain open.</p>
-
-  <p>The refusal is the informative fact. A prize declined by the only person
-  entitled to it is not what was being pursued, so the reward for settling a
-  famous problem is priority, the record, and whatever a career is worth, and
-  it is not denominated in escrow. That the reward exceeds the notional purse
-  follows. By how much is unmeasured.</p>
-
-  <p>Corollary 2 says the usual diagnostic will not recover it. The reward
-  exceeds the walk-away threshold by \((2-p)/(1-p)\) times the cost of one
-  attempt, about twice it for long shots, whatever the level of the reward. So
-  the ratio that governs whether a cash purse changes behavior is
-  <strong>purse / 2k</strong>, where \(k\) is the expected cost of one serious
-  attempt, and not purse over \(V\). A purse worth one percent of the reward
-  is worth half the surplus whenever an attempt costs about the purse.
-  Dividing a purse by an unobservable reward and finding a small number
-  establishes nothing.</p>
-
-  <p>Arithmetic on round numbers gives the range. If a serious attempt costs
-  1M then purse/2k is a half, and deleting the purse from the reward roughly
-  halves the equilibrium solver count, from \(y^{*}=0.0403\) to \(0.0203\). At
-  10M per attempt the ratio is 0.05 and the effect is a five percent
-  reduction. At 200k per attempt the purse is decisive: without it the reward
-  falls below \(\zeta^{2}\) and the model predicts nothing is attempted. The
-  cost of a serious assault on a Millennium problem has not been measured, and
-  it is the quantity to go and measure.</p>
-
-  <p>The arithmetic understates the purse for a second reason. It sets
-  \(V_{e}=\zeta^{2}\), which assumes no cost of entering beyond the flow cost
-  of working. A setup cost raises \(V_{e}\) to \((\zeta+\sqrt K)^{2}\) and
-  shrinks the excess \(V-V_{e}\) that the purse is measured against, so every
-  ratio above is a lower bound on the purse's share.</p>
-
-  <h4>Rivalry.</h4>
-  <p>This last calculation belongs to the companion note's first-solution race
-  rather than the lottery above, since it needs the option destroyed rather
-  than diluted. There an attempt faces \(\rho=r+h\) and competition supplies a
-  share \(h/(r+h)\) of the impatience. One solution since 2000 over an
-  exposure of \(6\times26+3=159\) problem-years gives \(\hat h=0.0063\) per
-  problem-year, with exact Poisson interval
-  \([1.6\times10^{-4},\,3.5\times10^{-2}]\) for one event. Two adjustments
-  push the same way: the problem-level hazard is the aggregate, including the
-  focal researcher, whose own contribution must come out, and any positive
-  discount rate enters the denominator.</p>
-
-  <div class="table-wrap">
-  <table class="impl">
-    <thead><tr><th>r</th><th class="num">aggregate share</th>
-      <th class="num">rival share, N = 3</th>
-      <th class="num">aggregate at interval upper</th></tr></thead>
-    <tbody>
-      <tr><td>0.03</td><td class="num">0.173</td><td class="num">0.123</td><td class="num">0.539</td></tr>
-      <tr><td>0.05</td><td class="num">0.112</td><td class="num">0.077</td><td class="num">0.412</td></tr>
-      <tr><td>0.10</td><td class="num">0.059</td><td class="num">0.040</td><td class="num">0.260</td></tr>
-    </tbody>
-  </table>
-  </div>
-
-  <p>A solution hazard of order \(10^{-2}\) per year is small beside any
-  plausible discount rate, so rivalry is unlikely to be the main reason anyone
-  abandons a Millennium problem. One event supports nothing stronger, and the
-  interval says so.</p>
-
-  <h4>When the metaphor of the title applies.</h4>
-  <p>All the interesting variation sits in \(\zeta=d\sqrt c/\sigma\). An
-  attempt run at machine cost lowers \(c\), and a genuinely broader search
-  raises \(\sigma\); both lower \(\zeta\), which lowers \(V_{e}\)
-  quadratically, raises \(p\), and raises expected solvers. If that compresses
-  expected time-to-solution from decades to a few years, \(h\) rises by two
-  orders of magnitude and the rivalry share moves from under a tenth to above
-  four fifths. Only then is the purse a clay pigeon, thrown up for several
-  guns with one hit counting. This is a graded, falsifiable prediction, and it
-  is the part of the paper that could be checked.</p>
 
   <h2>7. Assumptions</h2>
 
@@ -547,7 +645,7 @@
   only dilutes it, so the constants here do not transfer.</p>
 
   <h4>Asymmetric equilibria.</h4>
-  <p>Proposition 2 gives uniqueness inside the symmetric class, and it needs
+  <p>Proposition 3 gives uniqueness inside the symmetric class, and it needs
   only that \(A\) decreases. Outside that class the question is open. The
   tempting route is Banach: the symmetric best-response map has modulus
   \(|T'|=\zeta|A'(p)|/(2A^{3/2})\), and a modulus below one would settle
@@ -566,7 +664,7 @@
   bang-bang. A mathematician who returns to a problem after twenty years needs
   something to have changed while it sat: new tools lowering \(c\), or a
   broader method raising \(\sigma\). That is a model in which \(\zeta\) drifts
-  down, which is the mechanism of Section 6.</p>
+  down, which is the mechanism of Section 3.</p>
 
   <h4>Independence.</h4>
   <p>The product survival formula behind \(A_{i}\) and behind the rivalry
@@ -584,9 +682,10 @@
   with a solution.</p>
 
   <h4>Measurement.</h4>
-  <p>No parameter in Section 6 is estimated. The cost of a serious attempt and
-  its success probability would both have to be measured before any of it
-  touched the world, and measuring them is harder than the mathematics
+  <p>Of the four inputs to Proposition 2 only the hazard comes from data, and
+  it comes from one event. The cost rate and the number of concurrent
+  attackers are stipulated, and the implied level is proportional to both.
+  Measuring what a serious attempt costs is harder than any mathematics
   here.</p>
 
   <h2>8. Related work</h2>
@@ -616,7 +715,7 @@
   dissipation. Taylor (1995) and Che and Gale (2003) design research
   tournaments, Fullerton and McAfee (1999) auctions entry to select
   contestants, and Halac, Kartik and Liu (2017) design contests when the
-  technology must be discovered. Proposition 4 uses a cruder instrument than
+  technology must be discovered. Proposition 5 uses a cruder instrument than
   any of these, namely how many purses and how large, and returns a fixed
   multiple of break-even.</p>
 
@@ -624,7 +723,7 @@
   <p>Morgan, Orzen and Sefton (2012) and Fu, Jiao and Lu (2015) study
   endogenous entry with subsequent effort. The companion note's fixed-attempt
   lottery and its exact potential sit in the tradition of Rosenthal (1973) and
-  Monderer and Shapley (1996), and Section 4 uses that potential to locate the
+  Monderer and Shapley (1996), and Section 5 uses that potential to locate the
   three-entrant equilibria.</p>
 
   <h4>Budgeted races.</h4>
@@ -637,12 +736,18 @@
 
   <h2>9. Closing</h2>
 
-  <p>An attempt on a hard problem has a price list,
-  \(k(p)=\zeta^{2}p/(1-p)\), and the price list carries most of the paper. It
-  makes the cost curve a theorem rather than a specification, reduces the
+  <p>A Millennium problem is worth about $96M to whoever is attacking it, on
+  four inputs of which one comes from data. The number should not be trusted
+  to a factor of two hundred, because one solution in a hundred and fifty-nine
+  problem-years does not pin a hazard. The surplus survives the same interval
+  intact at $1.8M, and the purse is 55% of it.</p>
+
+  <p>The instrument is a price list, \(k(p)=\zeta^{2}p/(1-p)\). It makes the
+  cost curve a theorem rather than a specification, identifies hardness from
+  an attempt without assuming the attempt was well run, reduces the
   competitive equilibrium to a scalar root in which the effective reward is
-  competed down exactly to break-even, and delivers an optimal purse at 1.7564
-  times that level for any capital.</p>
+  competed down exactly to break-even, and delivers an optimal purse at
+  1.7564 times that level for any capital.</p>
 
   <p>Neither breadth nor depth dominates. Below about twice break-even the
   marginal dollar buys success probability at rate \((1-p)/2\) per log dollar
@@ -664,7 +769,7 @@
   <a href="https://github.com/microprediction/brownianbandit/blob/main/papers/clay-shooting/numerics.py"><code>papers/clay-shooting/numerics.py</code></a>
   (seed 20260909) and committed to
   <a href="https://github.com/microprediction/brownianbandit/blob/main/papers/clay-shooting/numerics.json"><code>numerics.json</code></a>.
-  It checks the price identity against the width at five widths, checks the
+  It checks the price identity against the width at five widths, runs the Millennium inversion and its closed forms, checks the
   optimal-size identities against a Monte Carlo of the attempt, solves the
   symmetric equilibrium at finite \(n\) and in the pool limit and certifies it
   by grid search for profitable deviations, reports the contraction modulus

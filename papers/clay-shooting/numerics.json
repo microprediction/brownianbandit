@@ -547,8 +547,8 @@
   "equilibrium_limit": [
     {
       "V_over_entry": 1.02,
-      "y_star": 0.039736837549148446,
-      "solve_probability": 0.038957683871714166
+      "y_star": 0.03973683754915033,
+      "solve_probability": 0.03895768387171601
     },
     {
       "V_over_entry": 1.5,
@@ -558,7 +558,7 @@
     {
       "V_over_entry": 2.0,
       "y_star": 1.5936242600400399,
-      "solve_probability": 0.7968121300200199
+      "solve_probability": 0.79681213002002
     },
     {
       "V_over_entry": 4.0,
@@ -784,11 +784,11 @@
       "power": 1,
       "condition": "exp(y) = 1 + 2.0 y",
       "y_star": 1.2564312086261697,
-      "purse_over_break_even": 1.7564312086261695,
+      "purse_over_break_even": 1.7564312086261697,
       "purse_closed_form": 1.7564312086261697,
-      "solve_probability": 0.7153318629591616,
-      "problems_per_capital": 0.569336274081677,
-      "solved_per_capital": 0.40726437758907386,
+      "solve_probability": 0.7153318629591615,
+      "problems_per_capital": 0.5693362740816769,
+      "solved_per_capital": 0.4072643775890737,
       "brute_force_y": 1.2564315235127619
     },
     "committed": {
@@ -810,6 +810,375 @@
     "hazard_ci95": [
       0.00015923149675654025,
       0.035041782332949044
+    ],
+    "central_case": {
+      "cost_rate": 300000.0,
+      "attackers": 2.0,
+      "duration": 3.0
+    },
+    "implied_reward": {
+      "cost_rate": 300000.0,
+      "attackers": 2.0,
+      "duration": 3.0,
+      "hazard": 0.006289308176100629,
+      "p": 0.009433962264150945,
+      "attempt_cost": 900000.0,
+      "A": 96308571.42857142,
+      "A_closed_form": 96308571.42857142,
+      "A_leading": 95400000.0,
+      "zeta_sq": 94499999.99999999,
+      "zeta_sq_closed_form": 94499999.99999999,
+      "surplus": 1808571.4285714328,
+      "surplus_closed_form": 1808571.4285714284,
+      "surplus_leading_2k": 1800000.0,
+      "purse_over_A": 0.010383291800166134,
+      "purse_over_surplus": 0.5529225908372815,
+      "total_reward_before_dilution": 96765010.15572117,
+      "dilution": 0.9952830188679233
+    },
+    "implied_reward_grid": [
+      {
+        "cost_rate": 200000.0,
+        "attackers": 1.0,
+        "duration": 3.0,
+        "hazard": 0.006289308176100629,
+        "p": 0.01886792452830189,
+        "attempt_cost": 600000.0,
+        "A": 32411538.461538453,
+        "A_closed_form": 32411538.46153846,
+        "A_leading": 31800000.0,
+        "zeta_sq": 31199999.999999996,
+        "zeta_sq_closed_form": 31200000.0,
+        "surplus": 1211538.4615384564,
+        "surplus_closed_form": 1211538.4615384615,
+        "surplus_leading_2k": 1200000.0,
+        "purse_over_A": 0.03085320992049366,
+        "purse_over_surplus": 0.8253968253968289,
+        "total_reward_before_dilution": 32411538.461538464,
+        "dilution": 0.9999999999999997
+      },
+      {
+        "cost_rate": 200000.0,
+        "attackers": 2.0,
+        "duration": 3.0,
+        "hazard": 0.006289308176100629,
+        "p": 0.009433962264150945,
+        "attempt_cost": 600000.0,
+        "A": 64205714.285714276,
+        "A_closed_form": 64205714.28571428,
+        "A_leading": 63600000.0,
+        "zeta_sq": 62999999.999999985,
+        "zeta_sq_closed_form": 63000000.0,
+        "surplus": 1205714.285714291,
+        "surplus_closed_form": 1205714.2857142857,
+        "surplus_leading_2k": 1200000.0,
+        "purse_over_A": 0.015574937700249201,
+        "purse_over_surplus": 0.8293838862559205,
+        "total_reward_before_dilution": 64510006.770480774,
+        "dilution": 0.9952830188679233
+      },
+      {
+        "cost_rate": 200000.0,
+        "attackers": 5.0,
+        "duration": 3.0,
+        "hazard": 0.006289308176100629,
+        "p": 0.003773584905660378,
+        "attempt_cost": 600000.0,
+        "A": 159602272.72727272,
+        "A_closed_form": 159602272.72727272,
+        "A_leading": 159000000.0,
+        "zeta_sq": 158399999.99999997,
+        "zeta_sq_closed_form": 158400000.0,
+        "surplus": 1202272.727272749,
+        "surplus_closed_form": 1202272.7272727273,
+        "surplus_leading_2k": 1200000.0,
+        "purse_over_A": 0.006265574937700249,
+        "purse_over_surplus": 0.83175803402645,
+        "total_reward_before_dilution": 160811372.20612192,
+        "dilution": 0.992481256379683
+      },
+      {
+        "cost_rate": 300000.0,
+        "attackers": 1.0,
+        "duration": 3.0,
+        "hazard": 0.006289308176100629,
+        "p": 0.01886792452830189,
+        "attempt_cost": 900000.0,
+        "A": 48617307.69230768,
+        "A_closed_form": 48617307.69230769,
+        "A_leading": 47700000.0,
+        "zeta_sq": 46799999.99999999,
+        "zeta_sq_closed_form": 46800000.0,
+        "surplus": 1817307.6923076883,
+        "surplus_closed_form": 1817307.6923076923,
+        "surplus_leading_2k": 1800000.0,
+        "purse_over_A": 0.02056880661366244,
+        "purse_over_surplus": 0.5502645502645515,
+        "total_reward_before_dilution": 48617307.692307696,
+        "dilution": 0.9999999999999997
+      },
+      {
+        "cost_rate": 300000.0,
+        "attackers": 2.0,
+        "duration": 3.0,
+        "hazard": 0.006289308176100629,
+        "p": 0.009433962264150945,
+        "attempt_cost": 900000.0,
+        "A": 96308571.42857142,
+        "A_closed_form": 96308571.42857142,
+        "A_leading": 95400000.0,
+        "zeta_sq": 94499999.99999999,
+        "zeta_sq_closed_form": 94499999.99999999,
+        "surplus": 1808571.4285714328,
+        "surplus_closed_form": 1808571.4285714284,
+        "surplus_leading_2k": 1800000.0,
+        "purse_over_A": 0.010383291800166134,
+        "purse_over_surplus": 0.5529225908372815,
+        "total_reward_before_dilution": 96765010.15572117,
+        "dilution": 0.9952830188679233
+      },
+      {
+        "cost_rate": 300000.0,
+        "attackers": 5.0,
+        "duration": 3.0,
+        "hazard": 0.006289308176100629,
+        "p": 0.003773584905660378,
+        "attempt_cost": 900000.0,
+        "A": 239403409.09090906,
+        "A_closed_form": 239403409.0909091,
+        "A_leading": 238500000.0,
+        "zeta_sq": 237599999.99999997,
+        "zeta_sq_closed_form": 237599999.99999997,
+        "surplus": 1803409.0909090936,
+        "surplus_closed_form": 1803409.0909090908,
+        "surplus_leading_2k": 1800000.0,
+        "purse_over_A": 0.004177049958466833,
+        "purse_over_surplus": 0.5545053560176425,
+        "total_reward_before_dilution": 241217058.30918288,
+        "dilution": 0.992481256379683
+      },
+      {
+        "cost_rate": 400000.0,
+        "attackers": 1.0,
+        "duration": 3.0,
+        "hazard": 0.006289308176100629,
+        "p": 0.01886792452830189,
+        "attempt_cost": 1200000.0,
+        "A": 64823076.923076905,
+        "A_closed_form": 64823076.92307692,
+        "A_leading": 63600000.0,
+        "zeta_sq": 62399999.99999999,
+        "zeta_sq_closed_form": 62400000.0,
+        "surplus": 2423076.9230769128,
+        "surplus_closed_form": 2423076.923076923,
+        "surplus_leading_2k": 2400000.0,
+        "purse_over_A": 0.01542660496024683,
+        "purse_over_surplus": 0.41269841269841445,
+        "total_reward_before_dilution": 64823076.92307693,
+        "dilution": 0.9999999999999997
+      },
+      {
+        "cost_rate": 400000.0,
+        "attackers": 2.0,
+        "duration": 3.0,
+        "hazard": 0.006289308176100629,
+        "p": 0.009433962264150945,
+        "attempt_cost": 1200000.0,
+        "A": 128411428.57142855,
+        "A_closed_form": 128411428.57142857,
+        "A_leading": 127200000.0,
+        "zeta_sq": 125999999.99999997,
+        "zeta_sq_closed_form": 126000000.0,
+        "surplus": 2411428.571428582,
+        "surplus_closed_form": 2411428.5714285714,
+        "surplus_leading_2k": 2400000.0,
+        "purse_over_A": 0.007787468850124601,
+        "purse_over_surplus": 0.41469194312796026,
+        "total_reward_before_dilution": 129020013.54096155,
+        "dilution": 0.9952830188679233
+      },
+      {
+        "cost_rate": 400000.0,
+        "attackers": 5.0,
+        "duration": 3.0,
+        "hazard": 0.006289308176100629,
+        "p": 0.003773584905660378,
+        "attempt_cost": 1200000.0,
+        "A": 319204545.45454544,
+        "A_closed_form": 319204545.45454544,
+        "A_leading": 318000000.0,
+        "zeta_sq": 316799999.99999994,
+        "zeta_sq_closed_form": 316800000.0,
+        "surplus": 2404545.454545498,
+        "surplus_closed_form": 2404545.4545454546,
+        "surplus_leading_2k": 2400000.0,
+        "purse_over_A": 0.0031327874688501247,
+        "purse_over_surplus": 0.415879017013225,
+        "total_reward_before_dilution": 321622744.41224384,
+        "dilution": 0.992481256379683
+      }
+    ],
+    "duration_cancels": [
+      {
+        "cost_rate": 300000.0,
+        "attackers": 2.0,
+        "duration": 2.0,
+        "hazard": 0.006289308176100629,
+        "p": 0.006289308176100629,
+        "attempt_cost": 600000.0,
+        "A": 96003797.46835442,
+        "A_closed_form": 96003797.46835442,
+        "A_leading": 95400000.0,
+        "zeta_sq": 94800000.0,
+        "zeta_sq_closed_form": 94800000.0,
+        "surplus": 1203797.4683544189,
+        "surplus_closed_form": 1203797.4683544303,
+        "surplus_leading_2k": 1200000.0,
+        "purse_over_A": 0.010416254631277773,
+        "purse_over_surplus": 0.8307045215562645,
+        "total_reward_before_dilution": 96306648.56446871,
+        "dilution": 0.9968553459119537
+      },
+      {
+        "cost_rate": 300000.0,
+        "attackers": 2.0,
+        "duration": 3.0,
+        "hazard": 0.006289308176100629,
+        "p": 0.009433962264150945,
+        "attempt_cost": 900000.0,
+        "A": 96308571.42857142,
+        "A_closed_form": 96308571.42857142,
+        "A_leading": 95400000.0,
+        "zeta_sq": 94499999.99999999,
+        "zeta_sq_closed_form": 94499999.99999999,
+        "surplus": 1808571.4285714328,
+        "surplus_closed_form": 1808571.4285714284,
+        "surplus_leading_2k": 1800000.0,
+        "purse_over_A": 0.010383291800166134,
+        "purse_over_surplus": 0.5529225908372815,
+        "total_reward_before_dilution": 96765010.15572117,
+        "dilution": 0.9952830188679233
+      },
+      {
+        "cost_rate": 300000.0,
+        "attackers": 2.0,
+        "duration": 5.0,
+        "hazard": 0.006289308176100629,
+        "p": 0.015723270440251572,
+        "attempt_cost": 1500000.0,
+        "A": 96923961.66134186,
+        "A_closed_form": 96923961.66134185,
+        "A_leading": 95400000.0,
+        "zeta_sq": 93900000.0,
+        "zeta_sq_closed_form": 93899999.99999999,
+        "surplus": 3023961.661341861,
+        "surplus_closed_form": 3023961.661341853,
+        "surplus_leading_2k": 3000000.0,
+        "purse_over_A": 0.010317366137942855,
+        "purse_over_surplus": 0.3306920232435279,
+        "total_reward_before_dilution": 97691980.37498176,
+        "dilution": 0.9921383647798732
+      }
+    ],
+    "hazard_sensitivity": [
+      {
+        "cost_rate": 300000.0,
+        "attackers": 2.0,
+        "duration": 3.0,
+        "hazard": 0.00015923149675654025,
+        "p": 0.00023884724513481038,
+        "attempt_cost": 900000.0,
+        "A": 3768998940.5906405,
+        "A_closed_form": 3768998940.5906405,
+        "A_leading": 3768098725.5767646,
+        "zeta_sq": 3767198725.5767646,
+        "zeta_sq_closed_form": 3767198725.5767646,
+        "surplus": 1800215.0138759613,
+        "surplus_closed_form": 1800215.013876093,
+        "surplus_leading_2k": 1800000.0,
+        "purse_over_A": 0.00026532244125366877,
+        "purse_over_surplus": 0.5554892011743338,
+        "total_reward_before_dilution": 3769449101.85808,
+        "dilution": 0.9998805763772702
+      },
+      {
+        "cost_rate": 300000.0,
+        "attackers": 2.0,
+        "duration": 3.0,
+        "hazard": 0.006289308176100629,
+        "p": 0.009433962264150945,
+        "attempt_cost": 900000.0,
+        "A": 96308571.42857142,
+        "A_closed_form": 96308571.42857142,
+        "A_leading": 95400000.0,
+        "zeta_sq": 94499999.99999999,
+        "zeta_sq_closed_form": 94499999.99999999,
+        "surplus": 1808571.4285714328,
+        "surplus_closed_form": 1808571.4285714284,
+        "surplus_leading_2k": 1800000.0,
+        "purse_over_A": 0.010383291800166134,
+        "purse_over_surplus": 0.5529225908372815,
+        "total_reward_before_dilution": 96765010.15572117,
+        "dilution": 0.9952830188679233
+      },
+      {
+        "cost_rate": 300000.0,
+        "attackers": 2.0,
+        "duration": 3.0,
+        "hazard": 0.035041782332949044,
+        "p": 0.05256267349942356,
+        "attempt_cost": 900000.0,
+        "A": 18072347.636269737,
+        "A_closed_form": 18072347.636269737,
+        "A_leading": 17122416.72809641,
+        "zeta_sq": 16222416.728096412,
+        "zeta_sq_closed_form": 16222416.728096412,
+        "surplus": 1849930.9081733245,
+        "surplus_closed_form": 1849930.9081733255,
+        "surplus_leading_2k": 1800000.0,
+        "purse_over_A": 0.05533315428224062,
+        "purse_over_surplus": 0.5405607288260452,
+        "total_reward_before_dilution": 18560132.734792165,
+        "dilution": 0.9737186632502878
+      }
+    ],
+    "purse_deletion": [
+      {
+        "purse_over_surplus": 0.5554892011743338,
+        "with_purse": {
+          "y_star": 0.0009555791890212943,
+          "solve_probability": 0.0009551227686215705
+        },
+        "without_purse": {
+          "y_star": 0.00042480284188480097,
+          "solve_probability": 0.00042471262593268074
+        },
+        "fractional_fall_in_solvers": 0.5554498813228816
+      },
+      {
+        "purse_over_surplus": 0.5529225908372815,
+        "with_purse": {
+          "y_star": 0.03803553284467205,
+          "solve_probability": 0.03732126643044761
+        },
+        "without_purse": {
+          "y_star": 0.017064092520172214,
+          "solve_probability": 0.016919325502269197
+        },
+        "fractional_fall_in_solvers": 0.5513644415116292
+      },
+      {
+        "purse_over_surplus": 0.5405607288260452,
+        "with_purse": {
+          "y_star": 0.2200100370900553,
+          "solve_probability": 0.19748925695054373
+        },
+        "without_purse": {
+          "y_star": 0.10301633133939805,
+          "solve_probability": 0.09788775933996391
+        },
+        "fractional_fall_in_solvers": 0.5317653107924751
+      }
     ],
     "shares": [
       {
@@ -898,8 +1267,8 @@
     "counterfactual": {
       "k_0.2M_p_0.01": {
         "with_purse": {
-          "y_star": 0.04033693057295265,
-          "solve_probability": 0.03953422565455089
+          "y_star": 0.04033693057295289,
+          "solve_probability": 0.03953422565455113
         },
         "without_purse": {
           "y_star": null,
@@ -909,32 +1278,32 @@
       },
       "k_1M_p_0.01": {
         "with_purse": {
-          "y_star": 0.04033693057295265,
-          "solve_probability": 0.03953422565455089
+          "y_star": 0.040336930572952526,
+          "solve_probability": 0.03953422565455078
         },
         "without_purse": {
-          "y_star": 0.0203371482210236,
-          "solve_probability": 0.02013174322939626
+          "y_star": 0.02033714822102222,
+          "solve_probability": 0.02013174322939489
         }
       },
       "k_1M_p_0.005": {
         "with_purse": {
-          "y_star": 0.020083780367344185,
-          "solve_probability": 0.019883444658179927
+          "y_star": 0.02008378036734683,
+          "solve_probability": 0.019883444658182547
         },
         "without_purse": {
-          "y_star": 0.010083807863320797,
-          "solve_probability": 0.010033136735141501
+          "y_star": 0.010083807863321734,
+          "solve_probability": 0.010033136735142433
         }
       },
       "k_1e+01M_p_0.01": {
         "with_purse": {
-          "y_star": 0.04033693057295265,
-          "solve_probability": 0.03953422565455089
+          "y_star": 0.040336930572952526,
+          "solve_probability": 0.03953422565455078
         },
         "without_purse": {
-          "y_star": 0.03834287584303518,
-          "solve_probability": 0.03761709353635978
+          "y_star": 0.03834287584303528,
+          "solve_probability": 0.03761709353635988
         }
       }
     },

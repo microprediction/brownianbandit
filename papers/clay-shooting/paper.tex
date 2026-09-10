@@ -339,7 +339,7 @@ condition in Corollary~\ref{cor:size}.
 \toprule
 $V/V_{e}$ & $y^{*}$ & $\PP(\text{solved})$ & $n p_{n}$ at $n=10^{4}$\\
 \midrule
-1.02 & 0.03974 & 0.0390 & \\
+1.02 & 0.03974 & 0.0390 & 0.03972\\
 1.5  & 0.87422 & 0.5828 & 0.87387\\
 2    & 1.59362 & 0.7968 & 1.59286\\
 4    & 3.92069 & 0.9802 & 3.91742\\
@@ -350,10 +350,10 @@ $V/V_{e}$ & $y^{*}$ & $\PP(\text{solved})$ & $n p_{n}$ at $n=10^{4}$\\
 
 The last column solves Proposition~\ref{prop:eqfinite} exactly at
 $n=10^{4}$. A deviation certificate backs the fixed points: at three
-computed equilibria, a two-million-point grid search over own success
-probability against equilibrium rivals improves on the equilibrium payoff
-by at most $4\times10^{-12}$. The grid does not know the closed-form best
-response, so the check can fail for the right reason.
+computed equilibria, no point of a two-million-point grid over own success
+probability beats the equilibrium payoff against equilibrium rivals, the
+best falling short by $4\times10^{-12}$ or less. The grid does not know the
+closed-form best response, so the check can fail for the right reason.
 
 \paragraph{Solutions are pinned, attempts are not.}
 Both $y^{*}$ and the solve probability depend only on $V/V_{e}$. The
@@ -389,9 +389,15 @@ $(p,k=p(1-p)V)$ exogenous, any three designated entrants form a pure Nash
 equilibrium whenever $p<2-\sqrt2\approx0.5858$: each incumbent earns
 $V\big[1-(1-p)^{3}\big]/3-p(1-p)V=Vp^{3}/3>0$, while a fourth would earn
 $Vp^{2}\big(-\tfrac12+p-\tfrac{p^{2}}{4}\big)<0$. Two entrants is never a
-pure equilibrium, since a third always gains $Vp^{3}/3$ by joining, and
-the companion note's exact potential selects three for every $p$ up to
-about $0.5$. The symmetric mixed equilibrium of the same game gives
+pure equilibrium, since a third always gains $Vp^{3}/3$ by joining.
+
+The companion note's exact potential selects three entrants on exactly the
+same range, and not by coincidence. An exact potential moves by the
+deviator's own payoff, so its maximiser leaves three at the $p$ where the
+fourth entrant breaks even, which is again $2-\sqrt2$. The committed
+increments agree with the entrant payoffs to $2\times10^{-16}$.
+
+The symmetric mixed equilibrium of the same game gives
 $nq\to2n/(n-1)$ as $p\downarrow0$, which is $2.667$ at $n=4$ and $2.041$
 at $n=50$, reaching two only in the pool limit. Any headline count from
 the shortcut is an equilibrium selection in disguise.
@@ -445,9 +451,11 @@ through the committed-width shortcut of Section~\ref{sec:committed}, where
 $V=V_{\min}(y/H)^{2}$, gives $e^{y}=1+\tfrac32y$, $y^{*}=0.76268856$,
 $V^{*}=\big(y^{*}+\tfrac23\big)^{2}V_{\min}=2.04305637\,V_{\min}$ and
 $\PP(\text{solved})=0.53358923$. Both constants agree with a
-two-million-point brute-force maximization of the exact objective. The
-general form is $e^{y}=1+(1+1/\pi)y$ with $\pi=1$ when widths adjust and
-$\pi=2$ when they are committed.
+two-million-point brute-force maximization of the exact objective. For a
+purse exponent $q$, meaning $V=V_{e}(y/H)^{q}$, the condition is
+$e^{y}=1+(1+1/q)y$ and the optimum is
+$V^{*}/V_{e}=\big(y^{*}+q/(q+1)\big)^{q}$. Widths that adjust give $q=1$ and
+widths that are committed give $q=2$.
 
 Integer $M$ reintroduces budget-dependent rounding, so budget independence
 belongs to the relaxation. And expected count solved is one objective
@@ -561,12 +569,17 @@ note's coupled stopping and forward-distribution system. The race destroys
 the option where the lottery only dilutes it, so the constants here do not
 transfer.
 
-\paragraph{Symmetry.}
-Best responses fall in rivals' success probabilities, so this is a game of
-strategic substitutes and asymmetric equilibria are not excluded. The
-best-response map contracts when $\zeta|A'(p)|/(2A^{3/2})<1$, which holds
-at every parameter combination reported here. That is a check, not a
-theorem.
+\paragraph{Asymmetric equilibria.}
+Proposition~\ref{prop:eqfinite} gives uniqueness inside the symmetric
+class, and it needs only that $A$ decreases. Outside that class the
+question is open. The tempting route is Banach: the symmetric
+best-response map has modulus
+$|T'|=\zeta|A'(p)|/(2A^{3/2})$, and a modulus below one would settle
+uniqueness outright. It is $0.18$ at $n=2$ and $0.77$ at $n=10$, then
+$12.0$ at $n=100$ and $500.3$ at $n=10^{4}$, so the argument fails exactly
+in the large pool the paper spends most of its time in. Best responses do
+fall in rivals' success probabilities, which makes this a game of strategic
+substitutes, and that is all we use.
 
 \paragraph{Pausing.}
 The companion note's intensity extension permits $u=0$, and one might

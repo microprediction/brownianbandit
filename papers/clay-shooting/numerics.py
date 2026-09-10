@@ -117,6 +117,20 @@ def equilibrium_finite(n: int, V: float, zeta_sq: float) -> float:
     return bisect(phi, 1e-15, 1.0 - 1e-15)
 
 
+def contraction_modulus(p_eq: float, n: int, V: float,
+                        zeta_sq: float) -> float:
+    """|T'| at the equilibrium, where T is the symmetric best-response map.
+
+    A modulus below one would give uniqueness beyond the symmetric class by
+    Banach. It exceeds one once the pool is large, so the argument fails
+    there and only Proposition 2's monotonicity survives.
+    """
+    zeta = math.sqrt(zeta_sq)
+    h = 1e-7
+    T = lambda q: max(0.0, 1.0 - zeta / math.sqrt(effective_reward(q, n, V)))
+    return abs((T(p_eq + h) - T(p_eq - h)) / (2.0 * h))
+
+
 def deviation_gain(p_eq: float, n: int, V: float, zeta_sq: float) -> float:
     """Largest unilateral gain from re-sizing against the equilibrium rivals.
 
@@ -191,6 +205,29 @@ def potential(m: int, p: float, V: float = 1.0) -> float:
     return V * e_h - m * p * (1.0 - p) * V
 
 
+def potential_increment_check(p: float, m: int) -> float:
+    """Adding the (m+1)-th entrant moves the potential by his own payoff.
+
+    The potential is exact, so its increments are deviation payoffs, and its
+    maximiser therefore switches from three to four entrants at exactly the
+    p where the fourth breaks even: 2 - sqrt(2).
+    """
+    return abs((potential(m + 1, p) - potential(m, p))
+               - pure_entrant_payoff(m + 1, p))
+
+
+def potential_switch_point() -> float:
+    """The p at which the potential's maximiser leaves three entrants."""
+    lo, hi = 0.5, 0.7
+    for _ in range(200):
+        mid = 0.5 * (lo + hi)
+        if max(range(14), key=lambda m: potential(m, mid)) <= 3:
+            lo = mid
+        else:
+            hi = mid
+    return 0.5 * (lo + hi)
+
+
 def committed_entrants(p: float, n: int) -> float:
     """Expected entrants n q at the interior symmetric mixed equilibrium."""
     g = lambda q: (1.0 - (1.0 - p * q) ** n) - n * q * p * (1.0 - p)
@@ -216,7 +253,7 @@ def purse_design(power: int) -> dict:
         "condition": "exp(y) = 1 + %.1f y" % slope,
         "y_star": y,
         "purse_over_break_even": (y / H(y)) ** power,
-        "purse_closed_form": (y + 1.0 / slope) ** power,
+        "purse_closed_form": (y + power / (power + 1.0)) ** power,
         "solve_probability": H(y),
         "problems_per_capital": (H(y) / y) ** power,     # times B / V_e
         "solved_per_capital": H(y) ** (power + 1) / y ** power,
@@ -318,7 +355,7 @@ def main() -> None:
 
     # ---- 2. equilibrium with endogenous widths
     rows = []
-    for V_ratio in (1.5, 2.0, 4.0, 10.0, 100.0):
+    for V_ratio in (1.02, 1.5, 2.0, 4.0, 10.0, 100.0):
         V = V_ratio * zeta_sq
         for n in (1, 2, 3, 5, 10, 100, 1000, 10_000):
             p = equilibrium_finite(n, V, zeta_sq)
@@ -340,6 +377,15 @@ def main() -> None:
              vr * zeta_sq, zeta_sq)}
         for n, vr in ((2, 4.0), (3, 2.0), (10, 10.0))
     ]
+    out["contraction"] = [
+        {"n": n, "V_over_V_min": vr,
+         "p_star": equilibrium_finite(n, vr * zeta_sq, zeta_sq),
+         "modulus": contraction_modulus(
+             equilibrium_finite(n, vr * zeta_sq, zeta_sq), n,
+             vr * zeta_sq, zeta_sq)}
+        for n, vr in ((2, 4.0), (3, 2.0), (10, 10.0),
+                      (100, 4.0), (10_000, 10.0))
+    ]
     out["setup_cost"] = [with_setup_cost(100.0, 1.0, K)
                          for K in (1.0, 0.01, 1e-4)]
 
@@ -357,6 +403,13 @@ def main() -> None:
             for p in (0.01, 0.1, 0.3, 0.5, 0.7, 0.9)
         ],
         "pure_threshold_2_minus_sqrt2": 2.0 - math.sqrt(2.0),
+        "potential_switch_point": potential_switch_point(),
+        "potential_switch_minus_threshold":
+            potential_switch_point() - (2.0 - math.sqrt(2.0)),
+        "potential_increment_residuals": [
+            potential_increment_check(p, m)
+            for p in (0.05, 0.3, 0.7) for m in (2, 3, 4)
+        ],
         "mixed_entrants_small_p": [
             {"n": n, "n_q_at_p_1e_3": committed_entrants(1e-3, n),
              "limit_2n_over_n_minus_1": 2.0 * n / (n - 1.0)}

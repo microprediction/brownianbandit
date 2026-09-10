@@ -326,7 +326,7 @@
       <th class="num">P(solved)</th>
       <th class="num">n p<sub>n</sub> at n = 10<sup>4</sup></th></tr></thead>
     <tbody>
-      <tr><td>1.02</td><td class="num">0.03974</td><td class="num">0.0390</td><td class="num"></td></tr>
+      <tr><td>1.02</td><td class="num">0.03974</td><td class="num">0.0390</td><td class="num">0.03972</td></tr>
       <tr><td>1.5</td><td class="num">0.87422</td><td class="num">0.5828</td><td class="num">0.87387</td></tr>
       <tr><td>2</td><td class="num">1.59362</td><td class="num">0.7968</td><td class="num">1.59286</td></tr>
       <tr><td>4</td><td class="num">3.92069</td><td class="num">0.9802</td><td class="num">3.91742</td></tr>
@@ -336,11 +336,11 @@
   </div>
 
   <p>The last column solves Proposition 2 exactly at \(n=10^{4}\). A deviation
-  certificate backs the fixed points: at three computed equilibria, a
-  two-million-point grid search over own success probability against
-  equilibrium rivals improves on the equilibrium payoff by at most
-  \(4\times10^{-12}\). The grid does not know the closed-form best response,
-  so the check can fail for the right reason.</p>
+  certificate backs the fixed points: at three computed equilibria, no point
+  of a two-million-point grid over own success probability beats the
+  equilibrium payoff against equilibrium rivals, the best falling short by
+  \(4\times10^{-12}\) or less. The grid does not know the closed-form best
+  response, so the check can fail for the right reason.</p>
 
   <h4>Solutions are pinned, attempts are not.</h4>
   <p>Both \(y^{*}\) and the solve probability depend only on \(V/V_{e}\). The
@@ -375,9 +375,15 @@
   equilibrium whenever \(p&lt;2-\sqrt2\approx0.5858\): each incumbent earns
   \(V[1-(1-p)^{3}]/3-p(1-p)V=Vp^{3}/3&gt;0\), while a fourth would earn
   \(Vp^{2}(-\tfrac12+p-\tfrac{p^{2}}{4})&lt;0\). Two entrants is never a pure
-  equilibrium, since a third always gains \(Vp^{3}/3\) by joining, and the
-  companion note's exact potential selects three for every \(p\) up to about
-  0.5. The symmetric mixed equilibrium of the same game gives
+  equilibrium, since a third always gains \(Vp^{3}/3\) by joining.</p>
+
+  <p>The companion note's exact potential selects three entrants on exactly
+  the same range, and not by coincidence. An exact potential moves by the
+  deviator's own payoff, so its maximiser leaves three at the \(p\) where the
+  fourth entrant breaks even, which is again \(2-\sqrt2\). The committed
+  increments agree with the entrant payoffs to \(2\times10^{-16}\).</p>
+
+  <p>The symmetric mixed equilibrium of the same game gives
   \(nq\to2n/(n-1)\) as \(p\downarrow0\), which is 2.667 at \(n=4\) and 2.041
   at \(n=50\), reaching two only in the pool limit. Any headline count from
   the shortcut is an equilibrium selection in disguise.</p>
@@ -423,8 +429,10 @@
   \(y^{*}=0.76268856\), \(V^{*}=(y^{*}+\tfrac23)^{2}V_{\min}
   =2.04305637\,V_{\min}\) and \(\mathbb{P}(\text{solved})=0.53358923\). Both
   constants agree with a two-million-point brute-force maximization of the
-  exact objective. The general form is \(e^{y}=1+(1+1/\pi)y\) with \(\pi=1\)
-  when widths adjust and \(\pi=2\) when they are committed.</p>
+  exact objective. For a purse exponent \(q\), meaning
+  \(V=V_{e}(y/H)^{q}\), the condition is \(e^{y}=1+(1+1/q)y\) and the
+  optimum is \(V^{*}/V_{e}=(y^{*}+q/(q+1))^{q}\). Widths that adjust give
+  \(q=1\) and widths that are committed give \(q=2\).</p>
 
   <p>Integer \(M\) reintroduces budget-dependent rounding, so budget
   independence belongs to the relaxation. And expected count solved is one
@@ -482,6 +490,12 @@
   cost of a serious assault on a Millennium problem has not been measured, and
   it is the quantity to go and measure.</p>
 
+  <p>The arithmetic understates the purse for a second reason. It sets
+  \(V_{e}=\zeta^{2}\), which assumes no cost of entering beyond the flow cost
+  of working. A setup cost raises \(V_{e}\) to \((\zeta+\sqrt K)^{2}\) and
+  shrinks the excess \(V-V_{e}\) that the purse is measured against, so every
+  ratio above is a lower bound on the purse's share.</p>
+
   <h4>Rivalry.</h4>
   <p>This last calculation belongs to the companion note's first-solution race
   rather than the lottery above, since it needs the option destroyed rather
@@ -532,12 +546,16 @@
   forward-distribution system. The race destroys the option where the lottery
   only dilutes it, so the constants here do not transfer.</p>
 
-  <h4>Symmetry.</h4>
-  <p>Best responses fall in rivals' success probabilities, so this is a game
-  of strategic substitutes and asymmetric equilibria are not excluded. The
-  best-response map contracts when \(\zeta|A'(p)|/(2A^{3/2})&lt;1\), which
-  holds at every parameter combination reported here. That is a check, not a
-  theorem.</p>
+  <h4>Asymmetric equilibria.</h4>
+  <p>Proposition 2 gives uniqueness inside the symmetric class, and it needs
+  only that \(A\) decreases. Outside that class the question is open. The
+  tempting route is Banach: the symmetric best-response map has modulus
+  \(|T'|=\zeta|A'(p)|/(2A^{3/2})\), and a modulus below one would settle
+  uniqueness outright. It is 0.18 at \(n=2\) and 0.77 at \(n=10\), then 12.0
+  at \(n=100\) and 500.3 at \(n=10^{4}\), so the argument fails exactly in
+  the large pool the paper spends most of its time in. Best responses do fall
+  in rivals' success probabilities, which makes this a game of strategic
+  substitutes, and that is all we use.</p>
 
   <h4>Pausing.</h4>
   <p>The companion note's intensity extension permits \(u=0\), and one might
@@ -649,8 +667,10 @@
   It checks the price identity against the width at five widths, checks the
   optimal-size identities against a Monte Carlo of the attempt, solves the
   symmetric equilibrium at finite \(n\) and in the pool limit and certifies it
-  by grid search for profitable deviations, locates the three-entrant
-  equilibria of the committed-width shortcut, solves both purse designs in
+  by grid search for profitable deviations, reports the contraction modulus
+  that fails at large \(n\), locates the three-entrant equilibria of the
+  committed-width shortcut and its potential switch at \(2-\sqrt2\), solves
+  both purse designs in
   closed form and confirms them by brute force, and computes the Millennium
   hazard with its exact Poisson interval.</p>
 

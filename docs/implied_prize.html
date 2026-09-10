@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>What is a Millennium Prize really worth? &mdash; Budgeted Brownian Races</title>
+  <link rel="stylesheet" href="./style.css" />
+  <style>
+    .byline { color: var(--muted); font-size: 0.95rem; margin: 0 0 18px; }
+    .big { background: var(--accent-soft); border-radius: 8px;
+      padding: 18px 22px; margin: 24px 0; }
+    .big p { margin: 6px 0; }
+    .big .num { font-size: 1.9rem; font-weight: 600; color: var(--ink);
+      line-height: 1.15; }
+    .aside { border-left: 3px solid var(--border); padding: 2px 0 2px 16px;
+      margin: 20px 0; color: var(--muted); }
+    h2 { font-size: 1.22rem; }
+    .odds { width: 100%; border-collapse: collapse; margin: 16px 0;
+      font-size: 0.95rem; }
+    .odds th, .odds td { padding: 9px 12px; text-align: right;
+      border-bottom: 1px solid var(--border);
+      font-variant-numeric: tabular-nums; }
+    .odds th:first-child, .odds td:first-child { text-align: left; }
+    .odds thead th { font-size: 0.72rem; text-transform: uppercase;
+      letter-spacing: 0.04em; color: var(--muted); font-weight: 600;
+      border-bottom: 2px solid var(--border); }
+    .caption { text-align: center; color: var(--muted); font-size: 0.9rem;
+      margin: 8px 0 0; }
+  </style>
+</head>
+<body>
+<header class="site-header">
+  <div class="nav-inner">
+    <a class="brand" href="./index.html">brownianbandit</a>
+    <nav>
+      <a href="./index.html">Home</a>
+      <a href="./demos.html">Demos</a>
+      <a href="./applications.html">Applications</a>
+      <a href="./papers.html">Papers</a>
+      <a href="./bibliography.html">Bibliography</a>
+      <a href="https://github.com/microprediction/brownianbandit">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <p class="pagenav"><a href="./clay_shooting.html">&larr; Clay Shooting</a></p>
+
+  <h1>What is a Millennium Prize really worth?</h1>
+  <p class="subtitle">The short version, with no calculus.</p>
+  <p class="byline">A plain-English companion to
+    <a href="./clay_shooting.html">Clay Shooting</a>.</p>
+
+  <h2>The puzzle</h2>
+
+  <p>In 2000 the Clay Mathematics Institute put one million dollars on each of
+  seven unsolved maths problems. One has been solved since. Grigori Perelman
+  settled the Poincar&eacute; conjecture, was offered the million in 2010, and
+  said no.</p>
+
+  <p>So the million was not the point. Fine. But then what <em>is</em> a
+  Millennium Prize worth to the person chasing it? Nobody can ask them. Fame,
+  a place in the history of mathematics, and a career are not things with
+  price tags.</p>
+
+  <h2>The idea: don't ask, watch the spending</h2>
+
+  <p>You can't see what the prize is worth. You <em>can</em> see what people
+  spend chasing it. A bookmaker doesn't need to know why you like a horse. He
+  looks at the size of your bet.</p>
+
+  <p>The trick is to work out what a rational bet on a maths problem looks
+  like, and then run the arithmetic backwards from the bets people actually
+  place.</p>
+
+  <h2>What you are really buying is odds</h2>
+
+  <p>Think about what "attacking a hard problem" involves. You pick an
+  approach and you push. Progress wanders: some weeks you gain, some weeks
+  you lose ground. At some point, if it has gone badly enough for long
+  enough, you give up.</p>
+
+  <p>The only real choice is <strong>how long you are willing to stick with
+  it before quitting</strong>. Stick longer and you are more likely to get
+  there. Stick longer and it costs more, because you are paying yourself the
+  whole time.</p>
+
+  <p>Here is the part that makes the whole thing work. Doing that
+  calculation properly gives a very simple price list. What money buys is
+  <strong>odds</strong>, and it buys them at a flat rate.</p>
+
+  <div class="table-wrap">
+  <table class="odds">
+    <thead><tr><th>Your chances</th><th>As odds</th><th>Cost, vs a 1-in-100 shot</th></tr></thead>
+    <tbody>
+      <tr><td>1 in 100</td><td>1 to 99</td><td>1&times;</td></tr>
+      <tr><td>1 in 2</td><td>1 to 1</td><td>99&times;</td></tr>
+      <tr><td>2 in 3</td><td>2 to 1</td><td>198&times;</td></tr>
+      <tr><td>9 in 10</td><td>9 to 1</td><td>891&times;</td></tr>
+      <tr><td>99 in 100</td><td>99 to 1</td><td>9801&times;</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>Look at the odds column and the cost column together. Getting from no
+  hope at all up to a coin flip costs you exactly what getting from a coin
+  flip up to two-to-one costs. Each further step of the same size costs the
+  same again, and there are infinitely many of them before you reach
+  certainty. Certainty is not merely expensive, it is unbuyable.</p>
+
+  <p>This is why nobody ever finishes a hard problem by gritting their teeth
+  harder.</p>
+
+  <div class="aside">
+    <p>It also matches something everyone knows. The first 90% of a hard
+    project takes a while. The last 10% takes forever.</p>
+  </div>
+
+  <h2>Running it backwards</h2>
+
+  <p>Now flip it round. If you know what someone spent, and you know the
+  chances they were buying, the price list tells you what payoff would make
+  that a sensible purchase.</p>
+
+  <p>So we need two numbers about a serious attempt on a Millennium problem:
+  what it costs, and how often it works.</p>
+
+  <p><strong>What it costs.</strong> Call a serious attempt three focused
+  years of a senior mathematician. At roughly $300,000 a year, all in, that
+  is about <strong>$900,000</strong> per attempt.</p>
+
+  <p><strong>How often it works.</strong> This one we don't have to guess,
+  because history counted it for us. Seven problems went up in 2000. Six have
+  been under attack for 26 years since, and the seventh only until it fell in
+  2003, which is 159 problem-years of trying between them, for one solution.
+  If about two people are seriously at it per problem and an attempt takes
+  three years, attempts are finishing at about two-thirds of an attempt per
+  problem per year. One success in 159 problem-years then means a single
+  attempt works about <strong>1% of the time</strong>.</p>
+
+  <p>A $900,000 bet at 1-in-106. What payoff makes that rational? The price
+  list answers:</p>
+
+  <div class="big">
+    <p class="num">About $96 million</p>
+    <p>is what solving a Millennium problem appears to be worth to the person
+    attacking it. The cash prize is $1 million, or about 1% of that.</p>
+  </div>
+
+  <p>That is the headline, and it is roughly what you would guess from the
+  fact that Perelman turned the money down. It puts a number on it.</p>
+
+  <h2>Don't trust that number</h2>
+
+  <p>It rests on one solved problem. Estimating how often maths problems fall
+  from a single solution is like estimating the bus timetable from having seen
+  one bus.</p>
+
+  <p>Done honestly, the range that one observation allows is a solution
+  somewhere between every 29 years and every 6,280 years. Push that through
+  the same arithmetic and the answer moves from <strong>$18 million to $3.8
+  billion</strong>. The $96M is the middle of a range that contains almost
+  anything.</p>
+
+  <p>Which would normally be the end of a fairly useless calculation. It
+  isn't, because of what comes next.</p>
+
+  <h2>The twist: a $96M prize with a thin margin</h2>
+
+  <p>A 1-in-100 shot tells you two things at once, and the second one is
+  easy to miss.</p>
+
+  <p>It tells you the payoff is enormous. Nobody spends $900,000 on a 1%
+  chance at a small reward.</p>
+
+  <p>But it also tells you the payoff is <em>only just</em> enormous enough.
+  Because if it were comfortably enormous, you wouldn't have bought 1% odds.
+  You would have bought better ones and stuck with the problem far longer.
+  People choose long odds precisely when they are on the edge of not
+  bothering at all.</p>
+
+  <p>So when you total it up, almost the whole $96M is eaten by what it takes
+  to get anyone to start. What's left over, the bit that actually makes
+  attacking the problem worth doing rather than not doing, is small:</p>
+
+  <div class="diagram">
+    <svg viewBox="0 0 800 300" role="img"
+         aria-label="A bar showing 96.3 million dollars, of which 94.5 million is what it takes before anyone bothers, leaving 1.8 million. That 1.8 million, blown up 53 times, is 55 percent taken by the 1 million dollar cash prize.">
+      <text x="60" y="34" font-size="14" font-weight="600" fill="#1f1d3d">
+        What solving it is worth: $96.3M</text>
+      <text x="740" y="34" font-size="13" font-weight="600" fill="#4a3aff"
+            text-anchor="end">$1.8M left over</text>
+      <line x1="733" y1="40" x2="733" y2="46" stroke="#4a3aff" stroke-width="1.4"/>
+
+      <rect x="60" y="46" width="667" height="44" fill="#ecebfb" stroke="#c9c5f2"/>
+      <rect x="727" y="46" width="13" height="44" fill="#4a3aff"/>
+      <text x="393" y="74" font-size="13" fill="#1f1d3d" text-anchor="middle">
+        $94.5M: what it takes before anyone bothers at all</text>
+
+      <path d="M727 90 L60 200 L740 200 L740 90 Z"
+            fill="#4a3aff" fill-opacity="0.06"/>
+      <line x1="727" y1="90" x2="60" y2="200" stroke="#4a3aff"
+            stroke-width="1" stroke-dasharray="4 4" stroke-opacity="0.5"/>
+
+      <rect x="60" y="200" width="376" height="44" fill="#4a3aff"/>
+      <rect x="436" y="200" width="304" height="44" fill="#ecebfb" stroke="#c9c5f2"/>
+      <text x="248" y="228" font-size="13" fill="#ffffff" text-anchor="middle"
+            font-weight="600">$1M cash prize</text>
+      <text x="588" y="228" font-size="13" fill="#1f1d3d" text-anchor="middle">
+        $0.8M everything else</text>
+
+      <text x="60" y="270" font-size="13" fill="#5a5a5a">
+        The lower bar is the upper bar&rsquo;s sliver, blown up 53 times.</text>
+      <text x="60" y="290" font-size="13" fill="#5a5a5a">
+        The prize is 1% of what solving it is worth, and 55% of the margin.</text>
+    </svg>
+    <p class="caption">Prize money looks like a rounding error and acts like
+      half the incentive.</p>
+  </div>
+
+  <h2>And that 55% is the solid number</h2>
+
+  <p>Remember the $96M was hopeless, anywhere from $18M to $3.8B. Here is the
+  strange thing. Run the whole calculation again at both ends of that range
+  and the 55% barely budges.</p>
+
+  <div class="table-wrap">
+  <table class="odds">
+    <thead><tr><th>If problems fall&hellip;</th><th>Value of solving</th>
+      <th>Prize as % of value</th><th>Prize as % of the margin</th></tr></thead>
+    <tbody>
+      <tr><td>every 6,280 years</td><td>$3,769M</td><td>0.03%</td><td>55.5%</td></tr>
+      <tr><td>every 159 years</td><td>$96M</td><td>1.04%</td><td>55.3%</td></tr>
+      <tr><td>every 29 years</td><td>$18M</td><td>5.5%</td><td>54.1%</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>The value swings by a factor of two hundred. The prize's share of the
+  margin moves by one percentage point.</p>
+
+  <p>It is not luck. How often problems fall pushes up the value of solving
+  one and pushes up the cost of getting anyone to start by the same amount, so
+  it cancels out of the gap between them. The number everyone would want to
+  quote is the one the evidence cannot pin down. The number that actually
+  decides whether people show up is the one it can.</p>
+
+  <h2>So does the million matter?</h2>
+
+  <p>Yes, and this is the part that surprised us, because it is the opposite
+  of what the 1% suggests.</p>
+
+  <p>Take the million away, leave the fame and the history and the career, and
+  redo the sums. The expected number of people who solve the problem falls by
+  about <strong>55%</strong>, tracking the prize's share of the margin exactly.
+  Not because a million is a lot next to $96M. Because it is a lot next to
+  $1.8M.</p>
+
+  <p>The lesson generalises past mathematics. If you are funding hard,
+  long-odds work, the number to compare your money against is not what success is
+  worth. It is <strong>roughly twice the cost of one serious attempt</strong>.
+  A prize that looks trivial beside the payoff can still be most of the reason
+  anybody turns up.</p>
+
+  <h2>What would show this is wrong</h2>
+
+  <p>Three things are guesses rather than measurements: the $300,000 a year,
+  the three years, and the two people per problem. The $96M moves in direct
+  proportion to the cost and the headcount, so if serious attempts are cheaper
+  or rarer than that, the value drops with them.</p>
+
+  <p>The margin, and therefore the 55%, depends only on what one serious
+  attempt costs. That is a number somebody could actually go and measure, and
+  it would settle the question. If a real attempt costs $10M rather than
+  $900k, the prize is 5% of the margin and close to irrelevant. If it costs
+  $200k, the prize is the whole reason anyone starts.</p>
+
+  <p>Nobody has measured it. That is the honest state of play, and it is a
+  more interesting gap than the headline.</p>
+
+  <div class="next-steps">
+    <p>The full argument, with the proofs and the code behind every number,
+    is in <a href="./clay_shooting.html">Clay Shooting: Equilibrium Effort
+    Solving Outstanding Problems</a>.</p>
+  </div>
+</main>
+
+<footer>
+  <a href="https://github.com/microprediction/brownianbandit">Source</a> &middot;
+  Maintained by <a href="https://github.com/microprediction">Peter Cotton</a>.
+</footer>
+</body>
+</html>
